@@ -1,0 +1,5 @@
+{{- define "ioc-instance.ioc" }}
+{{  include "ioc-instance.volume" . }}
+{{  include "ioc-instance.deployment" . }}
+{{  include "ioc-instance.configmap" . }}
+{{ end }}

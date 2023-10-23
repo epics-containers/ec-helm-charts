@@ -1,3 +1,5 @@
+{{- define "ioc-instance.deployment" -}}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -138,3 +140,6 @@ spec:
           operator: Equal
           value: {{ .Values.beamline }}
           effect: NoSchedule
+
+---
+{{- end -}}

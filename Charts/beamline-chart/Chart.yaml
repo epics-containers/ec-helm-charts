@@ -1,6 +1,7 @@
 # A Helm Chart for an IOC instance
 apiVersion: v2
-name: ioc-instance-beamline
+name: ioc-instance
 
-# this is replaced by command line arguments when `ec` invokes helm
 version: 1.0.0
+
+type: library
