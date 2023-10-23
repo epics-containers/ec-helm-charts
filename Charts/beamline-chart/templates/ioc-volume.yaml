@@ -1,0 +1,17 @@
+# IOCS can use a PVC as a data volume, or mount the host filesystem
+{{- if .Values.dataVolume.pvc }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.beamline }}-data
+  labels:
+    app: {{ .Values.beamline }}-data
+    beamline: {{ .Values.beamline }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Mi
+{{- end }}

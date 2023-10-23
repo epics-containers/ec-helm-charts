@@ -1,0 +1,12 @@
+# this chart should be installed once per beamline and be the first
+# chart installed as it creates resources share by all iocs and other
+# EPICS services
+
+apiVersion: v2
+name: domain-shared-pvcs
+description: |
+  A set of PVCs to share between pods for a beamline/accelerator domain
+
+type: application
+
+version: 1.0.0

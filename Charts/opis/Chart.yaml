@@ -1,0 +1,8 @@
+apiVersion: v2
+name: domain-opis
+description: |
+  A service for sharing bob files to phoebus for all iocs on the beamline.
+
+type: application
+
+version: 1.0.0

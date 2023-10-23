@@ -1,0 +1,47 @@
+name: Build and publish a beamline's ioc helm charts
+
+on:
+  push:
+  pull_request:
+
+env:
+  HELM_VERSION_TO_INSTALL: 3.13.1 # version of HELM to install
+
+jobs:
+  build-and-push-helm-charts:
+    name: publish helm charts to ghcr.io
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: install helm
+        uses: Azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION_TO_INSTALL }}
+
+      - name: push the helm chart
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io/${{ github.repository_owner }} --username ${{ github.repository_owner }} --password-stdin
+
+          REGISTRY=oci://ghcr.io/epics-containers
+
+          # helm tags must be SemVar. Use 0.0.0-b0 for testing the latest non-tagged build
+          if [ "${GITHUB_REF_TYPE}" == "tag" ] ; then
+            TAG=${GITHUB_REF_NAME}
+          else
+            TAG="0.0.0-b0"
+          fi
+
+          for chart in Charts/*; do
+            (
+              cd $(realpath $chart)
+              NAME=$(sed -n '/^name: */s///p' Chart.yaml)
+
+              helm package -u --app-version ${TAG} --version ${TAG} .
+              PACKAGE=${NAME}-${TAG}.tgz
+
+              helm push "$PACKAGE" $REGISTRY
+            )
+          done

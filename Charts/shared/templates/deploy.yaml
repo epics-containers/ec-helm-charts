@@ -1,0 +1,29 @@
+# PVC for shared OPI files
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.beamline }}-opi-claim
+  labels:
+    app: {{ .Values.beamline }}-opi
+    beamline: {{ .Values.beamline }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+---
+# PVC for Autosave volumes
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.beamline }}-autosave-claim
+  labels:
+    app: {{ .Values.beamline }}-autosave
+    beamline: {{ .Values.beamline }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
