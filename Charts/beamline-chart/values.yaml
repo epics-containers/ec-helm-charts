@@ -70,6 +70,8 @@ dataVolume:
 
 # use the shared PVC for publishing opi files over http (see services/opis)
 opisClaim:
+# use the shared PVC for publishing pvi device files over http (see services/opis)
+pvisClaim:
 # use the shared PVC autosave files (comment out for no autosave)
 autosaveClaim:
 

@@ -13,6 +13,21 @@ spec:
     requests:
       storage: 100Mi
 ---
+# PVC for shared PVI files
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.beamline }}-pvi-claim
+  labels:
+    app: {{ .Values.beamline }}-pvi
+    beamline: {{ .Values.beamline }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+---
 # PVC for Autosave volumes
 kind: PersistentVolumeClaim
 apiVersion: v1
