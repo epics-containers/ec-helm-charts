@@ -33,7 +33,7 @@ spec:
         {{- if .Values.pviClaim }}
         - name: pvi-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.pvi }}
+            claimName: {{ .Values.pviClaim }}
         {{- end }}
         {{- if .Values.opisClaim }}
         - name: opis-volume
