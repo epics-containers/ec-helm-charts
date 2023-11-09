@@ -13,13 +13,13 @@ spec:
     requests:
       storage: 100Mi
 ---
-# PVC for shared PVI files
+# PVC for shared runtime files
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-pvi-claim
+  name: {{ .Values.beamline }}-runtime-claim
   labels:
-    app: {{ .Values.beamline }}-pvi
+    app: {{ .Values.beamline }}-runtime
     beamline: {{ .Values.beamline }}
 spec:
   accessModes:
