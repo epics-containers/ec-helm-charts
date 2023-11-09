@@ -107,7 +107,7 @@ spec:
         {{- end }}
         {{- if .Values.opisClaim }}
         - name: opis-volume
-          mountPath: /epics/opis
+          mountPath: /epics/opi
           subPath: "{{ .Values.ioc_name }}"
         {{- end }}
         stdin: true
