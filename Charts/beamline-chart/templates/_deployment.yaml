@@ -30,6 +30,11 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       terminationGracePeriodSeconds: 15 # nice to have quick restarts on IOCs
       volumes:
+        {{- if .Values.pviClaim }}
+        - name: pvi-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvi }}
+        {{- end }}
         {{- if .Values.opisClaim }}
         - name: opis-volume
           persistentVolumeClaim:
@@ -95,11 +100,16 @@ spec:
           mountPath: /nfsv2-tftp
           subPath: "{{ .Values.beamline }}/{{ .Values.ioc_name }}"
           {{- end }}
+        {{- if .Values.pvisClaim }}
+        - name: pvis-volume
+          mountPath: /epics/pvi
+          subPath: "{{ .Values.ioc_name }}"
+        {{- end }}
         {{- if .Values.opisClaim }}
         - name: opis-volume
           mountPath: /epics/opis
           subPath: "{{ .Values.ioc_name }}"
-          {{- end }}
+        {{- end }}
         stdin: true
         tty: true
         securityContext:
