@@ -64,7 +64,6 @@ metadata:
     app: {{ .Values.beamline }}-opis
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
   ports:
     - name: http
       port: 80
