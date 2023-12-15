@@ -1,7 +1,7 @@
 {{- define "ioc-instance.deployment" -}}
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.ioc_name }}
   labels:
@@ -28,7 +28,7 @@ spec:
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
-      terminationGracePeriodSeconds: 15 # nice to have quick restarts on IOCs
+      terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       volumes:
         {{- if .Values.runtimeClaim }}
         - name: runtime-volume
