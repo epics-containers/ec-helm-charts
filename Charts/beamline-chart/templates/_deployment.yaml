@@ -146,10 +146,11 @@ spec:
                   - {{ .Values.beamline }}
       {{- end }}
       tolerations:
-        - key: nodetype
+        - key: beamline
           operator: Equal
           value: {{ .Values.beamline }}
           effect: NoSchedule
+{{  toYaml .Values.tolerations | indent 8}}
 
 ---
 {{- end -}}

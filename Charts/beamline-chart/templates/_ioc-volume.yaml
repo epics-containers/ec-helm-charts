@@ -6,9 +6,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-data
+  name: {{ .Values.ioc_name }}-data
   labels:
-    app: {{ .Values.beamline }}-data
+    app: {{ .Values.ioc_name }}
     beamline: {{ .Values.beamline }}
 spec:
   accessModes:
