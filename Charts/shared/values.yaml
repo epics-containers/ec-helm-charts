@@ -1,2 +1,3 @@
-beamline: bl38p
-
+# this value must be overridden
+beamline:
+f
