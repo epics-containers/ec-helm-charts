@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  HELM_VERSION_TO_INSTALL: 3.13.1 # version of HELM to install
+  HELM_VERSION_TO_INSTALL: 3.13.2
 
 jobs:
   build-and-push-helm-charts:

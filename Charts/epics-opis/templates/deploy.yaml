@@ -55,6 +55,26 @@ spec:
             - mountPath: /etc/nginx/nginx.conf
               name: config-volume
               subPath: nginx.conf
+      {{- if .Values.useAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beamline
+                operator: In
+                values:
+                  - {{ .Values.beamline }}
+      {{- end }}
+      tolerations:
+        - key: beamline
+          operator: Equal
+          value: {{ .Values.beamline }}
+          effect: NoSchedule
+      {{- if .Values.tolerations }}
+{{  toYaml .Values.tolerations | indent 8}}
+      {{- end }}
+
 ---
 kind: Service
 apiVersion: v1
