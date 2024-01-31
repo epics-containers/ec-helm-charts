@@ -1,0 +1,8 @@
+# A Helm Chart for an IOC instance
+apiVersion: v2
+name: ioc-instance
+
+# This is overridden by CI when publishing to ghcr.io
+version: 1.4.1
+
+type: application

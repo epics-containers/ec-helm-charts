@@ -1,13 +1,11 @@
-{{- define "ioc-instance.deployment" -}}
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Values.ioc_name }}
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Values.ioc_name }}
+    app: {{ .Release.Name }}
     beamline: {{ .Values.beamline }}
-    ioc_version: {{ .Values.ioc_version | quote }}
+    ioc_version: {{ .Chart.Version | quote }}
     is_ioc: "True"
   annotations:
     kubernetes.io/change-cause: {{ .Values.ioc_version }} deployed
@@ -15,13 +13,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.ioc_name }}
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.ioc_name }}
+        app: {{ .Release.Name }}
         beamline: {{ .Values.beamline }}
-        ioc_version: {{ .Values.ioc_version | quote }}
+        ioc_version: {{ .Chart.Version | quote }}
         is_ioc: "True"
     spec:
       {{ if .Values.serviceAccountName }}
@@ -46,25 +44,25 @@ spec:
             claimName: {{ .Values.nfsv2TftpClaim }}
         {{- end }}
         {{- if .Values.autosave }}
-        - name: {{ .Values.ioc_name }}
+        - name: {{ .Release.Name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.ioc_name }}
+            claimName: {{ .Release.Name }}
         {{- end }}
         {{- if .Values.dataVolume.pvc }}
-        - name: {{ .Values.ioc_name }}-data
+        - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
-            claimName: {{ .Values.ioc_name }}-data
+            claimName: {{ .Release.Name }}-data
         {{- else if .Values.dataVolume.hostPath }}
-        - name: {{ .Values.ioc_name }}-data
+        - name: {{ .Release.Name }}-data
           hostPath:
             path: {{ .Values.dataVolume.hostPath }}
             type: Directory
         {{- end }}
         - name: config-volume
           configMap:
-            name: {{ .Values.ioc_name }}
+            name: {{ .Release.Name }}-config
       containers:
-      - name: {{ .Values.ioc_name }}
+      - name: {{ .Release.Name }}
         image: {{ .Values.image }}
         command:
           - bash
@@ -85,11 +83,11 @@ spec:
         - name: config-volume
           mountPath: {{ .Values.iocConfig }}
         {{- if .Values.autosave }}
-        - name: {{ .Values.ioc_name }}
+        - name: {{ .Release.Name }}
           mountPath: /autosave
         {{- end }}
         {{- if or (.Values.dataVolume.pvc) (.Values.dataVolume.hostPath)  }}
-        - name: {{ .Values.ioc_name }}-data
+        - name: {{ .Release.Name }}-data
           mountPath: {{ .Values.dataVolume.hostPath }}
           {{- if .Values.dataVolume.hostPath }}
           mountPropagation: HostToContainer
@@ -98,17 +96,17 @@ spec:
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           mountPath: /nfsv2-tftp
-          subPath: "{{ .Values.beamline }}/{{ .Values.ioc_name }}"
+          subPath: "{{ .Values.beamline }}/{{ .Release.Name }}"
           {{- end }}
         {{- if .Values.runtimeClaim }}
         - name: runtime-volume
           mountPath: /epics/runtime
-          subPath: "{{ .Values.ioc_name }}"
+          subPath: "{{ .Release.Name }}"
         {{- end }}
         {{- if .Values.opisClaim }}
         - name: opis-volume
           mountPath: /epics/opi
-          subPath: "{{ .Values.ioc_name }}"
+          subPath: "{{ .Release.Name }}"
         {{- end }}
         stdin: true
         tty: true
@@ -119,13 +117,15 @@ spec:
         imagePullPolicy: Always
         env:
         - name: IOCSH_PS1
-          value: "{{ .Values.ioc_name }} > "
+          value: "{{ .Release.Name }} > "
         - name: IOC_NAME
-          value: {{ .Values.ioc_name }}
+          value: {{ .Release.Name }}
         - name: IOC_PREFIX
-          value: {{ or .Values.prefix .Values.ioc_name | quote }}
+          value: {{ or .Values.prefix .Release.Name | quote }}
         - name: IOC_VERSION
-          value: {{ .Values.ioc_version | quote }}
+          value: {{ .Chart.Version | quote }}
+        - name: BEAMLINE
+          value: {{ .Values.beamline | quote }}
         {{- range $envVar := .Values.env }}
         - name: {{ $envVar.name }}
           value: {{ $envVar.value | quote }}
@@ -150,9 +150,6 @@ spec:
           operator: Equal
           value: {{ .Values.beamline }}
           effect: NoSchedule
-      {{- if .Values.tolerations }} 
+      {{- if .Values.tolerations }}
 {{  toYaml .Values.tolerations | indent 8}}
       {{- end }}
-
----
-{{- end -}}

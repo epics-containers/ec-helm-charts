@@ -1,8 +1,5 @@
-# IOCS can use a PVC as a data volume, or mount the host filesystem
-{{- define "ioc-instance.volume" -}}
-
 {{- if .Values.dataVolume.pvc }}
----
+# This IOC uses a data volume, so we will create a PVC for it
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -16,9 +13,6 @@ spec:
   resources:
     requests:
       storage: 1000Mi
-
----
+{{ else }}
+# This IOC has no data volume, so we will mount the host filesystem
 {{- end }}
-
-{{- end }}
-
