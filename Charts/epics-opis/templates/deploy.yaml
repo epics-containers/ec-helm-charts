@@ -2,38 +2,38 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name:  {{ .Values.beamline }}-nginx-config
+  name:  {{ .Values.domain }}-nginx-config
   labels:
-    app: {{ .Values.beamline }}-opis
-    beamline: {{ .Values.beamline }}
+    app: {{ .Values.domain }}-opis
+    beamline: {{ .Values.domain }}
 data:
 {{ (.Files.Glob "config/*").AsConfig | indent 2 }}
   version.txt: |
-    IOC {{ .Release.Name }} version {{ .Chart.AppVersion }}
+    IOC {{ .Values.domain }} version {{ .Chart.AppVersion }}
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: {{ .Values.beamline }}-opis
+  name: {{ .Values.domain }}-opis
   labels:
-    app: {{ .Values.beamline }}-opis
+    app: {{ .Values.domain }}-opis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.beamline }}-opis
+      app: {{ .Values.domain }}-opis
   template:
     metadata:
       labels:
-        app: {{ .Values.beamline }}-opis
+        app: {{ .Values.domain }}-opis
     spec:
       volumes:
         - name: html-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.beamline }}-opi-claim
+            claimName: {{ .Values.domain }}-opi-claim
         - name: config-volume
           configMap:
-            name: {{ .Values.beamline }}-nginx-config
+            name: {{ .Values.domain }}-nginx-config
       containers:
         - name: server
           image: {{ .Values.image }}
@@ -64,12 +64,12 @@ spec:
               - key: beamline
                 operator: In
                 values:
-                  - {{ .Values.beamline }}
+                  - {{ .Values.domain }}
       {{- end }}
       tolerations:
         - key: beamline
           operator: Equal
-          value: {{ .Values.beamline }}
+          value: {{ .Values.domain }}
           effect: NoSchedule
       {{- if .Values.tolerations }}
 {{  toYaml .Values.tolerations | indent 8}}
@@ -79,9 +79,9 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-opis
+  name: {{ .Values.domain }}-opis
   labels:
-    app: {{ .Values.beamline }}-opis
+    app: {{ .Values.domain }}-opis
 spec:
   type: LoadBalancer
   ports:
@@ -91,4 +91,4 @@ spec:
       targetPort: 8080
   sessionAffinity: None
   selector:
-    app: {{ .Values.beamline }}-opis
+    app: {{ .Values.domain }}-opis

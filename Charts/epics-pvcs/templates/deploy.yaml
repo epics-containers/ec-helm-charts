@@ -2,10 +2,10 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-opi-claim
+  name: {{ .Values.domain }}-opi-claim
   labels:
-    app: {{ .Values.beamline }}-opi
-    beamline: {{ .Values.beamline }}
+    app: {{ .Values.domain }}-opi
+    beamline: {{ .Values.domain }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -17,10 +17,10 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-runtime-claim
+  name: {{ .Values.domain }}-runtime-claim
   labels:
-    app: {{ .Values.beamline }}-runtime
-    beamline: {{ .Values.beamline }}
+    app: {{ .Values.domain }}-runtime
+    beamline: {{ .Values.domain }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -32,10 +32,10 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-autosave-claim
+  name: {{ .Values.domain }}-autosave-claim
   labels:
-    app: {{ .Values.beamline }}-autosave
-    beamline: {{ .Values.beamline }}
+    app: {{ .Values.domain }}-autosave
+    beamline: {{ .Values.domain }}
 spec:
   accessModes:
     - ReadWriteMany

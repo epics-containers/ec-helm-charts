@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    beamline: {{ .Values.beamline }}
+    beamline: {{ .Values.domain }}
     is_ioc: "true"
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        beamline: {{ .Values.beamline }}
+        beamline: {{ .Values.domain }}
         is_ioc: "True"
     spec:
       {{ if .Values.serviceAccountName }}
@@ -92,7 +92,7 @@ spec:
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           mountPath: /nfsv2-tftp
-          subPath: "{{ .Values.beamline }}/{{ .Release.Name }}"
+          subPath: "{{ .Values.domain }}/{{ .Release.Name }}"
           {{- end }}
         {{- if .Values.runtimeClaim }}
         - name: runtime-volume
@@ -119,7 +119,7 @@ spec:
         - name: IOC_PREFIX
           value: {{ or .Values.prefix .Release.Name | quote }}
         - name: BEAMLINE
-          value: {{ .Values.beamline | quote }}
+          value: {{ .Values.domain | quote }}
         {{- range $envVar := .Values.env }}
         - name: {{ $envVar.name }}
           value: {{ $envVar.value | quote }}
@@ -137,12 +137,12 @@ spec:
               - key: beamline
                 operator: In
                 values:
-                  - {{ .Values.beamline }}
+                  - {{ .Values.domain }}
       {{- end }}
       tolerations:
         - key: beamline
           operator: Equal
-          value: {{ .Values.beamline }}
+          value: {{ .Values.domain }}
           effect: NoSchedule
       {{- if .Values.tolerations }}
 {{  toYaml .Values.tolerations | indent 8}}
