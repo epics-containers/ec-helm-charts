@@ -5,10 +5,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     beamline: {{ .Values.beamline }}
-    ioc_version: {{ .Chart.Version | quote }}
-    is_ioc: "True"
-  annotations:
-    kubernetes.io/change-cause: {{ .Values.ioc_version }} deployed
+    is_ioc: "true"
 spec:
   replicas: 1
   selector:
@@ -19,7 +16,6 @@ spec:
       labels:
         app: {{ .Release.Name }}
         beamline: {{ .Values.beamline }}
-        ioc_version: {{ .Chart.Version | quote }}
         is_ioc: "True"
     spec:
       {{ if .Values.serviceAccountName }}
@@ -122,8 +118,6 @@ spec:
           value: {{ .Release.Name }}
         - name: IOC_PREFIX
           value: {{ or .Values.prefix .Release.Name | quote }}
-        - name: IOC_VERSION
-          value: {{ .Chart.Version | quote }}
         - name: BEAMLINE
           value: {{ .Values.beamline | quote }}
         {{- range $envVar := .Values.env }}
