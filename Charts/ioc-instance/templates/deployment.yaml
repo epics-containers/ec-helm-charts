@@ -16,7 +16,7 @@ spec:
       labels:
         app: {{ .Release.Name }}
         beamline: {{ .Values.domain }}
-        is_ioc: "True"
+        is_ioc: "true"
     spec:
       {{ if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
