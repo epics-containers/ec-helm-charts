@@ -3,16 +3,20 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.ioc_name }}-data
+  name: {{ .Release.Name }}-data
   labels:
-    app: {{ .Values.ioc_name }}
-    beamline: {{ .Values.beamline }}
+    app: {{ .Release.Name }}
+    beamline: {{ .Release.Name }}
 spec:
+{{- if .Values.dataVolume.spec }}
+{{  toYaml .Values.dataVolume.spec | indent 2 }}
+{{ else }}
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 1000Mi
+{{- end }}
 {{ else }}
 # This IOC has no data volume, so we will mount the host filesystem
 {{- end }}
