@@ -62,7 +62,7 @@ image:
 # a volume to mount for writing data to. This can be a PVC or a hostPath
 # the PVC
 dataVolume:
-  # Create a PVC called {{ .Chart.Name }}-data when true
+  # Create a PVC called {{ .Release.Name }}-data when true
   pvc: true
   # A path on the host machine to write data into. Also used as the path that the
   # pvc or hostPath will be mounted at so that users need not be confused about

@@ -6,7 +6,13 @@ metadata:
   name: {{ .Release.Name }}-data
   labels:
     app: {{ .Release.Name }}
-    beamline: {{ .Release.Name }}
+    {{ if .Values.beamline -}}
+    beamline: {{ .Values.beamline }}
+    {{- else -}}
+    location: {{ .Values.location }}
+    {{- end }}
+    ioc_group: {{ .Values.ioc_group }}
+    is_ioc: "true"
 spec:
 {{- if .Values.dataVolume.spec }}
 {{  toYaml .Values.dataVolume.spec | indent 2 }}
