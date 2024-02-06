@@ -4,7 +4,12 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    beamline: {{ .Values.domain }}
+    {{ if .Values.beamline -}}
+    beamline: {{ .Values.beamline }}
+    {{- else -}}
+    location: {{ .Values.location }}
+    {{- end }}
+    ioc_group: {{ .Values.ioc_group }}
     is_ioc: "true"
 spec:
   replicas: 1
@@ -15,7 +20,12 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        beamline: {{ .Values.domain }}
+        {{ if .Values.beamline -}}
+        beamline: {{ .Values.beamline }}
+        {{- else -}}
+        location: {{ .Values.location }}
+        {{- end }}
+        ioc_group: {{ .Values.ioc_group }}
         is_ioc: "true"
     spec:
       {{ if .Values.serviceAccountName }}
@@ -92,7 +102,7 @@ spec:
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           mountPath: /nfsv2-tftp
-          subPath: "{{ .Values.domain }}/{{ .Release.Name }}"
+          subPath: "{{ .Values.ioc_group }}/{{ .Release.Name }}"
           {{- end }}
         {{- if .Values.runtimeClaim }}
         - name: runtime-volume
@@ -118,8 +128,10 @@ spec:
           value: {{ .Release.Name }}
         - name: IOC_PREFIX
           value: {{ or .Values.prefix .Release.Name | quote }}
+        - name: IOC_LOCATION
+          location: {{ .Values.location }}
         - name: BEAMLINE
-          value: {{ .Values.domain | quote }}
+          value: {{ .Values.beamline | quote }}
         {{- range $envVar := .Values.env }}
         - name: {{ $envVar.name }}
           value: {{ $envVar.value | quote }}
@@ -133,16 +145,28 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
+            {{ if .Values.beamline -}}
             - matchExpressions:
               - key: beamline
                 operator: In
                 values:
-                  - {{ .Values.domain }}
+                  - {{ .Values.beamline }}
+            {{- else -}}
+            - matchExpressions:
+              - key: location
+                operator: In
+                values:
+                  - {{ .Values.location }}
+            {{- end }}
       {{- end }}
       tolerations:
         - key: beamline
           operator: Equal
-          value: {{ .Values.domain }}
+          value: {{ .Values.beamline }}
+          effect: NoSchedule
+        - key: location
+          operator: Equal
+          value: {{ .Values.location }}
           effect: NoSchedule
       {{- if .Values.tolerations }}
 {{  toYaml .Values.tolerations | indent 8}}

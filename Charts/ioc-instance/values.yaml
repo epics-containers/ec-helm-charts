@@ -1,7 +1,14 @@
 # default values for all IOCs on bl38p
 # see end of file for values that may be overridden per individual IOC
 
+# the beamline name - only set for beamlines
 beamline:
+# the location where the IOCs will run - same as beamline for beamlines
+location:
+# the name of the repository in which the IOC is grouped
+# same as beamline for beamlines
+ioc_group:
+
 # we use the default service account in the namespace so leave this out
 # if you need to specify an alternative then uncomment below
 # serviceAccountName: k8s-p38-iocs
@@ -11,9 +18,8 @@ beamline:
 hostNetwork:
 
 # useAffinity - only run on nodes with label beamline:<beamline-name>
-# Not using this now that we have cluster per beamline
-# However if you are using one cluster for multiple beamlines / domains
-# Then label the local nodes for each beamline and switch to true
+# or location:<location-name>
+# Set to false for dedicated cluster per beamline and accelerator
 useAffinity:
 
 # root folder for ioc source/binaries inside generic IOC container
@@ -26,15 +32,13 @@ liveness: /epics/ioc/liveness.sh
 
 # the following are added to the pod's environment
 globalenv:
-  # Where to find RTEMS IOC files
-  - name:
-    value:
-  - name:
-    value:
   - name:
     value:
 
-# reasonable defaults for securityContext
+# defaults for securityContext
+# Usually override runAsXXX in the individual IOC values.yaml.
+# At DLS the IOCs that write to the shared data directory must use
+# iXXdetector user/group IDs
 securityContext:
   allowPrivilegeEscalation: false
   # IMPORTANT if you want access to /dls/p38/data then the following should
@@ -51,12 +55,9 @@ securityContext:
 # The following values are expected to be overridden in individual IOC values.yaml
 ########################################################################################
 
-# these values are the only mandatory overrides. We supply image in the values.yaml
-# for each IOC instance. `ec ioc deploy` supplies ioc_name and ioc_version
-# on the command line to helm.
+# This value is the only mandatory override. You must declare the image for the
+# Generic IOC in the values.yaml for each IOC instance.
 image:
-ioc_name:
-ioc_version:
 
 # a volume to mount for writing data to. This can be a PVC or a hostPath
 # the PVC
