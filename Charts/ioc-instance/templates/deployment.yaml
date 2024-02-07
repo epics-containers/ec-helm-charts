@@ -129,9 +129,11 @@ spec:
         - name: IOC_PREFIX
           value: {{ or .Values.prefix .Release.Name | quote }}
         - name: IOC_LOCATION
-          location: {{ .Values.location }}
+          location: {{ .Values.location | quote}}
         - name: BEAMLINE
           value: {{ .Values.beamline | quote }}
+        - name: IOC_GROUP
+          value: {{ .Values.ioc_group | quote }}
         {{- range $envVar := .Values.env }}
         - name: {{ $envVar.name }}
           value: {{ $envVar.value | quote }}
