@@ -2,6 +2,6 @@
 apiVersion: v2
 name: ioc-instance
 
-version: 2.0.0+b1
+version: 2.0.0+b3
 
 type: application

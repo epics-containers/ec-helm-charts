@@ -4,11 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    {{ if .Values.beamline -}}
-    beamline: {{ .Values.beamline }}
-    {{- else -}}
     location: {{ .Values.location }}
-    {{- end }}
     ioc_group: {{ .Values.ioc_group }}
     is_ioc: "true"
 spec:
@@ -20,11 +16,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        {{ if .Values.beamline -}}
-        beamline: {{ .Values.beamline }}
-        {{- else -}}
         location: {{ .Values.location }}
-        {{- end }}
         ioc_group: {{ .Values.ioc_group }}
         is_ioc: "true"
     spec:
@@ -129,7 +121,7 @@ spec:
         - name: IOC_PREFIX
           value: {{ or .Values.prefix .Release.Name | quote }}
         - name: IOC_LOCATION
-          location: {{ .Values.location | quote}}
+          value: {{ .Values.location | quote }}
         - name: BEAMLINE
           value: {{ .Values.beamline | quote }}
         - name: IOC_GROUP

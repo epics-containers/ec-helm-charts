@@ -2,38 +2,43 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name:  {{ .Values.domain }}-nginx-config
+  name:  {{ .Release.Name }}-nginx-config
   labels:
-    app: {{ .Values.domain }}-opis
-    beamline: {{ .Values.domain }}
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
 data:
 {{ (.Files.Glob "config/*").AsConfig | indent 2 }}
   version.txt: |
-    IOC {{ .Values.domain }} version {{ .Chart.AppVersion }}
+    IOC {{ .Release.Name }} version {{ .Chart.AppVersion }}
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: {{ .Values.domain }}-opis
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Values.domain }}-opis
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.domain }}-opis
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.domain }}-opis
+        app: {{ .Release.Name }}
+        location: {{ .Values.location }}
+        ioc_group: {{ .Values.ioc_group }}
     spec:
       volumes:
         - name: html-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.domain }}-opi-claim
+            claimName: {{ .Values.ioc_group }}-opi-claim
         - name: config-volume
           configMap:
-            name: {{ .Values.domain }}-nginx-config
+            name: {{ .Release.Name }}-nginx-config
       containers:
         - name: server
           image: {{ .Values.image }}
@@ -60,16 +65,28 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
+            {{ if .Values.beamline -}}
             - matchExpressions:
               - key: beamline
                 operator: In
                 values:
-                  - {{ .Values.domain }}
+                  - {{ .Values.beamline }}
+            {{- else -}}
+            - matchExpressions:
+              - key: location
+                operator: In
+                values:
+                  - {{ .Values.location }}
+            {{- end }}
       {{- end }}
       tolerations:
         - key: beamline
           operator: Equal
-          value: {{ .Values.domain }}
+          value: {{ .Values.beamline }}
+          effect: NoSchedule
+        - key: location
+          operator: Equal
+          value: {{ .Values.location }}
           effect: NoSchedule
       {{- if .Values.tolerations }}
 {{  toYaml .Values.tolerations | indent 8}}
@@ -79,9 +96,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.domain }}-opis
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Values.domain }}-opis
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
 spec:
   type: LoadBalancer
   ports:
@@ -91,4 +110,4 @@ spec:
       targetPort: 8080
   sessionAffinity: None
   selector:
-    app: {{ .Values.domain }}-opis
+    app: {{ .Release.Name }}
