@@ -1,0 +1,113 @@
+# a config map to contain nginx config - ingests the files in config folder
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ .Release.Name }}-nginx-config
+  labels:
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
+data:
+{{ (.Files.Glob "config/*").AsConfig | indent 2 }}
+  version.txt: |
+    IOC {{ .Release.Name }} version {{ .Chart.AppVersion }}
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        location: {{ .Values.location }}
+        ioc_group: {{ .Values.ioc_group }}
+    spec:
+      volumes:
+        - name: html-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.ioc_group }}-opi-claim
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-nginx-config
+      containers:
+        - name: server
+          image: {{ .Values.image }}
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 200m
+            limits:
+              memory: 500Mi
+              cpu: 600m
+          ports:
+            - containerPort: 90
+              protocol: TCP
+          volumeMounts:
+            # - mountPath: /opis
+            - mountPath: /usr/share/nginx/html
+              name: html-volume
+            # mount a config file over the default nginx config
+            - mountPath: /etc/nginx/nginx.conf
+              name: config-volume
+              subPath: nginx.conf
+      {{- if .Values.useAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            {{ if .Values.beamline -}}
+            - matchExpressions:
+              - key: beamline
+                operator: In
+                values:
+                  - {{ .Values.beamline }}
+            {{- else -}}
+            - matchExpressions:
+              - key: location
+                operator: In
+                values:
+                  - {{ .Values.location }}
+            {{- end }}
+      {{- end }}
+      tolerations:
+        - key: beamline
+          operator: Equal
+          value: {{ .Values.beamline }}
+          effect: NoSchedule
+        - key: location
+          operator: Equal
+          value: {{ .Values.location }}
+          effect: NoSchedule
+      {{- if .Values.tolerations }}
+{{  toYaml .Values.tolerations | indent 8}}
+      {{- end }}
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  sessionAffinity: None
+  selector:
+    app: {{ .Release.Name }}

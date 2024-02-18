@@ -1,0 +1,28 @@
+{{- if .Values.dataVolume.pvc }}
+# This IOC uses a data volume, so we will create a PVC for it
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-data
+  labels:
+    app: {{ .Release.Name }}
+    {{ if .Values.beamline -}}
+    beamline: {{ .Values.beamline }}
+    {{- else -}}
+    location: {{ .Values.location }}
+    {{- end }}
+    ioc_group: {{ .Values.ioc_group }}
+    is_ioc: "true"
+spec:
+{{- if .Values.dataVolume.spec }}
+{{  toYaml .Values.dataVolume.spec | indent 2 }}
+{{ else }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Mi
+{{- end }}
+{{ else }}
+# This IOC has no data volume, so we will mount the host filesystem
+{{- end }}

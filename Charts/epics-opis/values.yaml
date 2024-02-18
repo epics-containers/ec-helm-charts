@@ -1,4 +1,7 @@
 # use nginx for publishing opi files over http
 image: docker.io/nginxinc/nginx-unprivileged:stable-bullseye-perl
-beamline: bl38p
 
+# These are overridden per ioc_group repository
+beamline:
+location:
+ioc_group:

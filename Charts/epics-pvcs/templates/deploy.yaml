@@ -2,10 +2,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-opi-claim
+  name: {{ .Values.ioc_group }}-opi-claim
   labels:
-    app: {{ .Values.beamline }}-opi
-    beamline: {{ .Values.beamline }}
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -17,10 +18,11 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-runtime-claim
+  name: {{ .Values.ioc_group }}-runtime-claim
   labels:
-    app: {{ .Values.beamline }}-runtime
-    beamline: {{ .Values.beamline }}
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -32,10 +34,11 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.beamline }}-autosave-claim
+  name: {{ .Values.ioc_group }}-autosave-claim
   labels:
-    app: {{ .Values.beamline }}-autosave
-    beamline: {{ .Values.beamline }}
+    app: {{ .Release.Name }}
+    location: {{ .Values.location }}
+    ioc_group: {{ .Values.ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany

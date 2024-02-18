@@ -1,0 +1,7 @@
+# A Helm Chart for an IOC instance
+apiVersion: v2
+name: ioc-instance
+
+version: 2.0.0+b3
+
+type: application

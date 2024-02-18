@@ -1,9 +1,0 @@
-# yaml-language-server: $schema="https://json-schema.org/draft-07/schema"
-
-# A Helm Chart for an IOC instance
-apiVersion: v2
-name: ioc-instance
-
-version: 1.2.1
-
-type: library
