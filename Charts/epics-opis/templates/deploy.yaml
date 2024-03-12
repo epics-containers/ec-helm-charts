@@ -1,17 +1,3 @@
-# a config map to contain nginx config - ingests the files in config folder
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name:  {{ .Release.Name }}-nginx-config
-  labels:
-    app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
-data:
-{{ (.Files.Glob "config/*").AsConfig | indent 2 }}
-  version.txt: |
-    IOC {{ .Release.Name }} version {{ .Chart.AppVersion }}
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -107,7 +93,11 @@ spec:
     - name: http
       port: 80
       protocol: TCP
-      targetPort: 8080
+      targetPort: 80
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
   sessionAffinity: None
   selector:
     app: {{ .Release.Name }}
