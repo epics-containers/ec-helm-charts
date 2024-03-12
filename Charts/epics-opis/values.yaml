@@ -1,5 +1,5 @@
 # use nginx for publishing opi files over http
-image: docker.io/nginxinc/nginx-unprivileged:stable-bullseye-perl
+image: nginx:1.25.4
 
 # These are overridden per ioc_group repository
 beamline:
