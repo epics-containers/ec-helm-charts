@@ -1,2 +1,12 @@
-# this value must be overridden
-beamline:
+# the beamline name - only set for beamlines
+beamline: bl20j
+# the name of the repository in which the IOC is grouped
+ioc_group: bl20j
+# the location where the IOCs will run - same as beamline for beamlines
+location: bl20j
+
+# sizes of the auto provisioned PVs
+opi_size: 1Gi
+runtime_size: 1Gi
+autosave_size: 1Gi
+binaries_size: 1Gi
