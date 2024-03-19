@@ -20,7 +20,7 @@ spec:
         ioc_group: {{ .Values.ioc_group }}
         is_ioc: "true"
     spec:
-      {{ if .Values.serviceAccountName }}
+      {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
@@ -126,15 +126,15 @@ spec:
           value: {{ .Values.beamline | quote }}
         - name: IOC_GROUP
           value: {{ .Values.ioc_group | quote }}
-        {{- range $envVar := .Values.env }}
-        - name: {{ $envVar.name }}
-          value: {{ $envVar.value | quote }}
+        {{- if .Values.globalEnv }}
+{{  toYaml .Values.globalEnv | indent 8}}
         {{- end }}
-        {{- range $envVar := .Values.globalenv }}
-        - name: {{ $envVar.name }}
-          value: {{ $envVar.value | quote }}
+        {{- if .Values.iocEnv }}
+{{  toYaml .Values.iocEnv | indent 8}}
         {{- end }}
-      {{- if .Values.useAffinity }}
+      {{- if .Values.nodeName }}
+      nodeName: {{ .Values.nodeName }}
+      {{- else if .Values.useAffinity }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
