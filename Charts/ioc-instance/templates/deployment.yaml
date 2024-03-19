@@ -126,15 +126,17 @@ spec:
           value: {{ .Values.beamline | quote }}
         - name: IOC_GROUP
           value: {{ .Values.ioc_group | quote }}
-        {{- range $envVar := .Values.env }}
+        {{- range $envVar := .Values.iocEnv }}
         - name: {{ $envVar.name }}
           value: {{ $envVar.value | quote }}
         {{- end }}
-        {{- range $envVar := .Values.globalenv }}
+        {{- range $envVar := .Values.globalEnv }}
         - name: {{ $envVar.name }}
           value: {{ $envVar.value | quote }}
         {{- end }}
-      {{- if .Values.useAffinity }}
+      {{- if .Values.nodeName }}
+      nodeName: {{ .Values.nodeName }}
+      {{- else if .Values.useAffinity }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

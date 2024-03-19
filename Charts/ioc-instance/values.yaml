@@ -1,88 +1,96 @@
-# default values for all IOCs on bl38p
-# see end of file for values that may be overridden per individual IOC
+# default values for all IOCs
+ioc-instance:
+  # see end of file for values that may be overridden per individual IOC
 
-# the beamline name - only set for beamlines
-beamline:
-# the location where the IOCs will run - same as beamline for beamlines
-location:
-# the name of the repository in which the IOC is grouped
-# same as beamline for beamlines
-ioc_group:
+  # the beamline name - only set for beamlines
+  beamline:
+  # the location where the IOCs will run - same as beamline for beamlines
+  location:
+  # the name of the repository in which the IOC is grouped
+  # same as beamline for beamlines
+  ioc_group:
 
-# we use the default service account in the namespace so leave this out
-# if you need to specify an alternative then uncomment below
-# serviceAccountName: k8s-p38-iocs
+  # we use the default service account in the namespace so leave this out
+  # if you need to specify an alternative then uncomment below
+  # serviceAccountName: k8s-p38-iocs
 
-# useHostNetwork - use host network for IOC - required for Channel Access
-# to work outside of the cluster
-hostNetwork:
+  # useHostNetwork - use host network for IOC - required for Channel Access
+  # to work outside of the cluster
+  hostNetwork:
 
-# useAffinity - only run on nodes with label beamline:<beamline-name>
-# or location:<location-name>
-# Set to false for dedicated cluster per beamline and accelerator
-useAffinity:
+  # useAffinity - only run on nodes with label beamline:<beamline-name>
+  # or location:<location-name>
+  # Set to false for dedicated cluster per beamline and accelerator
+  useAffinity:
 
-# root folder for ioc source/binaries inside generic IOC container
-iocFolder: /epics/ioc
-iocConfig: /epics/ioc/config
-# scripts for controlling the IOC
-start: /epics/ioc/start.sh
-stop: /epics/ioc/stop.sh
-liveness: /epics/ioc/liveness.sh
+  # nodeName is used to run on a specific node. Overrides affinity above.
+  nodeName:
 
-# the following are added to the pod's environment
-globalenv:
-  - name:
-    value:
+  # root folder for ioc source/binaries inside generic IOC container
+  iocFolder: /epics/ioc
+  iocConfig: /epics/ioc/config
+  # scripts for controlling the IOC
+  start: /epics/ioc/start.sh
+  stop: /epics/ioc/stop.sh
+  liveness: /epics/ioc/liveness.sh
 
-# defaults for securityContext
-# Usually override runAsXXX in the individual IOC values.yaml.
-# At DLS the IOCs that write to the shared data directory must use
-# iXXdetector user/group IDs
-securityContext:
-  allowPrivilegeEscalation: false
-  # IMPORTANT if you want access to /dls/p38/data then the following should
-  # be set to p38detector account ID and group ID
-  # runAsUser: 37143
-  # runAsGroup: 37143
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
+  # the following are added to the pod's environment
+  globalEnv:
+    # - name:
+    #   value:
+  iocEnv:
+    # - name:
+    #   value:
 
-########################################################################################
-# The following values are expected to be overridden in individual IOC values.yaml
-########################################################################################
+  # defaults for securityContext
+  # Usually override runAsXXX in the individual IOC values.yaml.
+  # At DLS the IOCs that write to the shared data directory must use
+  # iXXdetector user/group IDs
+  securityContext:
+    allowPrivilegeEscalation: false
+    # # e.g. if you want access to /dls/p38/data then the following should
+    # # be set to p38detector account ID and group ID
+    # runAsUser: 37143
+    # runAsGroup: 37143
+    # capabilities:
+    #   drop:
+    #   - ...
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
 
-# This value is the only mandatory override. You must declare the image for the
-# Generic IOC in the values.yaml for each IOC instance.
-image:
+  ########################################################################################
+  # The following values are expected to be overridden in individual IOC values.yaml
+  ########################################################################################
 
-# a volume to mount for writing data to. This can be a PVC or a hostPath
-# the PVC
-dataVolume:
-  # Create a PVC called {{ .Release.Name }}-data when true
-  pvc: true
-  # A path on the host machine to write data into. Also used as the path that the
-  # pvc or hostPath will be mounted at so that users need not be confused about
-  # inside/outside container paths.
-  hostPath: /data
+  # This value is the only mandatory override. You must declare the image for the
+  # Generic IOC in the values.yaml for each IOC instance.
+  image:
 
-# use the shared PVC for publishing opi files over http (see services/opis)
-opisClaim:
-# use the shared PVC for holding runtime files for each IOC
-runtimeClaim:
-# use the shared PVC autosave files (comment out for no autosave)
-autosaveClaim:
+  # a volume to mount for writing data to. This can be a PVC or a hostPath
+  # the PVC
+  dataVolume:
+    # Create a PVC called {{ .Release.Name }}-data when true
+    pvc: true
+    # A path on the host machine to write data into. Also used as the path that the
+    # pvc or hostPath will be mounted at so that users need not be confused about
+    # inside/outside container paths.
+    hostPath: /data
 
-# default resource limits
-resources:
-  limits:
-    cpu: 500m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 64Mi
-# extra tolerations if needed
-# tolerations:
+  # use the shared PVC for publishing opi files over http (see services/opis)
+  opisClaim:
+  # use the shared PVC for holding runtime files for each IOC
+  runtimeClaim:
+  # use the shared PVC autosave files (comment out for no autosave)
+  autosaveClaim:
+
+  # default resource limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+  # extra tolerations if needed
+  tolerations:
