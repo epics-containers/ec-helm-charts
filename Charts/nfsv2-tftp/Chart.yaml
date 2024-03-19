@@ -1,0 +1,8 @@
+apiVersion: v2
+name: nfsv2-tftp
+description: |
+  A service for sharing bob files to phoebus for all iocs on the beamline.
+
+type: application
+
+version: 3.0.4

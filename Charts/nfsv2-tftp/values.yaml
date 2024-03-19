@@ -1,0 +1,14 @@
+# a container for publishing NFS and TFTP services
+image: ghcr.io/epics-containers/nfsv2-tftp-server:main
+
+# The following values must all be set by each invoker
+
+# the beamline name - only set for beamlines
+beamline:
+# the name of the repository in which the IOC is grouped
+ioc_group:
+# the location where the IOCs will run - same as beamline for beamlines
+location:
+
+# static IP for both services (must be from the allowed range for the cluster)
+static_ip:
