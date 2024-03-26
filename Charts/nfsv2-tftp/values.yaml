@@ -1,7 +1,7 @@
 # a container for publishing NFS and TFTP services
-image: ghcr.io/epics-containers/nfsv2-tftp-server:main
+image: ghcr.io/epics-containers/nfsv2-tftp-server:0.2.2
 
-# The following values must all be set by each invoker
+# The remaining values must all be set by each invoker
 
 # the beamline name - only set for beamlines
 beamline:

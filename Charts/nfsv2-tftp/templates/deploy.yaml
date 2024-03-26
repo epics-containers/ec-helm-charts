@@ -33,26 +33,33 @@ spec:
 
       containers:
         - name: server
-          image: ghcr.io/epics-containers/nfsv2-tftp-server:0.1.1
+          image: {{ .Values.image }}
           ports:
             - containerPort: 2049
               protocol: UDP
+              name: nfsd
             - containerPort: 20048
               protocol: UDP
+              name: mountd
             - containerPort: 111
               protocol: UDP
+              name: rpcbind
             - containerPort: 69
               protocol: UDP
+              name: tftp
+            - containerPort: 12002
+              protocol: TCP
+              name: rsync
           command: ["/bin/bash"]
           args: ["-c", "bash /scripts/startup.sh && sleep infinity"]
 
           resources:
             limits:
               memory: 50Mi
-              cpu: 100m
+              cpu: 800m
             requests:
               memory: 20Mi
-              cpu: 50m
+              cpu: 200m
 
           volumeMounts:
             - mountPath: "/iocs"
@@ -91,7 +98,11 @@ spec:
       port: 69
       protocol: UDP
       targetPort: 69
-  # a j20 static IP
+    - name: rsync
+      port: 12002
+      protocol: TCP
+      targetPort: 12002
+  # a static IP is required for the NFSv2 server to work
   loadBalancerIP: {{ .Values.static_ip }}
   sessionAffinity: None
   selector:

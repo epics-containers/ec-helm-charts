@@ -26,6 +26,7 @@ jobs:
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io/${{ github.repository_owner }} --username ${{ github.repository_owner }} --password-stdin
 
           REGISTRY=oci://ghcr.io/epics-containers
+          set -x
 
           # helm tags must be SemVar. Use 0.0.0-b0 for testing the latest non-tagged build
           if [ "${GITHUB_REF_TYPE}" == "tag" ] ; then

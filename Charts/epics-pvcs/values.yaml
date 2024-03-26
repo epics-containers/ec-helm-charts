@@ -1,9 +1,9 @@
 # the beamline name - only set for beamlines
-beamline: bl20j
+beamline:
 # the name of the repository in which the IOC is grouped
-ioc_group: bl20j
+ioc_group:
 # the location where the IOCs will run - same as beamline for beamlines
-location: bl20j
+location:
 
 # sizes of the auto provisioned PVs
 opi_size: 1Gi
