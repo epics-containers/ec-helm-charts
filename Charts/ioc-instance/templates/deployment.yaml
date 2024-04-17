@@ -19,6 +19,8 @@ spec:
         location: {{ .Values.location }}
         ioc_group: {{ .Values.ioc_group }}
         is_ioc: "true"
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}  # force roll out
     spec:
       {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
