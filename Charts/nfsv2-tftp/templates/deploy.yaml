@@ -79,7 +79,7 @@ metadata:
     location: {{ .Values.location }}
     ioc_group: {{ .Values.ioc_group }}
 spec:
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   type: LoadBalancer
   ports:
     - name: rpcbind
