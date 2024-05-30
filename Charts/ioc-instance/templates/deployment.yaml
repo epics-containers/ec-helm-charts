@@ -65,9 +65,9 @@ spec:
       - name: {{ .Release.Name }}
         image: {{ .Values.image }}
         command:
-          - bash
+          - {{ .Values.startCommand }}
         args:
-          - {{ .Values.start }}
+          - {{ .Values.startArgs }}
         livenessProbe:
           exec:
             command:
