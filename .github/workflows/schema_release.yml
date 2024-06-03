@@ -1,0 +1,20 @@
+name: Publish schemas
+
+on:
+  push
+
+jobs:
+  release:
+    # Release on tag push - publish schema
+    if: ${{ github.ref_type == 'tag' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Github Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
+        with:
+          files: |
+            Schemas/*.schema.json
+          generate_release_notes: true
