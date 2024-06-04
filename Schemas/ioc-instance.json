@@ -124,11 +124,15 @@
               "properties":{
                 "cpu": {
                   "type": "string",
-                  "default": "500m"
+                  "default": "500m",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
                 },
                 "memory": {
                   "type": "string",
-                  "default": "256Mi"
+                  "default": "256Mi",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
                 }
               }
             },
@@ -137,11 +141,15 @@
               "properties":{
                 "cpu": {
                   "type": "string",
-                  "default": "100m"
+                  "default": "100m",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
                 },
                 "memory": {
                   "type": "string",
-                  "default": "64Mi"
+                  "default": "64Mi",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
                 }
               }
             }
