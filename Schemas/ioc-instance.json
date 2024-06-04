@@ -1,5 +1,5 @@
 {
-  "$defs":{
+  "$defs": {
     "base": {
       "type": "object",
       "properties": {
@@ -54,8 +54,26 @@
           "default": "/epics/ioc/liveness.sh"
         },
         "globalEnv": {
-          "type": "string",
-          "description": ""
+          "type": "array",
+          "description": "The following are added to the pod's environment ",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+          "additionalProperties": false
+          }
         },
         "securityContext": {
           "type": "object",
@@ -121,7 +139,7 @@
           "properties": {
             "limits": {
               "type": "object",
-              "properties":{
+              "properties": {
                 "cpu": {
                   "type": "string",
                   "default": "500m",
@@ -138,7 +156,7 @@
             },
             "requests": {
               "type": "object",
-              "properties":{
+              "properties": {
                 "cpu": {
                   "type": "string",
                   "default": "100m",
@@ -156,13 +174,36 @@
           }
         },
         "tolerations": {
-          "type": "object",
-          "description": "Extra tolerations if needed"
+          "type": "array",
+          "description": "Extra tolerations if needed",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "operator": {
+                "type": [
+                  "string"
+                ]
+              },
+              "effect": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            "required": [
+              "key",
+              "operator",
+              "effect"
+            ]
+          }
         }
       },
       "additionalProperties": false
     },
-    "repo":{
+    "repo": {
       "type": "object",
       "properties": {
         "ioc-instance": {
@@ -183,7 +224,7 @@
         }
       }
     },
-    "service":{
+    "service": {
       "type": "object",
       "properties": {
         "shared": {
