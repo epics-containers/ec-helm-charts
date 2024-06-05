@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../Schemas/ioc-instance.json#/$defs/base
+# yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json#/$defs/base
 
 # default values for all IOCs
 # see end of file for values that may be overridden per individual IOC

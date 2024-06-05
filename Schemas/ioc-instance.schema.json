@@ -1,0 +1,244 @@
+{
+  "$defs": {
+    "base": {
+      "type": "object",
+      "properties": {
+        "beamline": {
+          "type": "string",
+          "description": "The beamline name."
+        },
+        "location": {
+          "type": "string",
+          "description": "The location where the IOCs will run - same as beamline for beamlines"
+        },
+        "ioc_group": {
+          "type": "string",
+          "description": "The name of the repository in which the IOC is grouped - same as beamline for beamlines"
+        },
+        "hostNetwork": {
+          "type": "boolean",
+          "description": "Use host network for IOC - required for Channel Access to work outside of the cluster"
+        },
+        "useAffinity": {
+          "type": "boolean",
+          "description": "Run only on nodes with label beamline:<beamline-name> or location:<location-name>"
+        },
+        "iocFolder": {
+          "type": "string",
+          "description": "Root folder for ioc source/binaries inside generic IOC container",
+          "default": "/epics/ioc"
+        },
+        "iocConfig": {
+          "type": "string",
+          "description": "Root folder for ioc source/binaries inside generic IOC container",
+          "default": "/epics/ioc/config"
+        },
+        "startCommand": {
+          "type": "string",
+          "description": "The command run as the entry point of the container.",
+          "default": "bash"
+        },
+        "startArgs": {
+          "type": "string",
+          "description": "The arguments for the entry point of the container.",
+          "default": "/epics/ioc/start.sh"
+        },
+        "stop": {
+          "type": "string",
+          "description": "Script run before stopping the IOC",
+          "default": "/epics/ioc/stop.sh"
+        },
+        "liveness": {
+          "type": "string",
+          "description": "Script for determining the liveness of the IOC",
+          "default": "/epics/ioc/liveness.sh"
+        },
+        "globalEnv": {
+          "type": "array",
+          "description": "The following are added to the pod's environment ",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+          "additionalProperties": false
+          }
+        },
+        "securityContext": {
+          "type": "object",
+          "description": "Override runAsXXX in the individual IOC values.yaml",
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "type": "boolean",
+              "description": "",
+              "default": "false"
+            },
+            "runAsUser": {
+              "type": "integer"
+            },
+            "runAsGroup": {
+              "type": "integer"
+            },
+            "capabilities": {
+              "type": "object"
+            },
+            "readOnlyRootFilesystem": {
+              "type": "string"
+            },
+            "runAsNonRoot": {
+              "type": "string"
+            }
+          }
+        },
+        "image": {
+          "type": "string",
+          "description": ""
+        },
+        "dataVolume": {
+          "type": "object",
+          "description": "A volume to mount for writing data to. This can be a PVC or a hostPath",
+          "properties": {
+            "pvc": {
+              "type": "boolean",
+              "description": "Create a PVC called {{ .Release.Name }}-data when true",
+              "default": "true"
+            },
+            "hostPath": {
+              "type": "string",
+              "description": "A path on the host machine to write data into. Also used as the path that the pvc or hostPath will be mounted at so that users need not be confused about inside/outside container paths",
+              "default": "/data"
+            }
+          }
+        },
+        "opisClaim": {
+          "type": "string",
+          "description": "Use the shared PVC for publishing opi files over http (see services/opis)"
+        },
+        "runtimeClaim": {
+          "type": "string",
+          "description": "Use the shared PVC for holding runtime files for each IOC"
+        },
+        "autosaveClaim": {
+          "type": "string",
+          "description": "Use the shared PVC autosave files (exclude for no autosave)"
+        },
+        "resources": {
+          "type": "object",
+          "description": "Set resource limits",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "default": "500m",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                },
+                "memory": {
+                  "type": "string",
+                  "default": "256Mi",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "default": "100m",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                },
+                "memory": {
+                  "type": "string",
+                  "default": "64Mi",
+                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
+                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                }
+              }
+            }
+          }
+        },
+        "tolerations": {
+          "type": "array",
+          "description": "Extra tolerations if needed",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "operator": {
+                "type": [
+                  "string"
+                ]
+              },
+              "effect": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            "required": [
+              "key",
+              "operator",
+              "effect"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "repo": {
+      "type": "object",
+      "properties": {
+        "ioc-instance": {
+          "$ref": "#/$defs/base",
+          "required": [
+            "autosaveClaim",
+            "beamline",
+            "dataVolume",
+            "globalEnv",
+            "hostNetwork",
+            "useAffinity",
+            "ioc_group",
+            "location",
+            "opisClaim",
+            "runtimeClaim",
+            "securityContext"
+          ]
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "shared": {
+          "type": "object",
+          "properties": {
+            "ioc-instance": {
+              "$ref": "#/$defs/base",
+              "required": [
+                "image"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
