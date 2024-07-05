@@ -1,31 +1,51 @@
 # yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json#/$defs/base
 
-# default values for all IOCs
-# see end of file for values that may be overridden per individual IOC
+########### Values defaults for ioc-instance Helm Chart ########################
 
+################################################################################
+# Values that all IOCs MUST set
+################################################################################
+
+# This value is the only mandatory override. You MUST declare the container
+# image URI for the Generic IOC
+image: ""
+
+# You MUST supply beamline for beamline IOCs or location for accelerator IOCs
 # the beamline name - only set for beamlines
-beamline:
-# the location where the IOCs will run - same as beamline for beamlines
-location:
+beamline: ""
+
+# The location where the IOCs will run - same as beamline for beamlines
+# For the accelerator this creates a label 'location' that should be used
+# in taints and tolerances to limit the launch of this IOC to the desired
+# servers.
+# DEFAULT = $.Values.beamline
+location: ""
+
+################################################################################
+# Optional override values
+################################################################################
+
 # the name of the repository in which the IOC is grouped
 # same as beamline for beamlines
-ioc_group:
+# DEFAULT = $.Values.beamline or .Values.$location
+ioc_group: ""
 
 # we use the default service account in the namespace so leave this out
 # if you need to specify an alternative then uncomment below
-# serviceAccountName: k8s-p38-iocs
+serviceAccountName: ""
 
 # useHostNetwork - use host network for IOC - required for Channel Access
-# to work outside of the cluster
-hostNetwork:
+# to work outside of the cluster unless a ca-gateway is in use
+hostNetwork: true
 
 # useAffinity - only run on nodes with label beamline:<beamline-name>
 # or location:<location-name>
-# Set to false for dedicated cluster per beamline and accelerator
-useAffinity:
+# Set to false for dedicated cluster per beamline and accelerator set to
+# true for beamlines that share a cluster
+useAffinity: false
 
 # nodeName is used to run on a specific node. Overrides affinity above.
-nodeName:
+nodeName: ""
 
 # root folder for ioc source/binaries inside generic IOC container
 iocFolder: /epics/ioc
@@ -37,13 +57,14 @@ startArgs: /epics/ioc/start.sh
 stop: /epics/ioc/stop.sh
 liveness: /epics/ioc/liveness.sh
 
-# the following are added to the pod's environment
-# globalEnv:
-  # - name:
-  #   value:
-# iocEnv:
-  # - name:
-  #   value:
+# the following are added to the pod's environment - globalEnv is for variables
+# that are the same for all IOCs, iocEnv for variables unique to each IOC
+globalEnv: []
+# - name:
+#   value:
+iocEnv: []
+# - name:
+#   value:
 
 # defaults for securityContext
 # Usually override runAsXXX in the individual IOC values.yaml.
@@ -61,14 +82,6 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
 
-########################################################################################
-# The following values are expected to be overridden in individual IOC values.yaml
-########################################################################################
-
-# This value is the only mandatory override. You must declare the image for the
-# Generic IOC in the values.yaml for each IOC instance.
-image:
-
 # a volume to mount for writing data to. This can be a PVC or a hostPath
 # the PVC
 dataVolume:
@@ -80,11 +93,11 @@ dataVolume:
   hostPath: /data
 
 # use the shared PVC for publishing opi files over http (see services/opis)
-opisClaim:
+opisClaim: ""
 # use the shared PVC for holding runtime files for each IOC
-runtimeClaim:
+runtimeClaim: ""
 # use the shared PVC autosave files (comment out for no autosave)
-autosaveClaim:
+autosaveClaim: ""
 
 # default resource limits
 resources:
@@ -96,4 +109,4 @@ resources:
     memory: 64Mi
 
 # extra tolerations if needed
-tolerations:
+tolerations: []
