@@ -1,11 +1,23 @@
+{{- /*
+Default the derivable substitution values.
+
+This keeps the length of the values.txt file for each individual IOC
+to a minimum
+*/ -}}
+{{- $location := default .Values.location .Values.beamline -}}
+{{- $ioc_group := default .Values.ioc_group $location -}}
+{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
+{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
+{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
     is_ioc: "true"
 spec:
   replicas: 1
@@ -16,8 +28,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        location: {{ .Values.location }}
-        ioc_group: {{ .Values.ioc_group }}
+        location: {{ $location }}
+        ioc_group: {{ $ioc_group }}
         is_ioc: "true"
       annotations:
         rollme: {{ randAlphaNum 5 | quote }}  # force roll out
@@ -28,26 +40,20 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       volumes:
-        {{- if .Values.runtimeClaim }}
         - name: runtime-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.runtimeClaim }}
-        {{- end }}
-        {{- if .Values.opisClaim }}
+            claimName: {{ $runtimeClaim }}
         - name: opis-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.opisClaim }}
-        {{- end }}
+            claimName: {{ $opisClaim }}
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           persistentVolumeClaim:
             claimName: {{ .Values.nfsv2TftpClaim }}
         {{- end }}
-        {{- if .Values.autosave }}
         - name: {{ .Release.Name }}
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}
-        {{- end }}
+            claimName: {{ .Release.Name }}-autosave
         {{- if .Values.dataVolume.pvc }}
         - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
@@ -82,10 +88,8 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: {{ .Values.iocConfig }}
-        {{- if .Values.autosave }}
-        - name: {{ .Release.Name }}
+        - name: {{ .Release.Name }}-autosave
           mountPath: /autosave
-        {{- end }}
         {{- if or (.Values.dataVolume.pvc) (.Values.dataVolume.hostPath)  }}
         - name: {{ .Release.Name }}-data
           mountPath: {{ .Values.dataVolume.hostPath }}
@@ -96,18 +100,14 @@ spec:
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           mountPath: /nfsv2-tftp
-          subPath: "{{ .Values.ioc_group }}/{{ .Release.Name }}"
-          {{- end }}
-        {{- if .Values.runtimeClaim }}
+          subPath: "{{ $ioc_group }}/{{ .Release.Name }}"
+        {{- end }}
         - name: runtime-volume
           mountPath: /epics/runtime
           subPath: "{{ .Release.Name }}"
-        {{- end }}
-        {{- if .Values.opisClaim }}
         - name: opis-volume
           mountPath: /epics/opi
           subPath: "{{ .Release.Name }}"
-        {{- end }}
         stdin: true
         tty: true
         securityContext:
@@ -123,11 +123,11 @@ spec:
         - name: IOC_PREFIX
           value: {{ or .Values.prefix .Release.Name | quote }}
         - name: IOC_LOCATION
-          value: {{ .Values.location | quote }}
+          value: {{ $location | quote }}
         - name: BEAMLINE
           value: {{ .Values.beamline | quote }}
         - name: IOC_GROUP
-          value: {{ .Values.ioc_group | quote }}
+          value: {{ $ioc_group | quote }}
         {{- if .Values.globalEnv }}
 {{  toYaml .Values.globalEnv | indent 8}}
         {{- end }}
@@ -152,7 +152,7 @@ spec:
               - key: location
                 operator: In
                 values:
-                  - {{ .Values.location }}
+                  - {{ $location }}
             {{- end }}
       {{- end }}
       tolerations:
@@ -162,8 +162,38 @@ spec:
           effect: NoSchedule
         - key: location
           operator: Equal
-          value: {{ .Values.location }}
+          value: {{ $location }}
           effect: NoSchedule
       {{- if .Values.tolerations }}
 {{  toYaml .Values.tolerations | indent 8}}
       {{- end }}
+
+{{ if .Values.dataVolume.pvc }}
+---
+# This IOC uses a data volume, so we will create a PVC for it
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-data
+  labels:
+    app: {{ .Release.Name }}
+    {{ if .Values.beamline -}}
+    beamline: {{ .Values.beamline }}
+    {{- else -}}
+    location: {{ .Values.location }}
+    {{- end }}
+    ioc_group: {{ $ioc_group }}
+    is_ioc: "true"
+spec:
+{{- if .Values.dataVolume.spec }}
+{{  toYaml .Values.dataVolume.spec | indent 2 }}
+{{ else }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Mi
+{{- end }}
+{{ else }}
+# This IOC has no data volume, so we will mount the host filesystem
+{{- end }}
