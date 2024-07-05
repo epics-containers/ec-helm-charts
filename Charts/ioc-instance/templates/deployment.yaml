@@ -21,6 +21,7 @@ metadata:
     is_ioc: "true"
 spec:
   replicas: 1
+  podManagementPolicy: Parallel  # force rollout from a failing state
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -32,7 +33,7 @@ spec:
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
       annotations:
-        rollme: {{ randAlphaNum 5 | quote }}  # force roll out
+        rollme: {{ randAlphaNum 5 | quote }}  # force roll out for config changes
     spec:
       {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
