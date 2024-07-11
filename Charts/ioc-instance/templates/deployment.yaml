@@ -49,14 +49,14 @@ spec:
         - name: opis-volume
           persistentVolumeClaim:
             claimName: {{ $opisClaim }}
+        - name: autosave-volume
+          persistentVolumeClaim:
+            claimName: {{ $autosaveClaim }}
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           persistentVolumeClaim:
             claimName: {{ .Values.nfsv2TftpClaim }}
         {{- end }}
-        - name: autosave-volume
-          persistentVolumeClaim:
-            claimName: $autosaveClaim
         {{- if .Values.dataVolume.pvc }}
         - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
