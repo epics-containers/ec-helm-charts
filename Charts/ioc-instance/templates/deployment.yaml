@@ -4,7 +4,9 @@ Default the derivable substitution values.
 This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
-{{- $location := default .Values.location .Values.beamline -}}
+{{- $beamline := default .Values.global.beamline .Values.beamline -}}
+{{- $enabled := default .Values.global.enable .Values.enabled  -}}
+{{- $location := default .Values.location $beamline -}}
 {{- $ioc_group := default .Values.ioc_group $location -}}
 {{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
 {{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
@@ -20,7 +22,11 @@ metadata:
     ioc_group: {{ $ioc_group }}
     is_ioc: "true"
 spec:
+  {{ if ne $enabled false -}}
   replicas: 1
+  {{- else -}}
+  replicas: 0
+  {{- end }}
   podManagementPolicy: Parallel  # force rollout from a failing state
   selector:
     matchLabels:
@@ -129,7 +135,7 @@ spec:
         - name: IOC_LOCATION
           value: {{ $location | quote }}
         - name: BEAMLINE
-          value: {{ .Values.beamline | quote }}
+          value: {{ $beamline | quote }}
         - name: IOC_GROUP
           value: {{ $ioc_group | quote }}
         {{- if .Values.globalEnv }}
@@ -145,12 +151,12 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            {{ if .Values.beamline -}}
+            {{ if $beamline -}}
             - matchExpressions:
               - key: beamline
                 operator: In
                 values:
-                  - {{ .Values.beamline }}
+                  - {{ $beamline }}
             {{- else -}}
             - matchExpressions:
               - key: location
@@ -162,7 +168,7 @@ spec:
       tolerations:
         - key: beamline
           operator: Equal
-          value: {{ .Values.beamline }}
+          value: {{ $beamline }}
           effect: NoSchedule
         - key: location
           operator: Equal
@@ -181,8 +187,8 @@ metadata:
   name: {{ .Release.Name }}-data
   labels:
     app: {{ .Release.Name }}
-    {{ if .Values.beamline -}}
-    beamline: {{ .Values.beamline }}
+    {{ if $beamline -}}
+    beamline: {{ $beamline }}
     {{- else -}}
     location: {{ .Values.location }}
     {{- end }}
