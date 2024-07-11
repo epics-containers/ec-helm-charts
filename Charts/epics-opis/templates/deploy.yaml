@@ -17,6 +17,10 @@ spec:
         app: {{ .Release.Name }}
         location: {{ .Values.location }}
         ioc_group: {{ .Values.ioc_group }}
+      annotations:
+      {{- range $k, $v := .Values.global.files }}
+        {{ $k }}-sha256: {{ $v | sha256sum }}
+      {{- end }}
     spec:
       volumes:
         - name: html-volume
