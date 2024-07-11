@@ -5,7 +5,7 @@ This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
 {{- $beamline := default .Values.global.beamline .Values.beamline -}}
-{{- $enabled := default .Values.global.enable .Values.enabled  -}}
+{{- $enabled := default .Values.global.enabled .Values.enabled  -}}
 {{- $location := default .Values.location $beamline -}}
 {{- $ioc_group := default .Values.ioc_group $location -}}
 {{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
