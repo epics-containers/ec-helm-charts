@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 data:
-{{- range $k, $v := .Values.files }}
+{{- range $k, $v := .Values.global.files }}
   {{ $k }}: |-
 {{ $v | indent 4 }}
 {{- end }}

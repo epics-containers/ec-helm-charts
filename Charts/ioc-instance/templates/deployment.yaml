@@ -33,7 +33,7 @@ spec:
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
       annotations:
-      {{- range $k, $v := .Values.files }}
+      {{- range $k, $v := .Values.global.files }}
         {{ $k }}-sha256: {{ $v | sha256sum }}
       {{- end }}
     spec:
