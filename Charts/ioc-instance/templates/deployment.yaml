@@ -20,6 +20,7 @@ metadata:
     app: {{ .Release.Name }}
     location: {{ $location }}
     ioc_group: {{ $ioc_group }}
+    enabled: {{ $enabled }}
     is_ioc: "true"
 spec:
   {{ if ne $enabled false -}}
