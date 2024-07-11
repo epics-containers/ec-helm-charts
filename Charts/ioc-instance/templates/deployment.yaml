@@ -54,9 +54,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.nfsv2TftpClaim }}
         {{- end }}
-        - name: {{ .Release.Name }}
+        - name: autosave-volume
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-autosave
+            claimName: $autosaveClaim
         {{- if .Values.dataVolume.pvc }}
         - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
@@ -91,8 +91,6 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: {{ .Values.iocConfig }}
-        - name: {{ .Release.Name }}-autosave
-          mountPath: /autosave
         {{- if or (.Values.dataVolume.pvc) (.Values.dataVolume.hostPath)  }}
         - name: {{ .Release.Name }}-data
           mountPath: {{ .Values.dataVolume.hostPath }}
@@ -110,6 +108,9 @@ spec:
           subPath: "{{ .Release.Name }}"
         - name: opis-volume
           mountPath: /epics/opi
+          subPath: "{{ .Release.Name }}"
+        - name: autosave-volume
+          mountPath: /autosave
           subPath: "{{ .Release.Name }}"
         stdin: true
         tty: true
