@@ -12,6 +12,7 @@ image: ""
 
 # You MUST supply beamline for beamline IOCs or location for accelerator IOCs
 # the beamline name - only set for beamlines
+# NOTE: this value can also be set in global: instead on ioc-instance:
 beamline: ""
 
 # The location where the IOCs will run - same as beamline for beamlines
@@ -19,6 +20,7 @@ beamline: ""
 # in taints and tolerances to limit the launch of this IOC to the desired
 # servers.
 # DEFAULT = $.Values.beamline
+# NOTE: this value can also be set in global: instead on ioc-instance:
 location: ""
 
 ################################################################################

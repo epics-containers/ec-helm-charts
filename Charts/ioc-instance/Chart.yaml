@@ -2,6 +2,7 @@
 apiVersion: v2
 name: ioc-instance
 
-version: 3.4.5
+# updated by CI when tagging a release
+version: 1.0.0
 
 type: application
