@@ -4,11 +4,15 @@ Default the derivable substitution values.
 This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
-{{- $location := default .Values.location .Values.beamline -}}
+{{- $beamline := default .Values.global.beamline .Values.beamline -}}
+{{- $location := default .Values.location $beamline | required "ERROR - You must supply beamline or location." -}}
 {{- $ioc_group := default .Values.ioc_group $location -}}
 {{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
 {{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
 {{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
+{{- $image := .Values.image | required "ERROR - You must supply image." -}}
+
+{{- $enabled := default .Values.global.enabled .Values.enabled -}}
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -18,9 +22,14 @@ metadata:
     app: {{ .Release.Name }}
     location: {{ $location }}
     ioc_group: {{ $ioc_group }}
+    enabled: {{ $enabled | quote }}
     is_ioc: "true"
 spec:
+  {{ if ne $enabled false -}}
   replicas: 1
+  {{- else -}}
+  replicas: 0
+  {{- end }}
   podManagementPolicy: Parallel  # force rollout from a failing state
   selector:
     matchLabels:
@@ -32,8 +41,11 @@ spec:
         location: {{ $location }}
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
+        enabled: {{ $enabled | quote }}
       annotations:
-        rollme: {{ randAlphaNum 5 | quote }}  # force roll out for config changes
+      {{- range $k, $v := .Values.global.files }}
+        {{ $k }}-sha256: {{ $v | sha256sum }}
+      {{- end }}
     spec:
       {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
@@ -47,14 +59,14 @@ spec:
         - name: opis-volume
           persistentVolumeClaim:
             claimName: {{ $opisClaim }}
+        - name: autosave-volume
+          persistentVolumeClaim:
+            claimName: {{ $autosaveClaim }}
         {{- if .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           persistentVolumeClaim:
             claimName: {{ .Values.nfsv2TftpClaim }}
         {{- end }}
-        - name: {{ .Release.Name }}
-          persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-autosave
         {{- if .Values.dataVolume.pvc }}
         - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
@@ -89,8 +101,6 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: {{ .Values.iocConfig }}
-        - name: {{ .Release.Name }}-autosave
-          mountPath: /autosave
         {{- if or (.Values.dataVolume.pvc) (.Values.dataVolume.hostPath)  }}
         - name: {{ .Release.Name }}-data
           mountPath: {{ .Values.dataVolume.hostPath }}
@@ -109,6 +119,9 @@ spec:
         - name: opis-volume
           mountPath: /epics/opi
           subPath: "{{ .Release.Name }}"
+        - name: autosave-volume
+          mountPath: /autosave
+          subPath: "{{ .Release.Name }}"
         stdin: true
         tty: true
         securityContext:
@@ -126,7 +139,7 @@ spec:
         - name: IOC_LOCATION
           value: {{ $location | quote }}
         - name: BEAMLINE
-          value: {{ .Values.beamline | quote }}
+          value: {{ $beamline | quote }}
         - name: IOC_GROUP
           value: {{ $ioc_group | quote }}
         {{- if .Values.globalEnv }}
@@ -142,12 +155,12 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            {{ if .Values.beamline -}}
+            {{ if $beamline -}}
             - matchExpressions:
               - key: beamline
                 operator: In
                 values:
-                  - {{ .Values.beamline }}
+                  - {{ $beamline }}
             {{- else -}}
             - matchExpressions:
               - key: location
@@ -159,7 +172,7 @@ spec:
       tolerations:
         - key: beamline
           operator: Equal
-          value: {{ .Values.beamline }}
+          value: {{ $beamline }}
           effect: NoSchedule
         - key: location
           operator: Equal
@@ -178,8 +191,8 @@ metadata:
   name: {{ .Release.Name }}-data
   labels:
     app: {{ .Release.Name }}
-    {{ if .Values.beamline -}}
-    beamline: {{ .Values.beamline }}
+    {{ if $beamline -}}
+    beamline: {{ $beamline }}
     {{- else -}}
     location: {{ .Values.location }}
     {{- end }}
