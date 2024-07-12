@@ -13,6 +13,7 @@ to a minimum
 {{- $image := .Values.image | required "ERROR - You must supply image." -}}
 
 {{- $enabled := default .Values.global.enabled .Values.enabled -}}
+{{- $enabled := default true $enabled -}}
 
 apiVersion: apps/v1
 kind: StatefulSet
