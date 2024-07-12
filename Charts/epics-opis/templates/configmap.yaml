@@ -5,7 +5,11 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 data:
+{{ if and .Values.global .Values.global.files -}}
 {{- range $k, $v := .Values.global.files }}
   {{ $k | replace "_dot_" "." }}: |-
 {{ $v | indent 4 }}
+{{- end }}
+{{- else -}}
+{{ (.Files.Glob "config/*").AsConfig | indent 2 }}
 {{- end }}

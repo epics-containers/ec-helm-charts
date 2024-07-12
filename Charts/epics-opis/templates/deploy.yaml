@@ -18,8 +18,10 @@ spec:
         location: {{ .Values.location }}
         ioc_group: {{ .Values.ioc_group }}
       annotations:
+      {{ if and .Values.global .Values.global.files -}}
       {{- range $k, $v := .Values.global.files }}
         {{ $k }}-sha256: {{ $v | sha256sum }}
+      {{- end }}
       {{- end }}
     spec:
       volumes:
