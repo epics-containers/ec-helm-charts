@@ -27,6 +27,10 @@ location: ""
 # Optional override values
 ################################################################################
 
+# set to false for replicas=0, 1 for replicas=1
+global:
+  enabled: true
+
 # the name of the repository in which the IOC is grouped
 # same as beamline for beamlines
 # DEFAULT = $.Values.beamline or .Values.$location
