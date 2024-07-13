@@ -12,7 +12,7 @@ to a minimum
 {{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
 {{- $image := .Values.image | required "ERROR - You must supply image." -}}
 
-{{- $enabled := default .Values.global.enabled .Values.enabled -}}
+{{- $enabled := ternary (eq .Values.global.enabled false) false true -}}
 
 apiVersion: apps/v1
 kind: StatefulSet
