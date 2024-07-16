@@ -41,11 +41,8 @@ spec:
         location: {{ $location }}
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
-        enabled: {{ $enabled | quote }}
-      annotations:
-      {{- range $k, $v := .Values.global.files }}
-        {{ $k }}-sha256: {{ $v | sha256sum }}
-      {{- end }}
+        # always re-deploy in case the configMap has changed
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
