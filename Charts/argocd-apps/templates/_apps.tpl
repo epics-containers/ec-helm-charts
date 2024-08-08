@@ -9,6 +9,8 @@ kind: Application
 metadata:
   name: {{ $service }}
   namespace: {{ $currentScope.Release.Namespace }}
+  labels:
+    ec-service: {{ $settings.enabled | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
