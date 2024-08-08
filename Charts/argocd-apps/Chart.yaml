@@ -1,0 +1,8 @@
+apiVersion: v2
+name: argocd-apps
+description: |
+  A chart for creating Argocd managed apps for ec services.
+
+type: library
+
+version: 3.4.0
