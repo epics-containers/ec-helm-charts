@@ -1,0 +1,79 @@
+{
+    "properties": {
+        "destination": {
+            "description": "The desired Kubernetes cluster for deployment",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the Kubernetes cluster"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "The target namespace"
+                }
+            },
+            "type": "object"
+        },
+        "source": {
+            "description": "The desired specification of the services to be deployed",
+            "properties": {
+                "targetRevision": {
+                    "type": "string",
+                    "description": "Optional override for targetRevision"
+                },
+                "repoURL": {
+                    "type": "string",
+                    "description": "The git repo hosting the services repository (helm chart path must be services/<service>)"
+                }
+            },
+            "type": "object"
+        },
+        "services": {
+            "type": "object",
+            "patternProperties": {
+                "^.*$": {
+                "type": ["object", "null"],
+                "properties": {
+                    "targetRevision": {
+                        "type": "string",
+                        "description": "Override for targetRevision"
+                        },
+                    "repoURL": {
+                        "type": "string",
+                        "description": "Override for repoURL"
+                        },
+                    "ec-service": {
+                            "type": "boolean",
+                            "description": "Manage a service as an Epics container",
+                            "default": "False"
+                            },
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "Start a service",
+                        "default": "True"
+                        },
+                    "removed": {
+                        "type": "boolean",
+                        "description": "Remove the service from the cluster",
+                        "default": "False"
+                        }
+                },
+                "additionalProperties": false,
+                "description": "A service instance"
+                }
+            }
+        },
+        "project": {
+            "description": "A target Argocd Project",
+            "type": "string"
+        }
+    },
+    "required": [
+        "project",
+        "destination",
+        "source"
+    ],
+    "title": "Values",
+    "type": "object"
+}
+  
