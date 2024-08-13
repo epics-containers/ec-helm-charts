@@ -1,10 +1,7 @@
 # use nginx for publishing opi files over http
 image: nginx:1.25.4
 
-
-# the beamline name - only set for beamlines
-beamline:
 # the name of the repository in which the IOC is grouped
 ioc_group:
-# the location where the IOCs will run - same as beamline for beamlines
+# the location where the IOCs will run
 location:

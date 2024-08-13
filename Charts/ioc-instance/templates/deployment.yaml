@@ -4,8 +4,7 @@ Default the derivable substitution values.
 This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
-{{- $beamline := default .Values.global.beamline .Values.beamline -}}
-{{- $location := default .Values.location $beamline | required "ERROR - You must supply beamline or location." -}}
+{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location." -}}
 {{- $ioc_group := default .Values.ioc_group $location -}}
 {{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
 {{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
@@ -123,8 +122,10 @@ spec:
         tty: true
         securityContext:
 {{  toYaml .Values.securityContext | indent 10}}
+        {{- if .Values.resources }}
         resources:
 {{  toYaml .Values.resources | indent 10}}
+        {{- end }}
         imagePullPolicy: Always
         env:
         - name: IOCSH_PS1
@@ -135,8 +136,6 @@ spec:
           value: {{ or .Values.prefix .Release.Name | quote }}
         - name: IOC_LOCATION
           value: {{ $location | quote }}
-        - name: BEAMLINE
-          value: {{ $beamline | quote }}
         - name: IOC_GROUP
           value: {{ $ioc_group | quote }}
         {{- if .Values.globalEnv }}
@@ -147,35 +146,12 @@ spec:
         {{- end }}
       {{- if .Values.nodeName }}
       nodeName: {{ .Values.nodeName }}
-      {{- else if .Values.useAffinity }}
+      {{- else if .Values.affinity }}
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            {{ if $beamline -}}
-            - matchExpressions:
-              - key: beamline
-                operator: In
-                values:
-                  - {{ $beamline }}
-            {{- else -}}
-            - matchExpressions:
-              - key: location
-                operator: In
-                values:
-                  - {{ $location }}
-            {{- end }}
+{{  toYaml .Values.affinity | indent 8}}
       {{- end }}
-      tolerations:
-        - key: beamline
-          operator: Equal
-          value: {{ $beamline }}
-          effect: NoSchedule
-        - key: location
-          operator: Equal
-          value: {{ $location }}
-          effect: NoSchedule
       {{- if .Values.tolerations }}
+      tolerations:
 {{  toYaml .Values.tolerations | indent 8}}
       {{- end }}
 
@@ -188,11 +164,7 @@ metadata:
   name: {{ .Release.Name }}-data
   labels:
     app: {{ .Release.Name }}
-    {{ if $beamline -}}
-    beamline: {{ $beamline }}
-    {{- else -}}
     location: {{ .Values.location }}
-    {{- end }}
     ioc_group: {{ $ioc_group }}
     is_ioc: "true"
 spec:

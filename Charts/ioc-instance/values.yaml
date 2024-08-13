@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json#/$defs/base
+# yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json
 
 ########### Values defaults for ioc-instance Helm Chart ########################
 
@@ -10,17 +10,9 @@
 # image URI for the Generic IOC
 image: ""
 
-# You MUST supply beamline for beamline IOCs or location for accelerator IOCs
-# the beamline name - only set for beamlines
-# NOTE: this value can also be set in global: instead on ioc-instance:
-beamline: ""
-
-# The location where the IOCs will run - same as beamline for beamlines
-# For the accelerator this creates a label 'location' that should be used
-# in taints and tolerances to limit the launch of this IOC to the desired
-# servers.
-# DEFAULT = $.Values.beamline
-# NOTE: this value can also be set in global: instead on ioc-instance:
+# The location where the IOCs will run.
+# This creates a label 'location'
+# NOTE: this value can also be set in global: instead of ioc-instance:
 location: ""
 
 ################################################################################
@@ -28,8 +20,7 @@ location: ""
 ################################################################################
 
 # the name of the repository in which the IOC is grouped
-# same as beamline for beamlines
-# DEFAULT = $.Values.beamline or .Values.$location
+# DEFAULT = .Values.$location
 ioc_group: ""
 
 # we use the default service account in the namespace so leave this out
@@ -39,15 +30,6 @@ serviceAccountName: ""
 # useHostNetwork - use host network for IOC - required for Channel Access
 # to work outside of the cluster unless a ca-gateway is in use
 hostNetwork: true
-
-# useAffinity - only run on nodes with label beamline:<beamline-name>
-# or location:<location-name>
-# Set to false for dedicated cluster per beamline and accelerator set to
-# true for beamlines that share a cluster
-useAffinity: false
-
-# nodeName is used to run on a specific node. Overrides affinity above.
-nodeName: ""
 
 # root folder for ioc source/binaries inside generic IOC container
 iocFolder: /epics/ioc
@@ -101,14 +83,32 @@ runtimeClaim: ""
 # use the shared PVC autosave files (comment out for no autosave)
 autosaveClaim: ""
 
-# default resource limits
-resources:
-  limits:
-    cpu: 500m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 64Mi
+# nodeName is used to run on a specific node. Overrides affinity
+nodeName: ""
 
-# extra tolerations if needed
+# Affinity is a group of affinity scheduling rules.
+affinity:
+  # nodeAffinity:
+  #   requiredDuringSchedulingIgnoredDuringExecution:
+  #     nodeSelectorTerms:
+  #       - matchExpressions:
+  #         - key: location
+  #           operator: In
+  #           values:
+  #             - bl01t
+
+# If specified, the pod's tolerations.
 tolerations: []
+  # - key: location
+  #   operator: Equal
+  #   value: bl01t
+  #   effect: NoSchedule
+
+# ResourceRequirements describes the compute resource requirements.
+resources:
+  # limits:
+  #   cpu: 500m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 64M

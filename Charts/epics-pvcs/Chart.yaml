@@ -5,7 +5,7 @@
 apiVersion: v2
 name: epics-pvcs
 description: |
-  A set of PVCs to share between pods for a beamline/accelerator domain
+  A set of PVCs to share between pods for a services domain
 
 type: application
 

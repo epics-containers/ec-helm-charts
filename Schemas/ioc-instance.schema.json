@@ -1,27 +1,41 @@
-{
+{ "title": "Values",
+  "type": "object",
+  "$schema": "http://json-schema.org/schema#",
+  "$ref": "#/$defs/base",
+  "required": [
+    "image",
+    "location"
+  ],
   "$defs": {
     "base": {
       "type": "object",
       "properties": {
-        "beamline": {
-          "type": "string",
-          "description": "The beamline name."
-        },
         "location": {
           "type": "string",
-          "description": "The location where the IOCs will run - same as beamline for beamlines"
+          "description": "The location where the IOCs will run",
+          "default": ""
         },
         "ioc_group": {
           "type": "string",
-          "description": "The name of the repository in which the IOC is grouped - same as beamline for beamlines"
+          "description": "The name of the repository in which the IOC is grouped",
+          "default": ""
+        },
+        "serviceAccountName": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/serviceAccountName"
         },
         "hostNetwork": {
-          "type": "boolean",
-          "description": "Use host network for IOC - required for Channel Access to work outside of the cluster"
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/hostNetwork",
+          "description": "Use host network for IOC - required for Channel Access to work outside of the cluster unless a ca-gateway is in use"
         },
-        "useAffinity": {
-          "type": "boolean",
-          "description": "Run only on nodes with label beamline:<beamline-name> or location:<location-name>"
+        "affinity": {
+          "description": "Affinity is a group of affinity scheduling rules.",
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/affinity"}
+          ]
+        },
+        "nodeName": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
         },
         "iocFolder": {
           "type": "string",
@@ -54,56 +68,21 @@
           "default": "/epics/ioc/liveness.sh"
         },
         "globalEnv": {
-          "type": "array",
-          "description": "The following are added to the pod's environment ",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "value": {
-                "type": [
-                  "string"
-                ]
-              }
-            },
-            "required": [
-              "name",
-              "value"
-            ],
-          "additionalProperties": false
-          }
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/env",
+          "description": "The following are added to the pod's environment"
+        },
+        "iocEnv": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/env",
+          "description": "The following are added to the pod's environment"
         },
         "securityContext": {
-          "type": "object",
-          "description": "Override runAsXXX in the individual IOC values.yaml",
-          "properties": {
-            "allowPrivilegeEscalation": {
-              "type": "boolean",
-              "description": "",
-              "default": "false"
-            },
-            "runAsUser": {
-              "type": "integer"
-            },
-            "runAsGroup": {
-              "type": "integer"
-            },
-            "capabilities": {
-              "type": "object"
-            },
-            "readOnlyRootFilesystem": {
-              "type": "string"
-            },
-            "runAsNonRoot": {
-              "type": "string"
-            }
-          }
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/securityContext"
         },
         "image": {
           "type": "string",
-          "description": ""
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/image",
+          "description": "The container image URI for the Generic IOC",
+          "default": ""
         },
         "dataVolume": {
           "type": "object",
@@ -134,109 +113,27 @@
           "description": "Use the shared PVC autosave files (exclude for no autosave)"
         },
         "resources": {
-          "type": "object",
-          "description": "Set resource limits",
-          "properties": {
-            "limits": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string",
-                  "default": "500m",
-                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
-                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
-                },
-                "memory": {
-                  "type": "string",
-                  "default": "256Mi",
-                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
-                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
-                }
-              }
-            },
-            "requests": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string",
-                  "default": "100m",
-                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
-                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
-                },
-                "memory": {
-                  "type": "string",
-                  "default": "64Mi",
-                  "description": "Resource limits e.g. 121M, 120Mi, 2G, 1Gi",
-                  "pattern": "^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
-                }
-              }
-            }
-          }
+          "description": "ResourceRequirements describes the compute resource requirements.",
+          "oneOf": [
+              {"type": "null"},
+              {"$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"}
+          ]
         },
         "tolerations": {
-          "type": "array",
-          "description": "Extra tolerations if needed",
-          "items": {
-            "type": "object",
-            "properties": {
-              "key": {
-                "type": "string"
-              },
-              "operator": {
-                "type": [
-                  "string"
-                ]
-              },
-              "effect": {
-                "type": [
-                  "string"
-                ]
-              }
-            },
-            "required": [
-              "key",
-              "operator",
-              "effect"
-            ]
-          }
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/tolerations"
         }
       },
       "additionalProperties": false
     },
-    "repo": {
+    "service": {
       "type": "object",
       "properties": {
         "ioc-instance": {
           "$ref": "#/$defs/base",
           "required": [
-            "autosaveClaim",
-            "beamline",
-            "dataVolume",
-            "globalEnv",
-            "hostNetwork",
-            "useAffinity",
-            "ioc_group",
-            "location",
-            "opisClaim",
-            "runtimeClaim",
-            "securityContext"
+            "image",
+            "location"
           ]
-        }
-      }
-    },
-    "service": {
-      "type": "object",
-      "properties": {
-        "shared": {
-          "type": "object",
-          "properties": {
-            "ioc-instance": {
-              "$ref": "#/$defs/base",
-              "required": [
-                "image"
-              ]
-            }
-          }
         }
       }
     }

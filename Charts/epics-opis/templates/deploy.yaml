@@ -52,35 +52,12 @@ spec:
             - mountPath: /etc/nginx/nginx.conf
               name: config-volume
               subPath: nginx.conf
-      {{- if .Values.useAffinity }}
+      {{- if .Values.affinity }}
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            {{ if .Values.beamline -}}
-            - matchExpressions:
-              - key: beamline
-                operator: In
-                values:
-                  - {{ .Values.beamline }}
-            {{- else -}}
-            - matchExpressions:
-              - key: location
-                operator: In
-                values:
-                  - {{ .Values.location }}
-            {{- end }}
+{{  toYaml .Values.affinity | indent 8}}
       {{- end }}
-      tolerations:
-        - key: beamline
-          operator: Equal
-          value: {{ .Values.beamline }}
-          effect: NoSchedule
-        - key: location
-          operator: Equal
-          value: {{ .Values.location }}
-          effect: NoSchedule
       {{- if .Values.tolerations }}
+      tolerations:
 {{  toYaml .Values.tolerations | indent 8}}
       {{- end }}
 
