@@ -104,11 +104,11 @@ tolerations: []
   #   value: bl01t
   #   effect: NoSchedule
 
-# ResourceRequirements describes the compute resource requirements.
+# default resource limits
 resources:
-  # limits:
-  #   cpu: 500m
-  #   memory: 256Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 64M
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
