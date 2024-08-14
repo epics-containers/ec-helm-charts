@@ -10,7 +10,7 @@ metadata:
   name: {{ $service }}
   namespace: {{ $currentScope.Release.Namespace }}
   labels:
-    ec-service: {{ eq $settings.enabled true | ternary true false | quote }}
+    ec-service: {{ eq $settings.ec-service true | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
