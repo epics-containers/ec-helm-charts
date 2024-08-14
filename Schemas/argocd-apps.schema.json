@@ -42,7 +42,7 @@
                         "type": "string",
                         "description": "Override for repoURL"
                         },
-                    "ec-service": {
+                    "ec_service": {
                             "type": "boolean",
                             "description": "Manage a service as an Epics container",
                             "default": "False"
