@@ -164,7 +164,7 @@ metadata:
   name: {{ .Release.Name }}-data
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
+    location: {{ $location }}
     ioc_group: {{ $ioc_group }}
     is_ioc: "true"
 spec:
