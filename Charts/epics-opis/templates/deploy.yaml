@@ -1,11 +1,15 @@
+{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
+{{- $ioc_group := .Values.global.ioc_group | required "ERROR - You must supply global.ioc_group" -}}
+{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
+
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   replicas: 1
   selector:
@@ -15,8 +19,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        location: {{ .Values.location }}
-        ioc_group: {{ .Values.ioc_group }}
+        location: {{ $location }}
+        ioc_group: {{ $ioc_group }}
       annotations:
       {{ if and .Values.global .Values.global.files -}}
       {{- range $k, $v := .Values.global.files }}
@@ -27,7 +31,7 @@ spec:
       volumes:
         - name: html-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.ioc_group }}-opi-claim
+            claimName: {{ $opisClaim }}
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-nginx-config
@@ -68,8 +72,8 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   type: LoadBalancer
   ports:
