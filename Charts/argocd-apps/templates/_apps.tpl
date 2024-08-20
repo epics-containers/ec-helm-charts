@@ -27,9 +27,6 @@ spec:
       valueFiles:
         - ../values.yaml
         - values.yaml
-      parameters:
-        - name: global.enabled
-          value: {{ eq $settings.enabled false | ternary false true | quote }}
   syncPolicy:
     automated:
       prune: true
