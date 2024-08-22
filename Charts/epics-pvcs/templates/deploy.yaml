@@ -1,12 +1,19 @@
+{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
+{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
+{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
+{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
+{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
+{{- $binariesClaim := default (print $ioc_group "-binaries-claim") .Values.binariesClaim -}}
+
 # PVC for shared OPI files
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.ioc_group }}-opi-claim
+  name: {{ $opisClaim }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -18,11 +25,11 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.ioc_group }}-runtime-claim
+  name: {{ $runtimeClaim }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -34,11 +41,11 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.ioc_group }}-autosave-claim
+  name: {{ $autosaveClaim }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -51,11 +58,11 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.ioc_group }}-binaries-claim
+  name: {{ $binariesClaim }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   accessModes:
     - ReadWriteMany

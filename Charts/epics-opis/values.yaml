@@ -1,7 +1,6 @@
 # use nginx for publishing opi files over http
 image: nginx:1.25.4
-
-# the name of the repository in which the IOC is grouped
+# Short name for this collection of services
 ioc_group:
-# the location where the IOCs will run
+# location where these IOCs and services will run
 location:

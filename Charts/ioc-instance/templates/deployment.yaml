@@ -4,8 +4,8 @@ Default the derivable substitution values.
 This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
-{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location." -}}
-{{- $ioc_group := default .Values.ioc_group $location -}}
+{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
+{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
 {{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
 {{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
 {{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
