@@ -3,11 +3,9 @@ image: ghcr.io/epics-containers/nfsv2-tftp-server:0.2.2
 
 # The remaining values must all be set by each invoker
 
-# the beamline name - only set for beamlines
-beamline:
 # the name of the repository in which the IOC is grouped
 ioc_group:
-# the location where the IOCs will run - same as beamline for beamlines
+# the location where the IOCs will run
 location:
 
 # static IP for both services (must be from the allowed range for the cluster)

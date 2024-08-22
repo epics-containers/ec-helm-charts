@@ -1,11 +1,15 @@
+{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
+{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
+{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
+
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   replicas: 1
   selector:
@@ -15,8 +19,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        location: {{ .Values.location }}
-        ioc_group: {{ .Values.ioc_group }}
+        location: {{ $location }}
+        ioc_group: {{ $ioc_group }}
       annotations:
       {{ if and .Values.global .Values.global.files -}}
       {{- range $k, $v := .Values.global.files }}
@@ -27,7 +31,7 @@ spec:
       volumes:
         - name: html-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.ioc_group }}-opi-claim
+            claimName: {{ $opisClaim }}
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-nginx-config
@@ -52,35 +56,12 @@ spec:
             - mountPath: /etc/nginx/nginx.conf
               name: config-volume
               subPath: nginx.conf
-      {{- if .Values.useAffinity }}
+      {{- if .Values.affinity }}
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            {{ if .Values.beamline -}}
-            - matchExpressions:
-              - key: beamline
-                operator: In
-                values:
-                  - {{ .Values.beamline }}
-            {{- else -}}
-            - matchExpressions:
-              - key: location
-                operator: In
-                values:
-                  - {{ .Values.location }}
-            {{- end }}
+{{  toYaml .Values.affinity | indent 8}}
       {{- end }}
-      tolerations:
-        - key: beamline
-          operator: Equal
-          value: {{ .Values.beamline }}
-          effect: NoSchedule
-        - key: location
-          operator: Equal
-          value: {{ .Values.location }}
-          effect: NoSchedule
       {{- if .Values.tolerations }}
+      tolerations:
 {{  toYaml .Values.tolerations | indent 8}}
       {{- end }}
 
@@ -91,8 +72,8 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
 spec:
   type: LoadBalancer
   ports:

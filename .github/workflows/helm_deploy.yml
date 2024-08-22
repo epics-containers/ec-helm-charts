@@ -1,11 +1,11 @@
-name: Build and publish a beamline's ioc helm charts
+name: Build and publish helm charts
 
 on:
   push:
   pull_request:
 
 env:
-  HELM_VERSION_TO_INSTALL: 3.13.2
+  HELM_VERSION_TO_INSTALL: 3.14.3
 
 jobs:
   build-and-push-helm-charts:
