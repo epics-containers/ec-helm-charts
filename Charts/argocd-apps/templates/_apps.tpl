@@ -24,6 +24,9 @@ spec:
     targetRevision: {{ default $currentScope.Values.source.targetRevision $settings.targetRevision }}
     helm:
       version: v3
+      parameters:
+        - name: global.enabled
+          value: {{ eq $settings.enabled false | ternary false true | quote }}
       valueFiles:
         - ../values.yaml
         - values.yaml
