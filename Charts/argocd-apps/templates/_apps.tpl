@@ -1,5 +1,5 @@
 {{- define "ec-helm-charts.argocd-apps" -}}
-{{- range $index, $services := list .Values.iocs .Values.services }}
+{{- range $index, $services := list .Values.ec_services .Values.services }}
 {{- range $service, $settings := $services }}
 {{- /* Make sure settings is an empty dict if it is currently nil */ -}}
 {{ $settings := default dict $settings -}}
@@ -10,7 +10,7 @@ metadata:
   name: {{ $service }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    is_ioc: {{ eq $index 0 | ternary true false | quote }}
+    ec_service: {{ eq $index 0 | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
