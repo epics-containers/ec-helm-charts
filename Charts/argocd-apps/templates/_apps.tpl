@@ -1,6 +1,6 @@
 {{- define "ec-helm-charts.argocd-apps" -}}
-{{- $currentScope := . -}}
-{{- range $service, $settings := .Values.services }}
+{{- range $index, $services := list .Values.ec_services .Values.services }}
+{{- range $service, $settings := $services }}
 {{- /* Make sure settings is an empty dict if it is currently nil */ -}}
 {{ $settings := default dict $settings -}}
 {{ if ne $settings.removed true }}
@@ -8,22 +8,27 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ $service }}
-  namespace: {{ $currentScope.Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   labels:
-    ec_service: {{ eq $settings.ec_service true | ternary true false | quote }}
+    ec_service: {{ eq $index 0 | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: {{ default $currentScope.Release.Namespace $currentScope.Values.project }}
+  project: {{ default $.Release.Namespace $.Values.project }}
   destination:
-    namespace: {{ $currentScope.Values.destination.namespace }}
-    name: {{ $currentScope.Values.destination.name }}
+    namespace: {{ $.Values.destination.namespace }}
+    name: {{ $.Values.destination.name }}
   source:
-    repoURL: {{ default $currentScope.Values.source.repoURL $settings.repoURL }}
+    repoURL: {{ default $.Values.source.repoURL $settings.repoURL }}
     path: services/{{ $service }}
-    targetRevision: {{ default $currentScope.Values.source.targetRevision $settings.targetRevision }}
+    targetRevision: {{ default $.Values.source.targetRevision $settings.targetRevision }}
     helm:
       version: v3
+      {{- if eq $index 0 }}
+      parameters:
+        - name: global.enabled
+          value: {{ eq $settings.enabled false | ternary false true | quote }}
+      {{- end }}
       valueFiles:
         - ../values.yaml
         - values.yaml
@@ -36,6 +41,7 @@ spec:
       - ApplyOutOfSyncOnly=true
       - RespectIgnoreDifferences=true
 ---
-{{ end }}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
