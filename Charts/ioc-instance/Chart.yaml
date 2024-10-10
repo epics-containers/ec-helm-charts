@@ -6,3 +6,5 @@ name: ioc-instance
 version: 1.0.0
 
 type: application
+sources:
+  - https://github.com/epics-containers/ec-helm-charts
