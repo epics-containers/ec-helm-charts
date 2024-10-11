@@ -75,6 +75,11 @@ spec:
             path: {{ .hostPath }}
             type: Directory
         {{- end }}
+        {{- range .Values.pvClaims }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .claimName }}
+        {{- end }}
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-config
@@ -123,6 +128,11 @@ spec:
         {{- range .Values.hostMounts }}
         - name: {{ .name }}
           mountPath: {{ .mountPath }}
+        {{- end }}
+        {{- range .Values.pvClaims }}
+        - name: {{ .name }}
+          mountPath: {{ .mountPath }}
+          subPath: {{ .subPath | default "/" }}
         {{- end }}
         stdin: true
         tty: true
