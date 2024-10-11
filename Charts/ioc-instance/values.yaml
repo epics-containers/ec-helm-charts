@@ -76,6 +76,13 @@ dataVolume:
   # inside/outside container paths.
   hostPath: /data
 
+# additional host mounts if required
+hostMounts: []
+# e.g.
+# - name: andorusb
+#   hostPath: /dev/andorusb
+#   mountPath: /dev/andorusb
+
 # use the shared PVC for publishing opi files over http (see services/opis)
 opisClaim: ""
 # use the shared PVC for holding runtime files for each IOC
@@ -98,7 +105,8 @@ affinity:
   #             - bl01t
 
 # If specified, the pod's tolerations.
-tolerations: []
+tolerations:
+  []
   # - key: location
   #   operator: Equal
   #   value: bl01t
