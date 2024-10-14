@@ -3,6 +3,12 @@ name: argocd-apps
 description: |
   A chart for creating Argocd managed apps for ec services.
 
-type: library
-
 version: 3.4.0
+
+type: library
+home: https://github.com/epics-containers/ec-helm-charts
+sources:
+  - https://github.com/epics-containers/ec-helm-charts/tree/main/Charts/argocd-apps
+maintainers:
+  - name: epics-containers
+    url: https://epics-containers.github.io
