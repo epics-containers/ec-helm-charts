@@ -10,6 +10,12 @@
     "base": {
       "type": "object",
       "properties": {
+        "image": {
+          "type": "string",
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/image",
+          "description": "The container image URI for the Generic IOC",
+          "default": ""
+        },
         "location": {
           "type": "string",
           "description": "The location where the IOCs will run",
@@ -26,16 +32,6 @@
         "hostNetwork": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/hostNetwork",
           "description": "Use host network for IOC - required for Channel Access to work outside of the cluster unless a ca-gateway is in use"
-        },
-        "affinity": {
-          "description": "Affinity is a group of affinity scheduling rules.",
-          "oneOf": [
-            {"type": "null"},
-            {"$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/affinity"}
-          ]
-        },
-        "nodeName": {
-          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
         },
         "iocFolder": {
           "type": "string",
@@ -78,12 +74,6 @@
         "securityContext": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/securityContext"
         },
-        "image": {
-          "type": "string",
-          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/image",
-          "description": "The container image URI for the Generic IOC",
-          "default": ""
-        },
         "dataVolume": {
           "type": "object",
           "description": "A volume to mount for writing data to. This can be a PVC or a hostPath",
@@ -112,15 +102,23 @@
           "type": "string",
           "description": "Use the shared PVC autosave files (exclude for no autosave)"
         },
-        "resources": {
-          "description": "ResourceRequirements describes the compute resource requirements.",
-          "oneOf": [
-              {"type": "null"},
-              {"$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"}
-          ]
+        "volumes": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/volumes"
+        },
+        "volumeMounts": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/volumeMounts"
+        },
+        "nodeName": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
+        },
+        "affinity": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/affinity"
         },
         "tolerations": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/tolerations"
+        },
+        "resources": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"
         }
       },
       "additionalProperties": false
