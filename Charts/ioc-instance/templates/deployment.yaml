@@ -72,6 +72,9 @@ spec:
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-config
+        {{- if .Values.volumes }}
+{{  toYaml .Values.volumes | indent 8}}
+        {{- end }}
       containers:
       - name: {{ .Release.Name }}
         image: {{ .Values.image }}
@@ -114,6 +117,9 @@ spec:
         - name: autosave-volume
           mountPath: /autosave
           subPath: "{{ .Release.Name }}"
+        {{- if .Values.volumeMounts }}
+{{  toYaml .Values.volumeMounts | indent 8}}
+        {{- end }}
         stdin: true
         tty: true
         securityContext:
