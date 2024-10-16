@@ -1,32 +1,13 @@
 {
     "properties": {
         "destination": {
-            "description": "The desired Kubernetes cluster for deployment",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": "The name of the Kubernetes cluster"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": "The target namespace"
-                }
-            },
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/destination"
         },
         "source": {
-            "description": "The desired specification of the services to be deployed",
-            "properties": {
-                "targetRevision": {
-                    "type": "string",
-                    "description": "Optional override for targetRevision"
-                },
-                "repoURL": {
-                    "type": "string",
-                    "description": "The git repo hosting the services repository (helm chart path must be services/<service>)"
-                }
-            },
-            "type": "object"
+             "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/source"
+        },
+        "project":  {
+            "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/project"
         },
         "services": {
             "type": "object",
@@ -35,43 +16,57 @@
                 "type": ["object", "null"],
                 "properties": {
                     "targetRevision": {
-                        "type": "string",
-                        "description": "Override for targetRevision"
-                        },
+                        "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSource/properties/targetRevision"
+                    },
                     "repoURL": {
-                        "type": "string",
-                        "description": "Override for repoURL"
-                        },
-                    "ec_service": {
-                            "type": "boolean",
-                            "description": "Manage a service as an Epics container",
-                            "default": "False"
-                            },
-                    "enabled": {
-                        "type": "boolean",
-                        "description": "Start a service",
-                        "default": "True"
-                        },
+                        "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSource/properties/repoURL"
+                    },
                     "removed": {
                         "type": "boolean",
                         "description": "Remove the service from the cluster",
                         "default": "False"
                         }
-                },
+                    },
                 "additionalProperties": false,
                 "description": "A service instance"
                 }
             }
         },
-        "project": {
-            "description": "A target Argocd Project",
-            "type": "string"
+        "ec-services": {
+            "type": "object",
+            "patternProperties": {
+                "^.*$": {
+                "type": ["object", "null"],
+                "properties": {
+                    "targetRevision": {
+                        "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSource/properties/targetRevision"
+                    },
+                    "repoURL": {
+                        "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSource/properties/repoURL"
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "Set to true to start a service",
+                        "default": "True"
+                        },
+                    "removed": {
+                        "type": "boolean",
+                        "description": "Set to true to remove the service from the cluster",
+                        "default": "False"
+                        }
+                    },
+                "additionalProperties": false,
+                "description": "Services which have implemented support for an 'enabled' parameter."
+                }
+            }
         }
     },
     "required": [
         "project",
         "destination",
-        "source"
+        "source",
+        "services",
+        "ec-services"
     ],
     "title": "Values",
     "type": "object"
