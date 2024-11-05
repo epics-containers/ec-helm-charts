@@ -98,11 +98,25 @@ runtimeClaim: ""
 # use the shared PVC autosave files (comment out for no autosave)
 autosaveClaim: ""
 
+# Additional volumes for the IOC pod
+volumes: []
+# - name:
+#   hostPath:
+#     path:
+# - name:
+#   persistentVolumeClaim:
+#     claimName:
+
+# Additional volume mounts for the IOC container
+volumeMounts: []
+# - name:
+#   mountPath:
+
 # nodeName is used to run on a specific node. Overrides affinity
 nodeName: ""
 
 # Affinity is a group of affinity scheduling rules.
-affinity:
+affinity: {}
   # nodeAffinity:
   #   requiredDuringSchedulingIgnoredDuringExecution:
   #     nodeSelectorTerms:

@@ -11,6 +11,12 @@
     "base": {
       "type": "object",
       "properties": {
+        "image": {
+          "type": "string",
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/image",
+          "description": "The container image URI for the Generic IOC",
+          "default": ""
+        },
         "location": {
           "type": "string",
           "description": "The location where the IOCs will run",
@@ -83,12 +89,6 @@
         "securityContext": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/securityContext"
         },
-        "image": {
-          "type": "string",
-          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/image",
-          "description": "The container image URI for the Generic IOC",
-          "default": ""
-        },
         "dataVolume": {
           "type": "object",
           "description": "A volume to mount for writing data to. This can be a PVC or a hostPath",
@@ -150,6 +150,9 @@
         },
         "tolerations": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/tolerations"
+        },
+        "resources": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"
         }
       },
       "additionalProperties": false

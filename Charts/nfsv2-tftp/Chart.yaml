@@ -3,6 +3,12 @@ name: nfsv2-tftp
 description: |
   A service for sharing bob files to phoebus for all iocs on the beamline.
 
-type: application
-
 version: 3.4.1
+
+type: application
+home: https://github.com/epics-containers/ec-helm-charts
+sources:
+  - https://github.com/epics-containers/ec-helm-charts/tree/main/Charts/nfsv2-tftp
+maintainers:
+  - name: epics-containers
+    url: https://epics-containers.github.io
