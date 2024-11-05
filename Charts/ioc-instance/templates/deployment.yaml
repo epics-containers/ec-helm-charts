@@ -69,9 +69,23 @@ spec:
             path: {{ .Values.dataVolume.hostPath }}
             type: Directory
         {{- end }}
+        {{- range .Values.hostMounts }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{ .hostPath }}
+            type: Directory
+        {{- end }}
+        {{- range .Values.pvClaims }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .claimName }}
+        {{- end }}
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-config
+        {{- if .Values.volumes }}
+{{  toYaml .Values.volumes | indent 8}}
+        {{- end }}
       containers:
       - name: {{ .Release.Name }}
         image: {{ .Values.image }}
@@ -114,6 +128,15 @@ spec:
         - name: autosave-volume
           mountPath: /autosave
           subPath: "{{ .Release.Name }}"
+        {{- range .Values.hostMounts }}
+        - name: {{ .name }}
+          mountPath: {{ .mountPath }}
+        {{- end }}
+        {{- range .Values.pvClaims }}
+        - name: {{ .name }}
+          mountPath: {{ .mountPath }}
+          subPath: {{ .subPath | default "/" }}
+        {{- end }}
         stdin: true
         tty: true
         securityContext:
