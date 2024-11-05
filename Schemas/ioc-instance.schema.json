@@ -151,8 +151,22 @@
         "tolerations": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/tolerations"
         },
-        "resources": {
-          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"
+        "global": {
+          "type": "object",
+          "description": "Shared values for all services. Globals are passed to all subcharts",
+          "properties": {
+            "location": {
+              "$ref": "#/$defs/base/properties/location"
+            },
+            "ioc_group": {
+              "$ref": "#/$defs/base/properties/ioc_group"
+            },
+            "enabled": {
+              "type": "boolean",
+              "description": "Set to true to start a service",
+              "default": "true"
+            }
+          }
         }
       },
       "additionalProperties": false
