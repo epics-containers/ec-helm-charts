@@ -1,5 +1,4 @@
-{
-  "title": "Values",
+{ "title": "Values",
   "type": "object",
   "$schema": "http://json-schema.org/schema#",
   "$ref": "#/$defs/base",
@@ -33,20 +32,6 @@
         "hostNetwork": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/hostNetwork",
           "description": "Use host network for IOC - required for Channel Access to work outside of the cluster unless a ca-gateway is in use"
-        },
-        "affinity": {
-          "description": "Affinity is a group of affinity scheduling rules.",
-          "oneOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/affinity"
-            }
-          ]
-        },
-        "nodeName": {
-          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
         },
         "iocFolder": {
           "type": "string",
@@ -105,26 +90,6 @@
             }
           }
         },
-        "hostMounts": {
-          "type": "array",
-          "properties": {
-            "description": "Additional host volumes to mount into the container",
-            "items": {
-              "name": {
-                "type": "string",
-                "description": "volume name"
-              },
-              "hostPath": {
-                "type": "string",
-                "description": "Path to mount on the host"
-              },
-              "mountPath": {
-                "type": "string",
-                "description": "Path to mount in the container"
-              }
-            }
-          }
-        },
         "opisClaim": {
           "type": "string",
           "description": "Use the shared PVC for publishing opi files over http (see services/opis)"
@@ -137,16 +102,17 @@
           "type": "string",
           "description": "Use the shared PVC autosave files (exclude for no autosave)"
         },
-        "resources": {
-          "description": "ResourceRequirements describes the compute resource requirements.",
-          "oneOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"
-            }
-          ]
+        "volumes": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/volumes"
+        },
+        "volumeMounts": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/volumeMounts"
+        },
+        "nodeName": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
+        },
+        "affinity": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/affinity"
         },
         "tolerations": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/tolerations"
