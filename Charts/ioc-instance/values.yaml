@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json
+# yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json/#/$defs/base
 
 ########### Values defaults for ioc-instance Helm Chart ########################
 
@@ -101,7 +101,8 @@ volumeMounts: []
 nodeName: ""
 
 # Affinity is a group of affinity scheduling rules.
-affinity: {}
+affinity:
+  {}
   # nodeAffinity:
   #   requiredDuringSchedulingIgnoredDuringExecution:
   #     nodeSelectorTerms:
@@ -112,7 +113,8 @@ affinity: {}
   #             - bl01t
 
 # If specified, the pod's tolerations.
-tolerations: []
+tolerations:
+  []
   # - key: location
   #   operator: Equal
   #   value: bl01t
