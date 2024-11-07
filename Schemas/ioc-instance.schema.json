@@ -108,6 +108,9 @@
         "volumeMounts": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/volumeMounts"
         },
+        "resources": {
+          "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"
+        },
         "nodeName": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
         },
