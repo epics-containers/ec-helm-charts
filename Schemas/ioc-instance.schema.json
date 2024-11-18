@@ -111,6 +111,10 @@
         "resources": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/resources"
         },
+        "podSpec": {
+          "type": "object",
+          "description": "TODO: Write description"
+        },
         "nodeName": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"
         },
