@@ -39,6 +39,10 @@ spec:
         # always re-deploy in case the configMap has changed
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
+      {{- if .Values.podSpec }}
+{{  toYaml .Values.podSpec | indent 6}}
+      {{- end }}
+
       {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
       {{- end }}

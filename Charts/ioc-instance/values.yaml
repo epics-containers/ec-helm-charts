@@ -23,6 +23,10 @@ location: ""
 # DEFAULT = .Values.$location
 ioc_group: ""
 
+# TODO: Description
+podSpec: {}
+
+
 # we use the default service account in the namespace so leave this out
 # if you need to specify an alternative then uncomment below
 serviceAccountName: ""
