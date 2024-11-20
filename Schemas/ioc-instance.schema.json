@@ -113,7 +113,7 @@
         },
         "podSpec": {
           "type": "object",
-          "description": "TODO: Write description"
+          "description": "Features relating to the pod run time, such as USB devices"
         },
         "nodeName": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec/properties/nodeName"

@@ -23,7 +23,7 @@ location: ""
 # DEFAULT = .Values.$location
 ioc_group: ""
 
-# TODO: Description
+# Features relating to the pod run time, such as USB devices
 podSpec: {}
 
 
