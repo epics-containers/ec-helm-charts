@@ -24,7 +24,7 @@ location: ""
 ioc_group: ""
 
 # Features relating to the pod run time, such as USB devices
-runtimeClassName: {}
+runtimeClassName: ""
 
 
 # we use the default service account in the namespace so leave this out
