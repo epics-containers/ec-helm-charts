@@ -68,7 +68,7 @@
         "services",
         "ec-services"
     ],
-    "title": "Values",
+    "title": "argocd-apps 0.0.1",
     "type": "object"
 }
   
