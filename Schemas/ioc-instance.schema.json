@@ -44,24 +44,56 @@
           "default": "/epics/ioc/config"
         },
         "startCommand": {
-          "type": "string",
-          "description": "The command run as the entry point of the container.",
-          "default": "bash"
+          "description": "The command to run as the entry point of the container.",
+          "default": "bash",
+          "oneOf":[
+            {
+            "type": "string"
+            },
+            {
+            "type": "array",
+            "items": { "type": "string" }
+            }
+          ]
         },
         "startArgs": {
-          "type": "string",
           "description": "The arguments for the entry point of the container.",
-          "default": "/epics/ioc/start.sh"
+          "default": "/epics/ioc/start.sh",
+          "oneOf":[
+            {
+            "type": "string"
+            },
+            {
+            "type": "array",
+            "items": { "type": "string" }
+            }
+          ]
         },
         "stop": {
-          "type": "string",
           "description": "Script run before stopping the IOC",
-          "default": "/epics/ioc/stop.sh"
+          "default": "/epics/ioc/stop.sh",
+          "oneOf":[
+            {
+            "type": "string"
+            },
+            {
+            "type": "array",
+            "items": { "type": "string" }
+            }
+          ]
         },
         "liveness": {
-          "type": "string",
-          "description": "Script for determining the liveness of the IOC",
-          "default": "/epics/ioc/liveness.sh"
+          "description": "A bash script for determining the liveness of the IOC or list of commands",
+          "default": "/epics/ioc/liveness.sh",
+          "oneOf":[
+            {
+            "type": "string"
+            },
+            {
+            "type": "array",
+            "items": { "type": "string" }
+            }
+          ]
         },
         "globalEnv": {
           "$ref": "https://kubernetesjsonschema.dev/v1.18.1/_definitions.json#/definitions/io.k8s.api.core.v1.Container/properties/env",

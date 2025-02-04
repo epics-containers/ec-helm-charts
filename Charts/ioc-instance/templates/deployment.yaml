@@ -82,20 +82,38 @@ spec:
       - name: {{ .Release.Name }}
         image: {{ .Values.image }}
         command:
-          - {{ .Values.startCommand }}
+        {{- if (kindIs "string" .Values.startCommand) }}
+        - {{ .Values.startCommand }}
+        {{- else if (kindIs "slice" .Values.startCommand) }}
+        {{- .Values.startCommand | toYaml | nindent 8 }}
+        {{- end }}
         args:
-          - {{ .Values.startArgs }}
+        {{- if (kindIs "string" .Values.startArgs) }}
+        - {{ .Values.startArgs }}
+        {{- else if (kindIs "slice" .Values.startArgs) }}
+        {{- .Values.startArgs | toYaml | nindent 8 }}
+        {{- end }}
         livenessProbe:
           exec:
             command:
+            {{- if (kindIs "string" .Values.liveness) }}
             - /bin/bash
             - {{ .Values.liveness }}
+            {{- else if (kindIs "slice" .Values.liveness) }}
+            {{- .Values.liveness | toYaml | nindent 12 }}
+            {{- end }}
           initialDelaySeconds: 120
           periodSeconds: 10
         lifecycle:
           preStop:
             exec:
-              command: ["bash", "-c", "{{ .Values.stop }}"]
+              command:
+              {{- if (kindIs "string" .Values.stop) }}
+              - /bin/bash
+              - {{ .Values.stop }}
+              {{- else if (kindIs "slice" .Values.stop) }}
+              {{- .Values.stop | toYaml | nindent 14 }}
+              {{- end }}
         volumeMounts:
         - name: config-volume
           mountPath: {{ .Values.iocConfig }}
