@@ -1,0 +1,112 @@
+{{- /*
+This creates a pod for user access to the PVCs. Useful for copying
+autosave SAV files in etc.
+
+
+Default the derivable substitution values.
+
+This keeps the length of the values.txt file for each individual IOC
+to a minimum
+*/ -}}
+{{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
+{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
+{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
+{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
+{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    location: {{ $location }}
+    ioc_group: {{ $ioc_group }}
+spec:
+  replicas: 1
+  podManagementPolicy: Parallel  # force rollout from a failing state
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        location: {{ $location }}
+        ioc_group: {{ $ioc_group }}
+    spec:
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName | quote }}
+      {{- end }}
+      terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
+      volumes:
+        - name: runtime-volume
+          persistentVolumeClaim:
+            claimName: {{ $runtimeClaim }}
+        - name: opis-volume
+          persistentVolumeClaim:
+            claimName: {{ $opisClaim }}
+        - name: autosave-volume
+          persistentVolumeClaim:
+            claimName: {{ $autosaveClaim }}
+        {{- if .Values.nfsv2TftpClaim }}
+        - name: nfsv2-tftp-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.nfsv2TftpClaim }}
+        {{- end }}
+        {{- if .Values.volumes }}
+{{  toYaml .Values.volumes | indent 8}}
+        {{- end }}
+      containers:
+      - name: {{ .Release.Name }}
+        image: busybox
+        command:
+          - sleep
+        args:
+          - infinity
+        volumeMounts:
+        {{- if .Values.nfsv2TftpClaim }}
+        - name: nfsv2-tftp-volume
+          mountPath: /mounts/nfsv2-tftp
+        {{- end }}
+        - name: runtime-volume
+          mountPath: /mounts/runtime
+        - name: opis-volume
+          mountPath: /mounts/opis
+        - name: autosave-volume
+          mountPath: /mounts/autosave
+        {{- if .Values.volumeMounts }}
+{{  toYaml .Values.volumeMounts | indent 8}}
+        {{- end }}
+        stdin: true
+        tty: true
+        securityContext:
+{{  toYaml .Values.securityContext | indent 10}}
+        {{- if .Values.resources }}
+        resources:
+{{  toYaml .Values.resources | indent 10}}
+        {{- end }}
+        imagePullPolicy: Always
+        env:
+        - name: IOC_NAME
+          value: {{ .Release.Name }}
+        - name: IOC_LOCATION
+          value: {{ $location | quote }}
+        - name: IOC_GROUP
+          value: {{ $ioc_group | quote }}
+        {{- if .Values.globalEnv }}
+{{  toYaml .Values.globalEnv | indent 8}}
+        {{- end }}
+        {{- if .Values.iocEnv }}
+{{  toYaml .Values.iocEnv | indent 8}}
+        {{- end }}
+      {{- if .Values.nodeName }}
+      nodeName: {{ .Values.nodeName }}
+      {{- else if .Values.affinity }}
+      affinity:
+{{  toYaml .Values.affinity | indent 8}}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{  toYaml .Values.tolerations | indent 8}}
+      {{- end }}
