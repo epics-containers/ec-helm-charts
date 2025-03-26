@@ -79,8 +79,10 @@ spec:
         {{- end }}
         stdin: true
         tty: true
+        {{- if .Values.securityContext }}
         securityContext:
 {{  toYaml .Values.securityContext | indent 10}}
+        {{- end }}
         {{- if .Values.resources }}
         resources:
 {{  toYaml .Values.resources | indent 10}}
