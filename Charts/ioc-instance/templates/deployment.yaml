@@ -81,17 +81,21 @@ spec:
       containers:
       - name: {{ .Release.Name }}
         image: {{ .Values.image }}
+        {{- if .Values.startCommand }}
         command:
         {{- if (kindIs "string" .Values.startCommand) }}
         - {{ .Values.startCommand }}
         {{- else if (kindIs "slice" .Values.startCommand) }}
         {{- .Values.startCommand | toYaml | nindent 8 }}
         {{- end }}
+        {{- end }}
+        {{- if .Values.startArgs }}
         args:
         {{- if (kindIs "string" .Values.startArgs) }}
         - {{ .Values.startArgs }}
         {{- else if (kindIs "slice" .Values.startArgs) }}
         {{- .Values.startArgs | toYaml | nindent 8 }}
+        {{- end }}
         {{- end }}
         livenessProbe:
           exec:
