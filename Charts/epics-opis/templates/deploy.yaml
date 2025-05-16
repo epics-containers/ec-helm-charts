@@ -56,13 +56,13 @@ spec:
             - mountPath: /etc/nginx/nginx.conf
               name: config-volume
               subPath: nginx.conf
-      {{- if .Values.affinity }}
+      {{- with .Values.affinity }}
       affinity:
-{{  toYaml .Values.affinity | indent 8}}
+{{  toYaml . | indent 8}}
       {{- end }}
-      {{- if .Values.tolerations }}
+      {{- with .Values.tolerations }}
       tolerations:
-{{  toYaml .Values.tolerations | indent 8}}
+{{  toYaml . | indent 8}}
       {{- end }}
 
 ---
