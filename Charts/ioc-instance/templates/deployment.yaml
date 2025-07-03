@@ -36,8 +36,8 @@ spec:
         location: {{ $location }}
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
-        # always re-deploy in case the configMap has changed
-        rollme: {{ randAlphaNum 5 | quote }}
+        # # always re-deploy in case the configMap has changed
+        # rollme: {{ randAlphaNum 5 | quote }}
     spec:
       {{- if .Values.runtimeClassName }}
       runtimeClassName: {{ .Values.runtimeClassName }}
