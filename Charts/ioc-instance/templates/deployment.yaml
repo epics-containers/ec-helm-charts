@@ -36,8 +36,9 @@ spec:
         location: {{ $location }}
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
-        # always re-deploy in case the configMap has changed
-        rollme: {{ randAlphaNum 5 | quote }}
+        # re-deploy in case the configMap has changed - use a random value
+        # unless the Commit Hash is supplied (by ArgoCD or helm command line)
+        rollme: {{ .Values.global.commitHash | default(randAlphaNum) 5 | quote }}
     spec:
       {{- with .Values.runtimeClassName }}
       runtimeClassName: {{ . }}
