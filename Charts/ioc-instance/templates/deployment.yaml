@@ -39,11 +39,11 @@ spec:
         # always re-deploy in case the configMap has changed
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
-      {{- if .Values.runtimeClassName }}
-      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{- with .Values.runtimeClassName }}
+      runtimeClassName: {{ . }}
       {{- end }}
-      {{- if .Values.serviceAccountName }}
-      serviceAccountName: {{ .Values.serviceAccountName | quote }}
+      {{- with .Values.serviceAccountName }}
+      serviceAccountName: {{ . | quote }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
@@ -57,26 +57,26 @@ spec:
         - name: autosave-volume
           persistentVolumeClaim:
             claimName: {{ $autosaveClaim }}
-        {{- if .Values.nfsv2TftpClaim }}
+        {{- with .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.nfsv2TftpClaim }}
+            claimName: {{ . }}
         {{- end }}
         {{- if .Values.dataVolume.pvc }}
         - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-data
-        {{- else if .Values.dataVolume.hostPath }}
+        {{- else with .Values.dataVolume.hostPath }}
         - name: {{ .Release.Name }}-data
           hostPath:
-            path: {{ .Values.dataVolume.hostPath }}
+            path: {{ . }}
             type: Directory
         {{- end }}
         - name: config-volume
           configMap:
             name: {{ .Release.Name }}-config
-        {{- if .Values.volumes }}
-{{  toYaml .Values.volumes | indent 8}}
+        {{- with .Values.volumes }}
+{{  toYaml . | indent 8}}
         {{- end }}
       containers:
       - name: {{ .Release.Name }}
@@ -138,16 +138,18 @@ spec:
         - name: autosave-volume
           mountPath: /autosave
           subPath: "{{ .Release.Name }}"
-        {{- if .Values.volumeMounts }}
-{{  toYaml .Values.volumeMounts | indent 8}}
+        {{- with .Values.volumeMounts }}
+{{  toYaml . | indent 8}}
         {{- end }}
         stdin: true
         tty: true
+        {{- with .Values.securityContext }}
         securityContext:
-{{  toYaml .Values.securityContext | indent 10}}
-        {{- if .Values.resources }}
+{{  toYaml . | indent 10}}
+        {{- end }}
+        {{- with .Values.resources }}
         resources:
-{{  toYaml .Values.resources | indent 10}}
+{{  toYaml . | indent 10}}
         {{- end }}
         imagePullPolicy: Always
         env:
@@ -161,21 +163,21 @@ spec:
           value: {{ $location | quote }}
         - name: IOC_GROUP
           value: {{ $ioc_group | quote }}
-        {{- if .Values.globalEnv }}
-{{  toYaml .Values.globalEnv | indent 8}}
+        {{- with .Values.globalEnv }}
+{{  toYaml . | indent 8}}
         {{- end }}
-        {{- if .Values.iocEnv }}
-{{  toYaml .Values.iocEnv | indent 8}}
+        {{- with .Values.iocEnv }}
+{{  toYaml . | indent 8}}
         {{- end }}
-      {{- if .Values.nodeName }}
-      nodeName: {{ .Values.nodeName }}
-      {{- else if .Values.affinity }}
+      {{- with .Values.nodeName }}
+      nodeName: {{ . }}
+      {{- else with .Values.affinity }}
       affinity:
-{{  toYaml .Values.affinity | indent 8}}
+{{  toYaml . | indent 8}}
       {{- end }}
-      {{- if .Values.tolerations }}
+      {{- with .Values.tolerations }}
       tolerations:
-{{  toYaml .Values.tolerations | indent 8}}
+{{  toYaml . | indent 8}}
       {{- end }}
 
 {{ if .Values.dataVolume.pvc }}
