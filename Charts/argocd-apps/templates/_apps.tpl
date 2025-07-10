@@ -30,7 +30,7 @@ spec:
           value: {{ eq $settings.enabled false | ternary false true | quote }}
         # pass the synced commit hash as a global value
         - name: global.commitHash
-          value: $ARGOCD_APP_REVISION
+          value: $ARGOCD_APP_REVISION_SHORT
       {{- end }}
       valueFiles:
         - ../values.yaml
