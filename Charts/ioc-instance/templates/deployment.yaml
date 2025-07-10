@@ -174,9 +174,11 @@ spec:
         {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}
-      {{- else with .Values.affinity }}
+      {{- else }}
+      {{- with .Values.affinity }}
       affinity:
 {{  toYaml . | indent 8}}
+      {{- end }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
