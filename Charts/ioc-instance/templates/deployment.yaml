@@ -36,8 +36,9 @@ spec:
         location: {{ $location }}
         ioc_group: {{ $ioc_group }}
         is_ioc: "true"
-        # always re-deploy in case the configMap has changed
-        rollme: {{ randAlphaNum 5 | quote }}
+        # re-deploy in case the configMap has changed - use a random value
+        # unless the Commit Hash is supplied (by ArgoCD or helm command line)
+        rollme: {{ .Values.global.commitHash | default (randAlphaNum 5) | quote }}
     spec:
       {{- with .Values.runtimeClassName }}
       runtimeClassName: {{ . }}
@@ -66,11 +67,13 @@ spec:
         - name: {{ .Release.Name }}-data
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-data
-        {{- else with .Values.dataVolume.hostPath }}
+        {{- else }}
+        {{- with .Values.dataVolume.hostPath }}
         - name: {{ .Release.Name }}-data
           hostPath:
             path: {{ . }}
             type: Directory
+        {{- end }}
         {{- end }}
         - name: config-volume
           configMap:
@@ -171,9 +174,11 @@ spec:
         {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}
-      {{- else with .Values.affinity }}
+      {{- else }}
+      {{- with .Values.affinity }}
       affinity:
 {{  toYaml . | indent 8}}
+      {{- end }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
