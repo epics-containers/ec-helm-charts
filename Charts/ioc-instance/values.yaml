@@ -39,8 +39,8 @@ iocFolder: /epics/ioc
 iocConfig: /epics/ioc/config
 
 # IOC Entry points
-# startCommand: bash
-# startArgs: /epics/ioc/start.sh
+startCommand: bash
+startArgs: /epics/ioc/start.sh
 stop: /epics/ioc/stop.sh
 liveness: /epics/ioc/liveness.sh
 
