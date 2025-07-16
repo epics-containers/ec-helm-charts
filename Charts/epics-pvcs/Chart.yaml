@@ -7,7 +7,8 @@ name: epics-pvcs
 description: |
   A set of PVCs to share between pods for a services deployment
 
-version: 3.4.0
+# version is replaced with git tag by the CI
+version: 1.0.0
 
 type: application
 home: https://github.com/epics-containers/ec-helm-charts
