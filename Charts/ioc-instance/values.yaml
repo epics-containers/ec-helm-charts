@@ -131,3 +131,11 @@ resources:
   requests:
     cpu: 100m
     memory: 64Mi
+
+# supply a fixed cluster IP for the service
+clusterIP:
+
+# If a fixed cluster IP is not supplied, we allocate one based on the IOC name
+# using baseIP to determine the range of IPs to allocate from.
+# This default is the CIDR for all DLS clusters (and most clusters?)
+baseIp: "10.96.0.0/12"
