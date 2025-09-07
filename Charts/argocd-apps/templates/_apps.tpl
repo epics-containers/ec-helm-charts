@@ -10,6 +10,7 @@ metadata:
   name: {{ $service }}
   namespace: {{ $.Release.Namespace }}
   labels:
+    1-enabled: {{ eq $settings.enabled false | ternary false true | quote }}
     ec_service: {{ eq $index 0 | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
