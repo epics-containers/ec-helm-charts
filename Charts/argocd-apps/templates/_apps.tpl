@@ -11,7 +11,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- if eq $settings.enabled false }}
-    STOPPED: 1
+    STOPPED: "1"
     {{- end }}
     ec_service: {{ eq $index 0 | ternary true false | quote }}
   finalizers:
