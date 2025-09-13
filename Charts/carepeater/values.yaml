@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=values.schema.json
+
+# NOTE: the $k8s schema references come from
+# https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1
+# with the version set in .fastcs.schema.config.yaml (k8sSchemaVersion)
+
+# Default values for fastcs-instance chart.
+# With annotations for building the schema using:
+#   https://github.com/losisin/helm-values-schema-json.git
+
+# @schema description: shared values for all services
+# @schema additionalProperties: true
+global: {}
+
+# @schema description: Add environment to all containers
+globalEnv:
+  - name: EPICS_TS_MIN_WEST
+    value: "0"
+  - name: EPICS_CA_REPEATER_PORT
+    value: "5065"
+
+# @schema description: container image URI
+image:
+  repository: ghcr.io/epics-containers/epics-base-runtime
+  pullPolicy: IfNotPresent
+  tag: 7.0.9ec4
+
+# @schema description: command to run for the production container
+command:
+  - bash
+  - -c
+  - sleep infinity
+
+# @schema description: enable host networking for the pod
+hostNetwork: true
+
+# @schema description: Add labels to the pod
+podLabels: {}
+
+# @schema  $ref:$k8s/container.json#/properties/securityContext
+securityContext: {}
+
+# @schema  $ref: $k8s/container.json#/properties/resources
+resources:
+  # only tiny resources required by carepeater
+  requests:
+    memory: 1Mi
+    cpu: 30m
+  limits:
+    memory: 10Mi
+    cpu: 200m
+
+# @schema $ref: $k8s/podspec.json#/properties/tolerations
+tolerations: []
+
+# @schema $ref: $k8s/affinity.json
+affinity:
+  # default is to just avoid control plane nodes
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: DoesNotExist
