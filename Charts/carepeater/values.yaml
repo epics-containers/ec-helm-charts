@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=values.schema.json
+## yaml-language-server: $schema=values.schema.json
 
 # NOTE: the $k8s schema references come from
 # https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1

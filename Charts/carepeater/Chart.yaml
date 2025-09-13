@@ -1,6 +1,6 @@
 apiVersion: v2
-name: fastcs
-description: A Helm chart for FastCS Applications
+name: carepeater
+description: A Helm chart for a carepeater daemonset
 
 # A chart can be either an 'application' or a 'library' chart.
 #
