@@ -23,13 +23,19 @@ globalEnv:
 image:
   repository: ghcr.io/epics-containers/epics-base-runtime
   pullPolicy: IfNotPresent
-  tag: 7.0.9ec4
+  tag: 7.0.9ec5-beta.1
 
-# @schema description: command to run for the production container
+# @schema description: command to as entrypoint to the container
 command:
   - bash
   - -c
-  - sleep infinity
+  - |
+    echo "Waiting for any existing caRepeater to exit ..."
+    while netstat -lu | grep :$EPICS_CA_REPEATER_PORT >/dev/null; do
+      sleep 30
+    done
+    echo "Starting caRepeater"
+    caRepeater
 
 # @schema description: enable host networking for the pod
 hostNetwork: true
