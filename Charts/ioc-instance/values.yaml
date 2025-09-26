@@ -1,141 +1,144 @@
-# yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json/#/$defs/base
+exports:
+  defaults:
+    iocInstance:
+      # yaml-language-server: $schema=../../Schemas/iocInstance.schema.json/#/$defs/base
 
-########### Values defaults for ioc-instance Helm Chart ########################
+      ########### Values defaults for iocInstance Helm Chart ########################
 
-################################################################################
-# Values that all IOCs MUST set
-################################################################################
+      ################################################################################
+      # Values that all IOCs MUST set
+      ################################################################################
 
-# This value is the only mandatory override. You MUST declare the container
-# image URI for the Generic IOC
-image: ""
+      # This value is the only mandatory override. You MUST declare the container
+      # image URI for the Generic IOC
+      image: ""
 
-# The location where the IOCs will run.
-# This creates a label 'location'
-# NOTE: this value can also be set in global: instead of ioc-instance:
-location: ""
+      # The location where the IOCs will run.
+      # This creates a label 'location'
+      # NOTE: this value can also be set in global: instead of iocInstance:
+      location: ""
 
-################################################################################
-# Optional override values
-################################################################################
+      ################################################################################
+      # Optional override values
+      ################################################################################
 
-# the name of the repository in which the IOC is grouped
-# DEFAULT = .Values.$location
-ioc_group: ""
+      # the name of the repository in which the IOC is grouped
+      # DEFAULT = .Values.$location
+      ioc_group: ""
 
-# Features relating to the pod run time, such as USB devices
-runtimeClassName: ""
+      # Features relating to the pod run time, such as USB devices
+      runtimeClassName: ""
 
-# we use the default service account in the namespace so leave this out
-# if you need to specify an alternative then uncomment below
-serviceAccountName: ""
+      # we use the default service account in the namespace so leave this out
+      # if you need to specify an alternative then uncomment below
+      serviceAccountName: ""
 
-# useHostNetwork - use host network for IOC - required for Channel Access
-# to work outside of the cluster unless a ca-gateway is in use
-hostNetwork: true
+      # useHostNetwork - use host network for IOC - required for Channel Access
+      # to work outside of the cluster unless a ca-gateway is in use
+      hostNetwork: true
 
-# root folder for ioc source/binaries inside generic IOC container
-iocFolder: /epics/ioc
-iocConfig: /epics/ioc/config
+      # root folder for ioc source/binaries inside generic IOC container
+      iocFolder: /epics/ioc
+      iocConfig: /epics/ioc/config
 
-# IOC Entry points
-startCommand: bash
-startArgs: /epics/ioc/start.sh
-stop: /epics/ioc/stop.sh
-liveness: /epics/ioc/liveness.sh
+      # IOC Entry points
+      startCommand: bash
+      startArgs: /epics/ioc/start.sh
+      stop: /epics/ioc/stop.sh
+      liveness: /epics/ioc/liveness.sh
 
-# the following are added to the pod's environment - globalEnv is for variables
-# that are the same for all IOCs, iocEnv for variables unique to each IOC
-globalEnv: []
-# - name:
-#   value:
-iocEnv: []
-# - name:
-#   value:
+      # the following are added to the pod's environment - globalEnv is for variables
+      # that are the same for all IOCs, iocEnv for variables unique to each IOC
+      globalEnv: []
+      # - name:
+      #   value:
+      iocEnv: []
+      # - name:
+      #   value:
 
-# defaults for securityContext
-# Usually override runAsXXX in the individual IOC values.yaml.
-# At DLS the IOCs that write to the shared data directory must use
-# iXXdetector user/group IDs
-securityContext:
-  allowPrivilegeEscalation: false
-  # # e.g. if you want access to /dls/p38/data then the following should
-  # # be set to p38detector account ID and group ID
-  # runAsUser: 37143
-  # runAsGroup: 37143
-  # capabilities:
-  #   drop:
-  #   - ...
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
+      # defaults for securityContext
+      # Usually override runAsXXX in the individual IOC values.yaml.
+      # At DLS the IOCs that write to the shared data directory must use
+      # iXXdetector user/group IDs
+      securityContext:
+        allowPrivilegeEscalation: false
+        # # e.g. if you want access to /dls/p38/data then the following should
+        # # be set to p38detector account ID and group ID
+        # runAsUser: 37143
+        # runAsGroup: 37143
+        # capabilities:
+        #   drop:
+        #   - ...
+        # readOnlyRootFilesystem: true
+        # runAsNonRoot: true
 
-# a volume to mount for writing data to. This can be a PVC or a hostPath
-# the PVC
-dataVolume:
-  # Create a PVC called {{ .Release.Name }}-data when true
-  pvc: true
-  # A path on the host machine to write data into. Also used as the path that the
-  # pvc or hostPath will be mounted at so that users need not be confused about
-  # inside/outside container paths.
-  hostPath: /data
+      # a volume to mount for writing data to. This can be a PVC or a hostPath
+      # the PVC
+      dataVolume:
+        # Create a PVC called {{ .Release.Name }}-data when true
+        pvc: true
+        # A path on the host machine to write data into. Also used as the path that the
+        # pvc or hostPath will be mounted at so that users need not be confused about
+        # inside/outside container paths.
+        hostPath: /data
 
-# use the shared PVC for publishing opi files over http (see services/opis)
-opisClaim: ""
-# use the shared PVC for holding runtime files for each IOC
-runtimeClaim: ""
-# use the shared PVC autosave files (comment out for no autosave)
-autosaveClaim: ""
+      # use the shared PVC for publishing opi files over http (see services/opis)
+      opisClaim: ""
+      # use the shared PVC for holding runtime files for each IOC
+      runtimeClaim: ""
+      # use the shared PVC autosave files (comment out for no autosave)
+      autosaveClaim: ""
 
-# Additional volumes for the IOC pod
-volumes: []
-# - name:
-#   hostPath:
-#     path:
-# - name:
-#   persistentVolumeClaim:
-#     claimName:
+      # Additional volumes for the IOC pod
+      volumes: []
+      # - name:
+      #   hostPath:
+      #     path:
+      # - name:
+      #   persistentVolumeClaim:
+      #     claimName:
 
-# Additional volume mounts for the IOC container
-volumeMounts: []
-# - name:
-#   mountPath:
+      # Additional volume mounts for the IOC container
+      volumeMounts: []
+      # - name:
+      #   mountPath:
 
-# nodeName is used to run on a specific node. Overrides affinity
-nodeName: ""
+      # nodeName is used to run on a specific node. Overrides affinity
+      nodeName: ""
 
-# Affinity is a group of affinity scheduling rules.
-affinity:
-  {}
-  # nodeAffinity:
-  #   requiredDuringSchedulingIgnoredDuringExecution:
-  #     nodeSelectorTerms:
-  #       - matchExpressions:
-  #         - key: location
-  #           operator: In
-  #           values:
-  #             - bl01t
+      # Affinity is a group of affinity scheduling rules.
+      affinity:
+        {}
+        # nodeAffinity:
+        #   requiredDuringSchedulingIgnoredDuringExecution:
+        #     nodeSelectorTerms:
+        #       - matchExpressions:
+        #         - key: location
+        #           operator: In
+        #           values:
+        #             - bl01t
 
-# If specified, the pod's tolerations.
-tolerations:
-  []
-  # - key: location
-  #   operator: Equal
-  #   value: bl01t
-  #   effect: NoSchedule
+      # If specified, the pod's tolerations.
+      tolerations:
+        []
+        # - key: location
+        #   operator: Equal
+        #   value: bl01t
+        #   effect: NoSchedule
 
-# default resource limits
-resources:
-  limits:
-    cpu: 500m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 64Mi
+      # default resource limits
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
 
-# supply a fixed cluster IP for the service
-clusterIP:
+      # supply a fixed cluster IP for the service
+      clusterIP:
 
-# If a fixed cluster IP is not supplied, we allocate one based on the IOC name
-# using baseIP to determine the range of IPs to allocate from.
-# This default is the CIDR for all DLS clusters (and most clusters?)
-baseIp: "10.96.0.0/12"
+      # If a fixed cluster IP is not supplied, we allocate one based on the IOC name
+      # using baseIP to determine the range of IPs to allocate from.
+      # This default is the CIDR for all DLS clusters (and most clusters?)
+      baseIp: "10.96.0.0/12"

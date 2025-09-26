@@ -5,7 +5,7 @@ name: ioc-instance
 # updated by CI when tagging a release
 version: 1.0.0
 
-type: application
+type: library
 home: https://github.com/epics-containers/ec-helm-charts
 sources:
   - https://github.com/epics-containers/ec-helm-charts/tree/main/Charts/ioc-instance

@@ -1,0 +1,15 @@
+{{- define "iocInstance.configmap" -}}
+{{- $_ := set .Values.iocInstance "configFolderConfigMap" (.Files.Glob "config/*").AsConfig -}}
+{{- $_ := set .Values.iocInstance "configFolderHash" (.Values.iocInstance.configFolderConfigMap | sha1sum) -}}
+{{ if ne .Values.iocInstance.configFolderConfigMap "{}" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ .Release.Name }}-config
+  labels:
+    app: {{ .Release.Name }}
+# contents of the ioc instance config folder
+data:
+{{ .Values.iocInstance.configFolderConfigMap | indent 2 }}
+{{ end -}}
+{{- end -}}
