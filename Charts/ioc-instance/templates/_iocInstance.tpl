@@ -1,9 +1,9 @@
-{{- define "iocInstance" -}}
+{{ define "iocInstance" }}
 
 {{- include "iocInstance.configmap" . }}
 ---
-{{- include "iocInstance.statefulset" . }}
+{{ include "iocInstance.statefulset" . }}
 ---
-{{- include "iocInstance.service" . }}
+{{ include "iocInstance.service" . }}
 
-{{- end -}}
+{{- end }}
