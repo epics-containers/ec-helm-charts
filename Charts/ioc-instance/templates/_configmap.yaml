@@ -1,6 +1,6 @@
 {{- define "iocInstance.configmap" -}}
 {{- $_ := set .Values.iocInstance "configFolderConfigMap" (.Files.Glob "config/*").AsConfig -}}
-{{- $_ := set .Values.iocInstance "configFolderHash" (.Values.iocInstance.configFolderConfigMap | sha256sum) -}}
+{{- $_ := set .Values.iocInstance "configFolderHash" (.Values.iocInstance.configFolderConfigMap | sha1sum) -}}
 {{ if ne .Values.iocInstance.configFolderConfigMap "{}" }}
 apiVersion: v1
 kind: ConfigMap
