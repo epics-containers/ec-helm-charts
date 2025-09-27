@@ -1,8 +1,8 @@
 {{- define "ioc-instance.statefulset" -}}
 
 
-{{/* Use with, set to move the iocInstance namespace to the root namespace. */}}
-{{ with .Values.iocInstance }}
+{{/* Use with, set to move the ioc-instance namespace to the root namespace. */}}
+{{ with get .Values "ioc-instance" }}
 {{- $_ := set . "Values" . -}}
 
 {{- /*
@@ -44,7 +44,7 @@ spec:
         is_ioc: "true"
         # re-deploy in case the configMap has changed - use a random value
         # unless the Commit Hash is supplied (by ArgoCD or helm command line)
-        configHash: {{ .Values.configFolderHash | default "noConfigMap" | quote }}
+        configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
       {{- with .Values.runtimeClassName }}
       runtimeClassName: {{ . }}
@@ -216,5 +216,5 @@ spec:
 {{ else }}
 # This IOC has no data volume, so we will mount the host filesystem
 {{- end }}  {{/* end if .Values.dataVolume.spec */}}
-{{- end -}} {{/* end with .Values.iocInstance */}}
+{{- end -}} {{/* end with .Values.ioc-instance */}}
 {{- end -}} {{/* end define "statefulset" */}}

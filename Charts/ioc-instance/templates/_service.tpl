@@ -1,7 +1,7 @@
 {{- define "ioc-instance.service" -}}
 
-{{/* Use with, set to move the iocInstance namespace to the root namespace. */}}
-{{ with .Values.iocInstance }}
+{{/* Use with, set to move the ioc-instance namespace to the root namespace. */}}
+{{ with get .Values "ioc-instance" }}
 {{- $_ := set . "Values" . -}}
 
 # when not using hostNetwork, create a service to give the IOC a fixed cluster IP
@@ -57,5 +57,5 @@ spec:
       protocol: UDP
 {{- end }} {{/* end if not .Values.hostNetwork */}}
 
-{{- end -}} {{/* end with .Values.iocInstance */}}
+{{- end -}} {{/* end with .Values.ioc-instance */}}
 {{- end -}} {{/* end define "statefulset" */}}

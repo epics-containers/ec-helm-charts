@@ -1,6 +1,6 @@
-{{ define "iocInstance" }}
+{{ define "ioc-instance" }}
 
-{{- include "iocInstance.configmap" . }}
+{{- include "ioc-instance.configmap" . }}
 ---
 {{ include "ioc-instance.statefulset" . }}
 ---
