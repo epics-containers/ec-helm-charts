@@ -44,7 +44,7 @@ spec:
         location: {{ $location }}
         domain: {{ $domain }}
         ioc: "true"
-        # re-deploy in case the configMap has changed
+        # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
       {{- with .runtimeClassName }}
