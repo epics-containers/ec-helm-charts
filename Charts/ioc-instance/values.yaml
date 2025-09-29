@@ -1,9 +1,9 @@
 exports:
   defaults:
-    iocInstance:
-      # yaml-language-server: $schema=../../Schemas/iocInstance.schema.json/#/$defs/base
+    ioc-instance:
+      # yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json/#/$defs/base
 
-      ########### Values defaults for iocInstance Helm Chart ########################
+      ########### Values defaults for ioc-instance Helm Chart ########################
 
       ################################################################################
       # Values that all IOCs MUST set
@@ -15,7 +15,7 @@ exports:
 
       # The location where the IOCs will run.
       # This creates a label 'location'
-      # NOTE: this value can also be set in global: instead of iocInstance:
+      # NOTE: this value can also be set in global: instead of ioc-instance:
       location: ""
 
       ################################################################################
