@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=values.schema.json
-
 # Default values for ioc-instance chart.
 # With annotations for building the schema using:
 #   https://github.com/losisin/helm-values-schema-json.git

@@ -7,7 +7,11 @@ values:
   - Charts/ioc-instance/values.yaml.tmp
   - Charts/ioc-instance/example.values.yaml
 
-output: Charts/ioc-instance/values.schema.json
+# NOTE: we don't call this values.schema.json because the default values file
+# fails this check. This is due to it being a library chart and having
+# `exports: defaults:` at the root. If we used the standard name, helm will
+# check the defaults file and fail.
+output: Charts/ioc-instance/ioc-instance.schema.json
 
 # bundle up references (don't do this as K8S refs are 500kb+)
 bundleRoot: Charts

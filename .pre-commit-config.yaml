@@ -12,7 +12,7 @@ repos:
     hooks:
       - id: prep-ioc-instance-library-chart
         name: ioc-instance-prep
-        entry: bash -c 'cat Charts/ioc-instance/values.yaml | sed -E "/exports:|defaults:/d" > Charts/ioc-instance/values.yaml.tmp'
+        entry: bash -c 'cat Charts/ioc-instance/values.yaml | sed -E "/^exports:|^  defaults:/d" > Charts/ioc-instance/values.yaml.tmp'
         language: system
         pass_filenames: false
 
