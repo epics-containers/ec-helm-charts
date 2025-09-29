@@ -3,7 +3,7 @@ domain:
 # location where these IOCs and services will run
 location:
 # sizes of the auto provisioned PVs
-opi_size: 1Gi
-runtime_size: 1Gi
-autosave_size: 1Gi
-binaries_size: 1Gi
+opiSize: 1Gi
+runtimeSize: 1Gi
+autosaveSize: 1Gi
+binariesSize: 1Gi

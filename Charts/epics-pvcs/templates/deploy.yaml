@@ -19,7 +19,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.opi_size }}
+      storage: {{ .Values.opiSize }}
 ---
 # PVC for shared runtime files
 kind: PersistentVolumeClaim
@@ -35,7 +35,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.runtime_size }}
+      storage: {{ .Values.runtimeSize }}
 ---
 # PVC for Autosave volumes
 kind: PersistentVolumeClaim
@@ -51,7 +51,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.autosave_size }}
+      storage: {{ .Values.autosaveSize }}
 
 ---
 # PVC for non-native ioc binaries
@@ -68,4 +68,4 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.binaries_size }}
+      storage: {{ .Values.binariesSize }}
