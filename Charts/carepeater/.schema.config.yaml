@@ -3,7 +3,6 @@
 # Define input, output and source for $refs relative to repository root for pre-commit
 values:
   - Charts/carepeater/values.yaml
-  - Charts/carepeater/extra.values.yaml
 
 output: Charts/carepeater/values.schema.json
 
@@ -15,7 +14,7 @@ bundle: false
 useHelmDocs: false
 
 # Allow additional properties for eg. initResources, different types of volumes/volumeMounts
-noAdditionalProperties: false
+noAdditionalProperties: true
 
 schemaRoot:
   title: carepeater Helm chart
