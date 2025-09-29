@@ -16,8 +16,8 @@ metadata:
   labels:
     app: {{ $.Release.Name }}
     location: {{ $.Values.global.location }}
-    ioc_group: {{ $.Values.global.ioc_group }}
-    is_ioc: "true"
+    domain: {{ $.Values.global.domain }}
+    ioc: "true"
 spec:
   selector:
     app: {{ $.Release.Name }}
@@ -26,12 +26,12 @@ spec:
   clusterIP: {{ .clusterIP | default (include "allocateIpFromName" $alloc_args) }}
   ports:
     - name: ca-server-tcp
-      port: {{ .ca_server_port | default 5064 }}
-      targetPort: {{ .ca_server_port | default 5064 }}
+      port: {{ .caServerPort | default 5064 }}
+      targetPort: {{ .caServerPort | default 5064 }}
       protocol: TCP
     - name: ca-server-udp
-      port: {{ .ca_server_port | default 5064 }}
-      targetPort: {{ .ca_server_port | default 5064 }}
+      port: {{ .caServerPort | default 5064 }}
+      targetPort: {{ .caServerPort | default 5064 }}
       protocol: UDP
     - name: ca-repeater-tcp
       port: {{ add1 (.caServerPort | default 5064) }}
@@ -42,12 +42,12 @@ spec:
       targetPort: {{ add1 (.caServerPort | default 5064) }}
       protocol: UDP
     - name: pva-server-tcp
-      port: {{ .pva_server_port | default 5075 }}
-      targetPort: {{ .pva_server_port | default 5075 }}
+      port: {{ .pvaServerPort | default 5075 }}
+      targetPort: {{ .pvaServerPort | default 5075 }}
       protocol: TCP
     - name: pva-server-udp
-      port: {{ .pva_server_port | default 5075 }}
-      targetPort: {{ .pva_server_port | default 5075 }}
+      port: {{ .pvaServerPort | default 5075 }}
+      targetPort: {{ .pvaServerPort | default 5075 }}
       protocol: UDP
     - name: pva-broadcast-tcp
       port: {{ add1 (.pvaServerPort | default 5075) }}

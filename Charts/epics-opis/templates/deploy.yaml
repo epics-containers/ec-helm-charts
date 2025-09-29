@@ -1,6 +1,6 @@
 {{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
-{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
-{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
+{{- $domain := default .Values.global.domain .Values.domain | required "ERROR - You must supply domain or global.domain" -}}
+{{- $opisClaim := default (print $domain "-opi-claim") .Values.opisClaim -}}
 
 kind: Deployment
 apiVersion: apps/v1
@@ -9,7 +9,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   replicas: 1
   selector:
@@ -20,7 +20,7 @@ spec:
       labels:
         app: {{ .Release.Name }}
         location: {{ $location }}
-        ioc_group: {{ $ioc_group }}
+        domain: {{ $domain }}
       annotations:
       {{ if and .Values.global .Values.global.files -}}
       {{- range $k, $v := .Values.global.files }}
@@ -73,7 +73,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   type: LoadBalancer
   ports:

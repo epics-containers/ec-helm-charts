@@ -9,10 +9,10 @@ This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
 {{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
-{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
-{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
-{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
-{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
+{{- $domain := default .Values.global.domain .Values.domain | required "ERROR - You must supply domain or global.domain" -}}
+{{- $opisClaim := default (print $domain "-opi-claim") .Values.opisClaim -}}
+{{- $runtimeClaim := default (print $domain "-runtime-claim") .Values.runtimeClaim -}}
+{{- $autosaveClaim := default (print $domain "-autosave-claim") .Values.autosaveClaim -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -21,7 +21,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   replicas: 1
   selector:
@@ -32,7 +32,7 @@ spec:
       labels:
         app: {{ .Release.Name }}
         location: {{ $location }}
-        ioc_group: {{ $ioc_group }}
+        domain: {{ $domain }}
     spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . | quote }}
@@ -94,7 +94,7 @@ spec:
         - name: IOC_LOCATION
           value: {{ $location | quote }}
         - name: IOC_GROUP
-          value: {{ $ioc_group | quote }}
+          value: {{ $domain | quote }}
         {{- with .Values.globalEnv }}
 {{  toYaml . | indent 8}}
         {{- end }}

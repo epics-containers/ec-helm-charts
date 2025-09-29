@@ -1,6 +1,6 @@
 # use nginx for publishing opi files over http
 image: nginx:1.25.4
 # Short name for this collection of services
-ioc_group:
+domain:
 # location where these IOCs and services will run
 location:

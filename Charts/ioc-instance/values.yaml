@@ -24,7 +24,7 @@ exports:
 
       # the name of the repository in which the IOC is grouped
       # DEFAULT = .Values.$location
-      ioc_group: ""
+      domain: ""
 
       # Features relating to the pod run time, such as USB devices
       runtimeClassName: ""
@@ -107,8 +107,7 @@ exports:
       nodeName: ""
 
       # Affinity is a group of affinity scheduling rules.
-      affinity:
-        {}
+      affinity: {}
         # nodeAffinity:
         #   requiredDuringSchedulingIgnoredDuringExecution:
         #     nodeSelectorTerms:
@@ -119,8 +118,7 @@ exports:
         #             - bl01t
 
       # If specified, the pod's tolerations.
-      tolerations:
-        []
+      tolerations: []
         # - key: location
         #   operator: Equal
         #   value: bl01t
@@ -142,3 +140,9 @@ exports:
       # using baseIP to determine the range of IPs to allocate from.
       # This default is the CIDR for all DLS clusters (and most clusters?)
       baseIp: "10.96.0.0/12"
+
+      # server port for channel access. The caRepeater port will be one greater.
+      caServerPort: 5064
+
+      # server port for pv access. The UDP broadcast port will be one greater.
+      pvaServer Port: 5075
