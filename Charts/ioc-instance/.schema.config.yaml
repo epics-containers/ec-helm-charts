@@ -2,7 +2,9 @@
 
 # Define input, output and source for $refs relative to repository root for pre-commit
 values:
-  - Charts/ioc-instance/values.yaml
+  # USING a tmp file created by pre-commit 'prep-ioc-instance-library-chart'
+  # remove after https://github.com/losisin/helm-values-schema-json/issues/283
+  - Charts/ioc-instance/values.yaml.tmp
   - Charts/ioc-instance/example.values.yaml
 
 output: Charts/ioc-instance/values.schema.json
