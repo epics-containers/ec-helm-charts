@@ -2,9 +2,14 @@
 
 # Define input, output and source for $refs relative to repository root for pre-commit
 values:
-  - Charts/carepeater/values.yaml
+  - Charts/ioc-instance/values.yaml
+  - Charts/ioc-instance/example.values.yaml
 
-output: Charts/carepeater/values.schema.json
+# Do not call this values.schema.json because this is a library chart.
+# When importing default values into the parent the schema check that would fail
+# if it sees values.schema.json and tries to use it (I think because the check assumes
+# that the contents of ioc-instance is going into the root?)
+output: Charts/ioc-instance/ioc-instance.schema.json
 
 # bundle up references (don't do this as K8S refs are 500kb+)
 bundleRoot: Charts
@@ -17,8 +22,8 @@ useHelmDocs: false
 noAdditionalProperties: true
 
 schemaRoot:
-  title: carepeater Helm chart
-  description: Helm chart for deploying a carepeater daemonset
+  title: ioc-instance Helm chart
+  description: Helm chart for deploying EPICS IOCs
   # No additional properties in schema root for tighter protection:
   additionalProperties: false
 

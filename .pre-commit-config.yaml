@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-yaml
+        exclude: ^Charts/
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+
+  - repo: local
+    hooks:
+      - id: prep-ioc-instance-library-chart
+        name: ioc-instance-prep
+        entry: bash -c 'cat Charts/ioc-instance/values.yaml | sed -E "/^exports:|^  defaults:/d" > Charts/ioc-instance/values.yaml.tmp'
+        language: system
+        pass_filenames: false
+
+  - repo: https://github.com/losisin/helm-values-schema-json
+    rev: v2.2.1
+    hooks:
+      - id: helm-schema
+        args:
+          - --config
+          - Charts/ioc-instance/.schema.config.yaml
+
+  - repo: https://github.com/losisin/helm-values-schema-json
+    rev: v2.2.1
+    hooks:
+      - id: helm-schema
+        args:
+          - --config
+          - Charts/carepeater/.schema.config.yaml

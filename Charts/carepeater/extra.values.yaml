@@ -1,9 +1,0 @@
-################################################################################
-# values for lists of custom objects from values.yaml for schema generation
-################################################################################
-
-globalEnv:
-  # @schema description: environment variable name
-  - name: NAME
-    # @schema description: environment variable value, must be string
-    value: "value" # must be string
