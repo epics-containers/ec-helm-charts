@@ -2,15 +2,13 @@
 
 # Define input, output and source for $refs relative to repository root for pre-commit
 values:
-  # USING a tmp file created by pre-commit 'prep-ioc-instance-library-chart'
-  # remove after https://github.com/losisin/helm-values-schema-json/issues/283
-  - Charts/ioc-instance/values.yaml.tmp
+  - Charts/ioc-instance/values.yaml
   - Charts/ioc-instance/example.values.yaml
 
-# NOTE: we don't call this values.schema.json because the default values file
-# fails this check. This is due to it being a library chart and having
-# `exports: defaults:` at the root. If we used the standard name, helm will
-# check the defaults file and fail.
+# Do not call this values.schema.json because this is a library chart.
+# When importing default values into the parent the schema check that would fail
+# if it sees values.schema.json and tries to use it (I think because the check assumes
+# that the contents of ioc-instance is going into the root?)
 output: Charts/ioc-instance/ioc-instance.schema.json
 
 # bundle up references (don't do this as K8S refs are 500kb+)
