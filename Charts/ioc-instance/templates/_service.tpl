@@ -1,12 +1,14 @@
 {{- define "ioc-instance.service" -}}
 
-{{/* Use with, set to move the ioc-instance namespace to the root namespace. */}}
+{{/*
+  Use with to access ioc-instance key.
+  Required because .ioc-instance is illegal because of the hyphen.
+*/}}
 {{ with get .Values "ioc-instance" }}
-{{- $_ := set . "Values" . -}}
 
 # when not using hostNetwork, create a service to give the IOC a fixed cluster IP
 # TODO - we could introduce this service to hostNetwork IOCs too: for review.
-{{- if not .Values.hostNetwork }}
+{{- if not .hostNetwork }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,16 +22,16 @@ spec:
   selector:
     app: {{ $.Release.Name }}
   type: ClusterIP
-  {{- $alloc_args := dict "name" $.Release.Name "namespace" $.Release.Namespace "baseIp" .Values.baseIp "startIp" .Values.startIp }}
-  clusterIP: {{ .Values.clusterIP | default (include "allocateIpFromName" $alloc_args) }}
+  {{- $alloc_args := dict "name" $.Release.Name "namespace" $.Release.Namespace "baseIp" .baseIp "startIp" .startIp }}
+  clusterIP: {{ .clusterIP | default (include "allocateIpFromName" $alloc_args) }}
   ports:
     - name: ca-server-tcp
-      port: {{ .Values.ca_server_port | default 5064 }}
-      targetPort: {{ .Values.ca_server_port | default 5064 }}
+      port: {{ .ca_server_port | default 5064 }}
+      targetPort: {{ .ca_server_port | default 5064 }}
       protocol: TCP
     - name: ca-server-udp
-      port: {{ .Values.ca_server_port | default 5064 }}
-      targetPort: {{ .Values.ca_server_port | default 5064 }}
+      port: {{ .ca_server_port | default 5064 }}
+      targetPort: {{ .ca_server_port | default 5064 }}
       protocol: UDP
     - name: ca-repeater-tcp
       port: {{ add1 (.Values.ca_server_port | default 5064) }}
@@ -40,12 +42,12 @@ spec:
       targetPort: {{ add1 (.Values.ca_server_port | default 5064) }}
       protocol: UDP
     - name: pva-server-tcp
-      port: {{ .Values.pva_server_port | default 5075 }}
-      targetPort: {{ .Values.pva_server_port | default 5075 }}
+      port: {{ .pva_server_port | default 5075 }}
+      targetPort: {{ .pva_server_port | default 5075 }}
       protocol: TCP
     - name: pva-server-udp
-      port: {{ .Values.pva_server_port | default 5075 }}
-      targetPort: {{ .Values.pva_server_port | default 5075 }}
+      port: {{ .pva_server_port | default 5075 }}
+      targetPort: {{ .pva_server_port | default 5075 }}
       protocol: UDP
     - name: pva-broadcast-tcp
       port: {{ add1 (.Values.pva_server_port | default 5075) }}
@@ -55,7 +57,7 @@ spec:
       port: {{ add1 (.Values.pva_server_port | default 5075) }}
       targetPort: {{ add1 (.Values.pva_server_port | default 5075) }}
       protocol: UDP
-{{- end }} {{/* end if not .Values.hostNetwork */}}
+{{- end }} {{/* end if not .hostNetwork */}}
 
-{{- end -}} {{/* end with .Values.ioc-instance */}}
+{{- end -}} {{/* end with .ioc-instance */}}
 {{- end -}} {{/* end define "statefulset" */}}

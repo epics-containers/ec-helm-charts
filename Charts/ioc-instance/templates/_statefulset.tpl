@@ -1,9 +1,11 @@
 {{- define "ioc-instance.statefulset" -}}
 
 
-{{/* Use with, set to move the ioc-instance namespace to the root namespace. */}}
+{{/*
+  Use with to access ioc-instance key.
+  Required because .ioc-instance is illegal because of the hyphen.
+*/}}
 {{ with get .Values "ioc-instance" }}
-{{- $_ := set . "Values" . -}}
 
 {{- /*
 Default the derivable substitution values.
@@ -11,12 +13,12 @@ Default the derivable substitution values.
 This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
-{{- $location := default $.Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
-{{- $ioc_group := default $.Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
-{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
-{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
-{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
-{{- $image := .Values.image | required "ERROR - You must supply image." -}}
+{{- $location := default $.Values.global.location .location | required "ERROR - You must supply location or global.location" -}}
+{{- $ioc_group := default $.Values.global.ioc_group .ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
+{{- $opisClaim := default (print $ioc_group "-opi-claim") .opisClaim -}}
+{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .runtimeClaim -}}
+{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .autosaveClaim -}}
+{{- $image := .image | required "ERROR - You must supply image." -}}
 {{- $enabled := eq $.Values.global.enabled false | ternary false true -}}
 
 apiVersion: apps/v1
@@ -46,13 +48,13 @@ spec:
         # unless the Commit Hash is supplied (by ArgoCD or helm command line)
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
-      {{- with .Values.runtimeClassName }}
+      {{- with .runtimeClassName }}
       runtimeClassName: {{ . }}
       {{- end }}
-      {{- with .Values.serviceAccountName }}
+      {{- with .serviceAccountName }}
       serviceAccountName: {{ . | quote }}
       {{- end }}
-      hostNetwork: {{ .Values.hostNetwork }}
+      hostNetwork: {{ .hostNetwork }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       volumes:
         - name: runtime-volume
@@ -64,17 +66,17 @@ spec:
         - name: autosave-volume
           persistentVolumeClaim:
             claimName: {{ $autosaveClaim }}
-        {{- with .Values.nfsv2TftpClaim }}
+        {{- with .nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           persistentVolumeClaim:
             claimName: {{ . }}
         {{- end }}
-        {{- if .Values.dataVolume.pvc }}
+        {{- if .dataVolume.pvc }}
         - name: {{ $.Release.Name }}-data
           persistentVolumeClaim:
             claimName: {{ $.Release.Name }}-data
         {{- else }}
-        {{- with .Values.dataVolume.hostPath }}
+        {{- with .dataVolume.hostPath }}
         - name: {{ $.Release.Name }}-data
           hostPath:
             path: {{ . }}
@@ -84,32 +86,32 @@ spec:
         - name: config-volume
           configMap:
             name: {{ $.Release.Name }}-config
-        {{- with .Values.volumes }}
+        {{- with .volumes }}
 {{  toYaml . | indent 8}}
         {{- end }}
       containers:
       - name: {{ $.Release.Name }}
-        image: {{ .Values.image }}
+        image: {{ .image }}
         command:
-        {{- if (kindIs "string" .Values.startCommand) }}
-        - {{ .Values.startCommand }}
-        {{- else if (kindIs "slice" .Values.startCommand) }}
-        {{- .Values.startCommand | toYaml | nindent 8 }}
+        {{- if (kindIs "string" .startCommand) }}
+        - {{ .startCommand }}
+        {{- else if (kindIs "slice" .startCommand) }}
+        {{- .startCommand | toYaml | nindent 8 }}
         {{- end }}
         args:
-        {{- if (kindIs "string" .Values.startArgs) }}
-        - {{ .Values.startArgs }}
-        {{- else if (kindIs "slice" .Values.startArgs) }}
-        {{- .Values.startArgs | toYaml | nindent 8 }}
+        {{- if (kindIs "string" .startArgs) }}
+        - {{ .startArgs }}
+        {{- else if (kindIs "slice" .startArgs) }}
+        {{- .startArgs | toYaml | nindent 8 }}
         {{- end }}
         livenessProbe:
           exec:
             command:
-            {{- if (kindIs "string" .Values.liveness) }}
+            {{- if (kindIs "string" .liveness) }}
             - /bin/bash
-            - {{ .Values.liveness }}
-            {{- else if (kindIs "slice" .Values.liveness) }}
-            {{- .Values.liveness | toYaml | nindent 12 }}
+            - {{ .liveness }}
+            {{- else if (kindIs "slice" .liveness) }}
+            {{- .liveness | toYaml | nindent 12 }}
             {{- end }}
           initialDelaySeconds: 120
           periodSeconds: 10
@@ -117,23 +119,23 @@ spec:
           preStop:
             exec:
               command:
-              {{- if (kindIs "string" .Values.stop) }}
+              {{- if (kindIs "string" .stop) }}
               - /bin/bash
-              - {{ .Values.stop }}
-              {{- else if (kindIs "slice" .Values.stop) }}
-              {{- .Values.stop | toYaml | nindent 14 }}
+              - {{ .stop }}
+              {{- else if (kindIs "slice" .stop) }}
+              {{- .stop | toYaml | nindent 14 }}
               {{- end }}
         volumeMounts:
         - name: config-volume
-          mountPath: {{ .Values.iocConfig }}
+          mountPath: {{ .iocConfig }}
         {{- if or (.Values.dataVolume.pvc) (.Values.dataVolume.hostPath)  }}
         - name: {{ $.Release.Name }}-data
-          mountPath: {{ .Values.dataVolume.hostPath }}
-          {{- if .Values.dataVolume.hostPath }}
+          mountPath: {{ .dataVolume.hostPath }}
+          {{- if .dataVolume.hostPath }}
           mountPropagation: HostToContainer
           {{- end}}
         {{- end }}
-        {{- if .Values.nfsv2TftpClaim }}
+        {{- if .nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           mountPath: /nfsv2-tftp
           subPath: "{{ $ioc_group }}/{{ $.Release.Name }}"
@@ -147,16 +149,16 @@ spec:
         - name: autosave-volume
           mountPath: /autosave
           subPath: "{{ $.Release.Name }}"
-        {{- with .Values.volumeMounts }}
+        {{- with .volumeMounts }}
 {{  toYaml . | indent 8}}
         {{- end }}
         stdin: true
         tty: true
-        {{- with .Values.securityContext }}
+        {{- with .securityContext }}
         securityContext:
 {{  toYaml . | indent 10}}
         {{- end }}
-        {{- with .Values.resources }}
+        {{- with .resources }}
         resources:
 {{  toYaml . | indent 10}}
         {{- end }}
@@ -167,7 +169,7 @@ spec:
         - name: IOC_NAME
           value: {{ $.Release.Name }}
         - name: IOC_PREFIX
-          value: {{ or .Values.prefix $.Release.Name | quote }}
+          value: {{ or .prefix $.Release.Name | quote }}
         - name: IOC_LOCATION
           value: {{ $location | quote }}
         - name: IOC_GROUP
@@ -175,23 +177,23 @@ spec:
         {{- with $.Values.globalEnv }}
 {{  toYaml . | indent 8}}
         {{- end }}
-        {{- with .Values.iocEnv }}
+        {{- with .iocEnv }}
 {{  toYaml . | indent 8}}
         {{- end }}
-      {{- with .Values.nodeName }}
+      {{- with .nodeName }}
       nodeName: {{ . }}
       {{- else }}
-      {{- with .Values.affinity }}
+      {{- with .affinity }}
       affinity:
 {{  toYaml . | indent 8}}
       {{- end }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .tolerations }}
       tolerations:
 {{  toYaml . | indent 8}}
       {{- end }}
 
-{{ if .Values.dataVolume.pvc }}
+{{ if .dataVolume.pvc }}
 ---
 # This IOC uses a data volume, so we will create a PVC for it
 kind: PersistentVolumeClaim
@@ -204,8 +206,8 @@ metadata:
     ioc_group: {{ $ioc_group }}
     is_ioc: "true"
 spec:
-{{- if .Values.dataVolume.spec }}
-{{  toYaml .Values.dataVolume.spec | indent 2 }}
+{{- if .dataVolume.spec }}
+{{  toYaml .dataVolume.spec | indent 2 }}
 {{ else }}
   accessModes:
     - ReadWriteMany
@@ -215,6 +217,6 @@ spec:
 {{- end }}
 {{ else }}
 # This IOC has no data volume, so we will mount the host filesystem
-{{- end }}  {{/* end if .Values.dataVolume.spec */}}
-{{- end -}} {{/* end with .Values.ioc-instance */}}
+{{- end }}  {{/* end if .dataVolume.spec */}}
+{{- end -}} {{/* end with .ioc-instance */}}
 {{- end -}} {{/* end define "statefulset" */}}
