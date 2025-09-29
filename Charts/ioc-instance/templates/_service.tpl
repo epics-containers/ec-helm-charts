@@ -16,7 +16,7 @@ metadata:
   labels:
     app: {{ $.Release.Name }}
     location: {{ $.Values.global.location }}
-    ioc_group: {{ $.Values.global.ioc_group }}
+    domain: {{ $.Values.global.domain }}
     is_ioc: "true"
 spec:
   selector:

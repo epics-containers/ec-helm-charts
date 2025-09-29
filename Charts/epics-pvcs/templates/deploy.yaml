@@ -1,9 +1,9 @@
 {{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
-{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
-{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
-{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
-{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
-{{- $binariesClaim := default (print $ioc_group "-binaries-claim") .Values.binariesClaim -}}
+{{- $domain := default .Values.global.domain .Values.domain | required "ERROR - You must supply domain or global.domain" -}}
+{{- $opisClaim := default (print $domain "-opi-claim") .Values.opisClaim -}}
+{{- $runtimeClaim := default (print $domain "-runtime-claim") .Values.runtimeClaim -}}
+{{- $autosaveClaim := default (print $domain "-autosave-claim") .Values.autosaveClaim -}}
+{{- $binariesClaim := default (print $domain "-binaries-claim") .Values.binariesClaim -}}
 
 # PVC for shared OPI files
 kind: PersistentVolumeClaim
@@ -13,7 +13,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -29,7 +29,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -45,7 +45,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -62,7 +62,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany

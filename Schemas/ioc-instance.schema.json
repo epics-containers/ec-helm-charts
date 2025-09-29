@@ -21,7 +21,7 @@
           "description": "The location where the IOCs will run",
           "default": ""
         },
-        "ioc_group": {
+        "domain": {
           "type": "string",
           "description": "Short name for this collection of services",
           "default": ""
@@ -46,52 +46,60 @@
         "startCommand": {
           "description": "The command to run as the entry point of the container.",
           "default": "bash",
-          "oneOf":[
+          "oneOf": [
             {
-            "type": "string"
+              "type": "string"
             },
             {
-            "type": "array",
-            "items": { "type": "string" }
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           ]
         },
         "startArgs": {
           "description": "The arguments for the entry point of the container.",
           "default": "/epics/ioc/start.sh",
-          "oneOf":[
+          "oneOf": [
             {
-            "type": "string"
+              "type": "string"
             },
             {
-            "type": "array",
-            "items": { "type": "string" }
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           ]
         },
         "stop": {
           "description": "Script run before stopping the IOC",
           "default": "/epics/ioc/stop.sh",
-          "oneOf":[
+          "oneOf": [
             {
-            "type": "string"
+              "type": "string"
             },
             {
-            "type": "array",
-            "items": { "type": "string" }
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           ]
         },
         "liveness": {
           "description": "A bash script for determining the liveness of the IOC or list of commands",
           "default": "/epics/ioc/liveness.sh",
-          "oneOf":[
+          "oneOf": [
             {
-            "type": "string"
+              "type": "string"
             },
             {
-            "type": "array",
-            "items": { "type": "string" }
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           ]
         },
@@ -162,8 +170,8 @@
             "location": {
               "$ref": "#/$defs/base/properties/location"
             },
-            "ioc_group": {
-              "$ref": "#/$defs/base/properties/ioc_group"
+            "domain": {
+              "$ref": "#/$defs/base/properties/domain"
             },
             "enabled": {
               "type": "boolean",

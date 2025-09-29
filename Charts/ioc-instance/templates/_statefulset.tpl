@@ -2,7 +2,7 @@
 
 
 {{/*
-  Use with to access ioc-instance key.
+  Use 'with' to access ioc-instance key.
   Required because .ioc-instance is illegal because of the hyphen.
 */}}
 {{ with get .Values "ioc-instance" }}
@@ -14,10 +14,10 @@ This keeps the length of the values.txt file for each individual IOC
 to a minimum
 */ -}}
 {{- $location := default $.Values.global.location .location | required "ERROR - You must supply location or global.location" -}}
-{{- $ioc_group := default $.Values.global.ioc_group .ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
-{{- $opisClaim := default (print $ioc_group "-opi-claim") .opisClaim -}}
-{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .runtimeClaim -}}
-{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .autosaveClaim -}}
+{{- $domain := default $.Values.global.domain .domain | required "ERROR - You must supply domain or global.domain" -}}
+{{- $opisClaim := default (print $domain "-opi-claim") .opisClaim -}}
+{{- $runtimeClaim := default (print $domain "-runtime-claim") .runtimeClaim -}}
+{{- $autosaveClaim := default (print $domain "-autosave-claim") .autosaveClaim -}}
 {{- $image := .image | required "ERROR - You must supply image." -}}
 {{- $enabled := eq $.Values.global.enabled false | ternary false true -}}
 
@@ -28,7 +28,7 @@ metadata:
   labels:
     app: {{ $.Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
     enabled: {{ $enabled | quote }}
     is_ioc: "true"
 spec:
@@ -42,7 +42,7 @@ spec:
       labels:
         app: {{ $.Release.Name }}
         location: {{ $location }}
-        ioc_group: {{ $ioc_group }}
+        domain: {{ $domain }}
         is_ioc: "true"
         # re-deploy in case the configMap has changed - use a random value
         # unless the Commit Hash is supplied (by ArgoCD or helm command line)
@@ -138,7 +138,7 @@ spec:
         {{- if .nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           mountPath: /nfsv2-tftp
-          subPath: "{{ $ioc_group }}/{{ $.Release.Name }}"
+          subPath: "{{ $domain }}/{{ $.Release.Name }}"
         {{- end }}
         - name: runtime-volume
           mountPath: /epics/runtime
@@ -173,7 +173,7 @@ spec:
         - name: IOC_LOCATION
           value: {{ $location | quote }}
         - name: IOC_GROUP
-          value: {{ $ioc_group | quote }}
+          value: {{ $domain | quote }}
         {{- with $.Values.globalEnv }}
 {{  toYaml . | indent 8}}
         {{- end }}
@@ -203,7 +203,7 @@ metadata:
   labels:
     app: {{ $.Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
     is_ioc: "true"
 spec:
 {{- if .dataVolume.spec }}

@@ -1,5 +1,5 @@
 # Short name for this collection of services
-ioc_group:
+domain:
 # location where these IOCs and services will run
 location:
 # sizes of the auto provisioned PVs

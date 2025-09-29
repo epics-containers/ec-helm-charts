@@ -2,34 +2,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.ioc_group }}-nfs-tftp
+  name: {{ .Values.domain }}-nfs-tftp
   labels:
     app: {{ .Release.Name }}
     location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    domain: {{ .Values.domain }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.ioc_group }}-nfs-tftp
+      app: {{ .Values.domain }}-nfs-tftp
   template:
     metadata:
       labels:
-        app: {{ .Values.ioc_group }}-nfs-tftp
+        app: {{ .Values.domain }}-nfs-tftp
         location: {{ .Values.location }}
-        ioc_group: {{ .Values.ioc_group }}
+        domain: {{ .Values.domain }}
     spec:
       volumes:
         - name: ioc-binaries-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.ioc_group }}-binaries-claim
+            claimName: {{ .Values.domain }}-binaries-claim
         - name: ioc-autosave-volume
           emptyDir: {}
         # TODO - we should rsync to this volume from the autosave PV during
         # runtime and rsync from it at startup
         - name: autosave-backing-store
           persistentVolumeClaim:
-            claimName: {{ .Values.ioc_group }}-autosave-claim
+            claimName: {{ .Values.domain }}-autosave-claim
 
       containers:
         - name: server
@@ -73,11 +73,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.ioc_group }}-nfs-tftp
+  name: {{ .Values.domain }}-nfs-tftp
   labels:
-    app: {{ .Values.ioc_group }}-nfs-tftp
+    app: {{ .Values.domain }}-nfs-tftp
     location: {{ .Values.location }}
-    ioc_group: {{ .Values.ioc_group }}
+    domain: {{ .Values.domain }}
 spec:
   externalTrafficPolicy: Cluster
   type: LoadBalancer
@@ -106,4 +106,4 @@ spec:
   loadBalancerIP: {{ .Values.static_ip }}
   sessionAffinity: None
   selector:
-    app: {{ .Values.ioc_group }}-nfs-tftp
+    app: {{ .Values.domain }}-nfs-tftp

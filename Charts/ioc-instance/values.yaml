@@ -24,7 +24,7 @@ exports:
 
       # the name of the repository in which the IOC is grouped
       # DEFAULT = .Values.$location
-      ioc_group: ""
+      domain: ""
 
       # Features relating to the pod run time, such as USB devices
       runtimeClassName: ""
@@ -107,8 +107,7 @@ exports:
       nodeName: ""
 
       # Affinity is a group of affinity scheduling rules.
-      affinity:
-        {}
+      affinity: {}
         # nodeAffinity:
         #   requiredDuringSchedulingIgnoredDuringExecution:
         #     nodeSelectorTerms:
@@ -119,8 +118,7 @@ exports:
         #             - bl01t
 
       # If specified, the pod's tolerations.
-      tolerations:
-        []
+      tolerations: []
         # - key: location
         #   operator: Equal
         #   value: bl01t
