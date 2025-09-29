@@ -128,7 +128,7 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: {{ .iocConfig }}
-        {{- if or (.Values.dataVolume.pvc) (.Values.dataVolume.hostPath)  }}
+        {{- if or (.dataVolume.pvc) (.dataVolume.hostPath) }}
         - name: {{ $.Release.Name }}-data
           mountPath: {{ .dataVolume.hostPath }}
           {{- if .dataVolume.hostPath }}

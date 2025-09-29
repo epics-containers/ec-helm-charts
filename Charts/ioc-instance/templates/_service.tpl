@@ -34,12 +34,12 @@ spec:
       targetPort: {{ .ca_server_port | default 5064 }}
       protocol: UDP
     - name: ca-repeater-tcp
-      port: {{ add1 (.Values.ca_server_port | default 5064) }}
-      targetPort: {{ add1 (.Values.ca_server_port | default 5064) }}
+      port: {{ add1 (.caServerPort | default 5064) }}
+      targetPort: {{ add1 (.caServerPort | default 5064) }}
       protocol: TCP
     - name: ca-repeater-udp
-      port: {{ add1 (.Values.ca_server_port | default 5064) }}
-      targetPort: {{ add1 (.Values.ca_server_port | default 5064) }}
+      port: {{ add1 (.caServerPort | default 5064) }}
+      targetPort: {{ add1 (.caServerPort | default 5064) }}
       protocol: UDP
     - name: pva-server-tcp
       port: {{ .pva_server_port | default 5075 }}
@@ -50,12 +50,12 @@ spec:
       targetPort: {{ .pva_server_port | default 5075 }}
       protocol: UDP
     - name: pva-broadcast-tcp
-      port: {{ add1 (.Values.pva_server_port | default 5075) }}
-      targetPort: {{ add1 (.Values.pva_server_port | default 5075) }}
+      port: {{ add1 (.pvaServerPort | default 5075) }}
+      targetPort: {{ add1 (.pvaServerPort | default 5075) }}
       protocol: TCP
     - name: pva-broadcast-udp
-      port: {{ add1 (.Values.pva_server_port | default 5075) }}
-      targetPort: {{ add1 (.Values.pva_server_port | default 5075) }}
+      port: {{ add1 (.pvaServerPort | default 5075) }}
+      targetPort: {{ add1 (.pvaServerPort | default 5075) }}
       protocol: UDP
 {{- end }} {{/* end if not .hostNetwork */}}
 
