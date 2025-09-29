@@ -1,148 +1,125 @@
+# yaml-language-server: $schema=values.schema.json
+
+# Default values for ioc-instance chart.
+# With annotations for building the schema using:
+#   https://github.com/losisin/helm-values-schema-json.git
+
+# NOTE: the $k8s schema references come from
+#   https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1
+#   with version from Charts/ioc-instance/.schema.config.yaml (k8sSchemaVersion)
+
+ioc-instance: &ioc-instance
+  ################################################################################
+  # Values that all IOCs MUST set
+  ################################################################################
+
+  # @schema description: containerimage URI for the Generic IOC. Mandatory override.
+  image: ""
+
+  # @schema description: The location where the IOCs will run. Should match location label on servers if present.
+  location: ""
+
+  ################################################################################
+  # Optional override values
+  ################################################################################
+
+  # domain can be beamline shortname or accelerator technical area
+  # @schema description: the domain IOCs run in, e.g. p47, b01-1, rf, va
+  domain: ""
+
+  # @schema description: at DLS set to 'usb-compat' for mounting in USB devices
+  runtimeClassName: ""
+
+  # @schema description: specify the service account
+  serviceAccountName: ""
+
+  # @schema description: enable host networking for the pod
+  hostNetwork: true
+
+  # @schema description: root folder for ioc source/binaries inside generic IOC container
+  iocFolder: /epics/ioc
+  iocConfig: /epics/ioc/config
+
+  # @schema description: IOC Entry point
+  startCommand: bash
+  # @schema description: IOC Entry point arguments
+  startArgs: /epics/ioc/start.sh
+  # @schema description: IOC Entry stop handler
+  stop: /epics/ioc/stop.sh
+  # @schema description: IOC Entry liveness probe
+  liveness: /epics/ioc/liveness.sh
+
+  # @schema description: IOC Entry point
+  globalEnv: []
+  # - name:
+  #   value:
+  iocEnv: []
+  # - name:
+  #   value:
+
+  # @schema description: specify the security context. At DLS the IOCs should use iXXdetector user/group IDs
+  # @schema  $ref:$k8s/container.json#/properties/securityContext
+  securityContext:
+    allowPrivilegeEscalation: false
+
+  # @schema description: a volume to mount for writing data to. This can be a PVC or a hostPath the PVC
+  dataVolume:
+    # @schema description:  Create a PVC called {{ .Release.Name }}-data when true
+    pvc: true
+    # @schema description: A path on the host machine to write data into. Also used as the path that the pvc or hostPath will be mounted at so that users need not be confused about inside/outside container paths.
+    hostPath: /data
+
+  # @schema description: PVC for opi files. Defaults to ixx-pvcs
+  opisClaim: ""
+  # @schema description: PVC for runtime assets. Defaults to ixx-runtime
+  runtimeClaim: ""
+  # @schema description: PVC for autosave sav files. Defaults to ixx-autosave
+  autosaveClaim: ""
+
+  # @schema $ref: $k8s/podspec.json#/properties/volumes
+  volumes: []
+
+  # @schema $ref: $k8s/container.json#/properties/volumeMounts
+  volumeMounts: []
+
+  # @schema description: nodeName is used to run on a specific node. Overrides affinity
+  nodeName: ""
+
+  # @schema $ref: $k8s/affinity.json
+  affinity: {}
+
+  # @schema $ref: $k8s/podspec.json#/properties/tolerations
+  tolerations: []
+
+  # @schema  $ref: $k8s/container.json#/properties/resources
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+  # @schema description: supply a fixed cluster IP for the service
+  clusterIP:
+
+  # If a fixed cluster IP is not supplied, we allocate one based on the IOC name
+  # using baseIP to determine the range of IPs to allocate from.
+  # @schema description: cluster CIDR (default is all clusters at DLS)
+  baseIp: "10.96.0.0/12"
+
+  # @schema description: server port for channel access. The caRepeater port will be one greater.
+  caServerPort: 5064
+
+  # @schema description: server port for pv access. The UDP broadcast port will be one greater.
+  pvaServer Port: 5075
+
+# Because this is a library chart, the values must be enclosed in an exports key.
+# Use an alias here so that the ioc-instance structure can be presented to
+# helm-values-schema-json without the enclosing 'exports: defaults:'
+# @schema description: exports for parents of the library chart to import from.
 exports:
   defaults:
+    # @schema additionalProperties: true
     ioc-instance:
-      # yaml-language-server: $schema=../../Schemas/ioc-instance.schema.json/#/$defs/base
-
-      ########### Values defaults for ioc-instance Helm Chart ########################
-
-      ################################################################################
-      # Values that all IOCs MUST set
-      ################################################################################
-
-      # This value is the only mandatory override. You MUST declare the container
-      # image URI for the Generic IOC
-      image: ""
-
-      # The location where the IOCs will run.
-      # This creates a label 'location'
-      # NOTE: this value can also be set in global: instead of ioc-instance:
-      location: ""
-
-      ################################################################################
-      # Optional override values
-      ################################################################################
-
-      # the name of the repository in which the IOC is grouped
-      # DEFAULT = .Values.$location
-      domain: ""
-
-      # Features relating to the pod run time, such as USB devices
-      runtimeClassName: ""
-
-      # we use the default service account in the namespace so leave this out
-      # if you need to specify an alternative then uncomment below
-      serviceAccountName: ""
-
-      # useHostNetwork - use host network for IOC - required for Channel Access
-      # to work outside of the cluster unless a ca-gateway is in use
-      hostNetwork: true
-
-      # root folder for ioc source/binaries inside generic IOC container
-      iocFolder: /epics/ioc
-      iocConfig: /epics/ioc/config
-
-      # IOC Entry points
-      startCommand: bash
-      startArgs: /epics/ioc/start.sh
-      stop: /epics/ioc/stop.sh
-      liveness: /epics/ioc/liveness.sh
-
-      # the following are added to the pod's environment - globalEnv is for variables
-      # that are the same for all IOCs, iocEnv for variables unique to each IOC
-      globalEnv: []
-      # - name:
-      #   value:
-      iocEnv: []
-      # - name:
-      #   value:
-
-      # defaults for securityContext
-      # Usually override runAsXXX in the individual IOC values.yaml.
-      # At DLS the IOCs that write to the shared data directory must use
-      # iXXdetector user/group IDs
-      securityContext:
-        allowPrivilegeEscalation: false
-        # # e.g. if you want access to /dls/p38/data then the following should
-        # # be set to p38detector account ID and group ID
-        # runAsUser: 37143
-        # runAsGroup: 37143
-        # capabilities:
-        #   drop:
-        #   - ...
-        # readOnlyRootFilesystem: true
-        # runAsNonRoot: true
-
-      # a volume to mount for writing data to. This can be a PVC or a hostPath
-      # the PVC
-      dataVolume:
-        # Create a PVC called {{ .Release.Name }}-data when true
-        pvc: true
-        # A path on the host machine to write data into. Also used as the path that the
-        # pvc or hostPath will be mounted at so that users need not be confused about
-        # inside/outside container paths.
-        hostPath: /data
-
-      # use the shared PVC for publishing opi files over http (see services/opis)
-      opisClaim: ""
-      # use the shared PVC for holding runtime files for each IOC
-      runtimeClaim: ""
-      # use the shared PVC autosave files (comment out for no autosave)
-      autosaveClaim: ""
-
-      # Additional volumes for the IOC pod
-      volumes: []
-      # - name:
-      #   hostPath:
-      #     path:
-      # - name:
-      #   persistentVolumeClaim:
-      #     claimName:
-
-      # Additional volume mounts for the IOC container
-      volumeMounts: []
-      # - name:
-      #   mountPath:
-
-      # nodeName is used to run on a specific node. Overrides affinity
-      nodeName: ""
-
-      # Affinity is a group of affinity scheduling rules.
-      affinity: {}
-        # nodeAffinity:
-        #   requiredDuringSchedulingIgnoredDuringExecution:
-        #     nodeSelectorTerms:
-        #       - matchExpressions:
-        #         - key: location
-        #           operator: In
-        #           values:
-        #             - bl01t
-
-      # If specified, the pod's tolerations.
-      tolerations: []
-        # - key: location
-        #   operator: Equal
-        #   value: bl01t
-        #   effect: NoSchedule
-
-      # default resource limits
-      resources:
-        limits:
-          cpu: 500m
-          memory: 256Mi
-        requests:
-          cpu: 100m
-          memory: 64Mi
-
-      # supply a fixed cluster IP for the service
-      clusterIP:
-
-      # If a fixed cluster IP is not supplied, we allocate one based on the IOC name
-      # using baseIP to determine the range of IPs to allocate from.
-      # This default is the CIDR for all DLS clusters (and most clusters?)
-      baseIp: "10.96.0.0/12"
-
-      # server port for channel access. The caRepeater port will be one greater.
-      caServerPort: 5064
-
-      # server port for pv access. The UDP broadcast port will be one greater.
-      pvaServer Port: 5075
+      <<: *ioc-instance
