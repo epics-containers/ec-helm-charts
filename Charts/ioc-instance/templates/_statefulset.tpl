@@ -30,7 +30,7 @@ metadata:
     location: {{ $location }}
     domain: {{ $domain }}
     enabled: {{ $enabled | quote }}
-    is_ioc: "true"
+    ioc: "true"
 spec:
   replicas: {{ $enabled | ternary 1 0 }}
   podManagementPolicy: Parallel  # force rollout from a failing state
@@ -43,7 +43,7 @@ spec:
         app: {{ $.Release.Name }}
         location: {{ $location }}
         domain: {{ $domain }}
-        is_ioc: "true"
+        ioc: "true"
         # re-deploy in case the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
@@ -203,7 +203,7 @@ metadata:
     app: {{ $.Release.Name }}
     location: {{ $location }}
     domain: {{ $domain }}
-    is_ioc: "true"
+    ioc: "true"
 spec:
 {{- if .dataVolume.spec }}
 {{  toYaml .dataVolume.spec | indent 2 }}

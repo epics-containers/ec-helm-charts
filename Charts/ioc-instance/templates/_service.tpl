@@ -17,7 +17,7 @@ metadata:
     app: {{ $.Release.Name }}
     location: {{ $.Values.global.location }}
     domain: {{ $.Values.global.domain }}
-    is_ioc: "true"
+    ioc: "true"
 spec:
   selector:
     app: {{ $.Release.Name }}
@@ -26,6 +26,7 @@ spec:
   clusterIP: {{ .clusterIP | default (include "allocateIpFromName" $alloc_args) }}
   ports:
     - name: ca-server-tcp
+<<<<<<< HEAD
       port: {{ .ca_server_port | default 5064 }}
       targetPort: {{ .ca_server_port | default 5064 }}
       protocol: TCP
@@ -56,6 +57,38 @@ spec:
     - name: pva-broadcast-udp
       port: {{ add1 (.pvaServerPort | default 5075) }}
       targetPort: {{ add1 (.pvaServerPort | default 5075) }}
+=======
+      port: {{ .Values.caServerPort | default 5064 }}
+      targetPort: {{ .Values.caServerPort | default 5064 }}
+      protocol: TCP
+    - name: ca-server-udp
+      port: {{ .Values.caServerPort | default 5064 }}
+      targetPort: {{ .Values.caServerPort | default 5064 }}
+      protocol: UDP
+    - name: ca-repeater-tcp
+      port: {{ add1 (.Values.caServerPort | default 5064) }}
+      targetPort: {{ add1 (.Values.caServerPort | default 5064) }}
+      protocol: TCP
+    - name: ca-repeater-udp
+      port: {{ add1 (.Values.caServerPort | default 5064) }}
+      targetPort: {{ add1 (.Values.caServerPort | default 5064) }}
+      protocol: UDP
+    - name: pva-server-tcp
+      port: {{ .Values.pvaServerPort | default 5075 }}
+      targetPort: {{ .Values.pvaServerPort | default 5075 }}
+      protocol: TCP
+    - name: pva-server-udp
+      port: {{ .Values.pvaServerPort | default 5075 }}
+      targetPort: {{ .Values.pvaServerPort | default 5075 }}
+      protocol: UDP
+    - name: pva-broadcast-tcp
+      port: {{ add1 (.Values.pvaServerPort | default 5075) }}
+      targetPort: {{ add1 (.Values.pvaServerPort | default 5075) }}
+      protocol: TCP
+    - name: pva-broadcast-udp
+      port: {{ add1 (.Values.pvaServerPort | default 5075) }}
+      targetPort: {{ add1 (.Values.pvaServerPort | default 5075) }}
+>>>>>>> a5b24fa (make ca, pva port values camelCase)
       protocol: UDP
 {{- end }} {{/* end if not .hostNetwork */}}
 
