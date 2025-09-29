@@ -44,8 +44,7 @@ spec:
         location: {{ $location }}
         domain: {{ $domain }}
         is_ioc: "true"
-        # re-deploy in case the configMap has changed - use a random value
-        # unless the Commit Hash is supplied (by ArgoCD or helm command line)
+        # re-deploy in case the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
       {{- with .runtimeClassName }}
