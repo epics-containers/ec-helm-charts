@@ -2,7 +2,7 @@
 
 
 {{/*
-  Use 'with' to access ioc-instance key.
+  Use with to access ioc-instance key.
   Required because .ioc-instance is illegal because of the hyphen.
 */}}
 {{ with get .Values "ioc-instance" }}
@@ -44,7 +44,7 @@ spec:
         location: {{ $location }}
         domain: {{ $domain }}
         ioc: "true"
-        # re-deploy in case the configMap has changed
+        # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
       {{- with .runtimeClassName }}
