@@ -56,7 +56,7 @@
                     "type": "string"
                 },
                 "globalEnv": {
-                    "description": "Environment variables for IOCs",
+                    "description": "IOC Entry point",
                     "type": "array"
                 },
                 "hostNetwork": {
