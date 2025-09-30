@@ -72,17 +72,12 @@
             }
         },
         "global": {
-            "description": "shared values for all services",
-            "type": "object",
-            "properties": {
-                "env": {
-                    "description": "Add environment to containers",
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
-                    "type": "object",
-                    "additionalProperties": false
-                }
-            },
-            "additionalProperties": true
+            "description": "Global values shared between all subcharts",
+            "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as the `additionalProperties` setting would otherwise collide with Helm's special 'global' values key.",
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "hostNetwork": {
             "description": "enable host networking for the pod",
