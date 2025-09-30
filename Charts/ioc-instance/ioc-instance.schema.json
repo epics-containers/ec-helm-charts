@@ -56,7 +56,7 @@
                     "type": "string"
                 },
                 "globalEnv": {
-                    "description": "IOC Entry point",
+                    "description": "Environment variables for IOCs",
                     "type": "array"
                 },
                 "hostNetwork": {
@@ -93,7 +93,7 @@
                     "description": "PVC for opi files. Defaults to ixx-pvcs",
                     "type": "string"
                 },
-                "pvaServer Port": {
+                "pvaServerPort": {
                     "description": "server port for pv access. The UDP broadcast port will be one greater.",
                     "type": "integer"
                 },

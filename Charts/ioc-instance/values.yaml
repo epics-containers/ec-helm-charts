@@ -112,4 +112,4 @@ ioc-instance:
   caServerPort: 5064
 
   # @schema description: server port for pv access. The UDP broadcast port will be one greater.
-  pvaServer Port: 5075
+  pvaServerPort: 5075
