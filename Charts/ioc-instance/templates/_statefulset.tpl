@@ -2,7 +2,7 @@
 
 
 {{/*
-  Use with to access ioc-instance key.
+  Use 'with' to access ioc-instance key.
   Required because .ioc-instance is illegal because of the hyphen.
 */}}
 {{ with get .Values "ioc-instance" }}

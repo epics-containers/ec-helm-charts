@@ -1,0 +1,183 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "ioc-instance Helm chart",
+    "description": "Helm chart for deploying EPICS IOCs",
+    "type": "object",
+    "properties": {
+        "global": {
+            "description": "Global values shared between all subcharts",
+            "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as the `additionalProperties` setting would otherwise collide with Helm's special 'global' values key.",
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "ioc-instance": {
+            "type": "object",
+            "properties": {
+                "affinity": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/affinity.json",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "autosaveClaim": {
+                    "description": "PVC for autosave sav files. Defaults to ixx-autosave",
+                    "type": "string"
+                },
+                "baseIp": {
+                    "description": "cluster CIDR (default is all clusters at DLS)",
+                    "type": "string"
+                },
+                "caServerPort": {
+                    "description": "server port for channel access. The caRepeater port will be one greater.",
+                    "type": "integer"
+                },
+                "clusterIP": {
+                    "description": "supply a fixed cluster IP for the service",
+                    "type": "null"
+                },
+                "dataVolume": {
+                    "description": "a volume to mount for writing data to. This can be a PVC or a hostPath the PVC",
+                    "type": "object",
+                    "properties": {
+                        "hostPath": {
+                            "description": "A path on the host machine to write data into. Also used as the path that the pvc or hostPath will be mounted at so that users need not be confused about inside/outside container paths.",
+                            "type": "string"
+                        },
+                        "pvc": {
+                            "description": "Create a PVC called {{ .Release.Name }}-data when true",
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "domain": {
+                    "description": "the domain IOCs run in, e.g. p47, b01-1, rf, va",
+                    "type": "string"
+                },
+                "globalEnv": {
+                    "description": "IOC Entry point",
+                    "type": "array"
+                },
+                "hostNetwork": {
+                    "description": "enable host networking for the pod",
+                    "type": "boolean"
+                },
+                "image": {
+                    "description": "containerimage URI for the Generic IOC. Mandatory override.",
+                    "type": "string"
+                },
+                "iocConfig": {
+                    "type": "string"
+                },
+                "iocEnv": {
+                    "type": "array"
+                },
+                "iocFolder": {
+                    "description": "root folder for ioc source/binaries inside generic IOC container",
+                    "type": "string"
+                },
+                "liveness": {
+                    "description": "IOC Entry liveness probe",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "The location where the IOCs will run. Should match location label on nodes if present.",
+                    "type": "string"
+                },
+                "nodeName": {
+                    "description": "nodeName is used to run on a specific node. Overrides affinity",
+                    "type": "string"
+                },
+                "opisClaim": {
+                    "description": "PVC for opi files. Defaults to ixx-pvcs",
+                    "type": "string"
+                },
+                "pvaServerPort": {
+                    "description": "server port for pv access. The UDP broadcast port will be one greater.",
+                    "type": "integer"
+                },
+                "resources": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/resources",
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "requests": {
+                            "type": "object",
+                            "properties": {
+                                "cpu": {
+                                    "type": "string"
+                                },
+                                "memory": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "runtimeClaim": {
+                    "description": "PVC for runtime assets. Defaults to ixx-runtime",
+                    "type": "string"
+                },
+                "runtimeClassName": {
+                    "description": "at DLS set to 'usb-compat' for mounting in USB devices",
+                    "type": "string"
+                },
+                "securityContext": {
+                    "description": "specify the security context. At DLS the IOCs should use iXXdetector user/group IDs",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
+                    "type": "object",
+                    "properties": {
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "serviceAccountName": {
+                    "description": "specify the service account",
+                    "type": "string"
+                },
+                "startArgs": {
+                    "description": "IOC Entry point arguments",
+                    "type": "string"
+                },
+                "startCommand": {
+                    "description": "IOC Entry point",
+                    "type": "string"
+                },
+                "stop": {
+                    "description": "IOC Entry stop handler",
+                    "type": "string"
+                },
+                "tolerations": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
+                    "type": "array"
+                },
+                "volumeMounts": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
+                    "type": "array"
+                },
+                "volumes": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/volumes",
+                    "type": "array"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}
