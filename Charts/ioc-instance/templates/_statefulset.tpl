@@ -154,13 +154,13 @@ spec:
           value: {{ or .prefix $.Release.Name | quote }}
         - name: IOC_LOCATION
           value: {{ $location | quote }}
-        - name: IOC_GROUP
+        - name: IOC_DOMAIN
           value: {{ $domain | quote }}
-        {{- with $.Values.globalEnv }}
-          {{- toYaml . | nindent 10 }}
+        {{- with .globalEnv }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- with .iocEnv }}
-          {{- toYaml . | nindent 10 }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- with .nodeName }}
       nodeName: {{ . }}

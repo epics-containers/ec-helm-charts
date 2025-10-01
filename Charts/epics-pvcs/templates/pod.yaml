@@ -89,18 +89,15 @@ spec:
         {{- end }}
         imagePullPolicy: Always
         env:
-        - name: IOC_NAME
-          value: {{ .Release.Name | quote }}
-        - name: IOC_LOCATION
-          value: {{ $location | quote }}
-        - name: IOC_GROUP
-          value: {{ $domain | quote }}
-        {{- with .Values.globalEnv }}
-          {{  toYaml . | nindent 10 }}
-        {{- end }}
-        {{- with .Values.iocEnv }}
-          {{  toYaml . | nindent 10 }}
-        {{- end }}
+          - name: IOC_NAME
+            value: {{ .Release.Name | quote }}
+          - name: IOC_LOCATION
+            value: {{ $location | quote }}
+          - name: IOC_DOMAIN
+            value: {{ $domain | quote }}
+          {{- with merge .Values.globalEnv .Values.iocEnv }}
+            {{  toYaml . | nindent 12 }}
+          {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}
       {{- else }}
