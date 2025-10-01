@@ -38,16 +38,34 @@ ioc-instance:
 
   # @schema description: root folder for ioc source/binaries inside generic IOC container
   iocFolder: /epics/ioc
+
+  # @schema description: config folder mount point inside generic IOC container
   iocConfig: /epics/ioc/config
 
-  # @schema description: IOC Entry point
-  startCommand: bash
-  # @schema description: IOC Entry point arguments
-  startArgs: /epics/ioc/start.sh
-  # @schema description: IOC Entry stop handler
-  stop: /epics/ioc/stop.sh
-  # @schema description: IOC Entry liveness probe
-  liveness: /epics/ioc/liveness.sh
+  # @schema $ref: $k8s/container.json#/properties/command
+  command:
+    - bash
+
+  # @schema $ref: $k8s/container.json#/properties/args
+  args:
+    - /epics/ioc/start.sh
+
+  # @schema $ref: $k8s/container.json#/properties/lifecycle
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - /bin/bash
+          - /epics/ioc/stop.sh
+
+  # @schema $ref: $k8s/container.json#/properties/readinessProbe
+  livenessProbe:
+    exec:
+      command:
+        - /bin/bash
+        - /epics/ioc/liveness.sh
+    initialDelaySeconds: 120
+    periodSeconds: 10
 
   # @schema description: Environment variables to add to the pod
   globalEnv: []

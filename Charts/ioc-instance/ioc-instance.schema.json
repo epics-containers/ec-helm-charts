@@ -20,6 +20,13 @@
                     "type": "object",
                     "additionalProperties": false
                 },
+                "args": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/args",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "autosaveClaim": {
                     "description": "PVC for autosave sav files. Defaults to ixx-autosave",
                     "type": "string"
@@ -35,6 +42,13 @@
                 "clusterIP": {
                     "description": "supply a fixed cluster IP for the service",
                     "type": "null"
+                },
+                "command": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/command",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "dataVolume": {
                     "description": "a volume to mount for writing data to. This can be a PVC or a hostPath the PVC",
@@ -56,7 +70,7 @@
                     "type": "string"
                 },
                 "globalEnv": {
-                    "description": "IOC Entry point",
+                    "description": "Environment variables to add to the pod",
                     "type": "array"
                 },
                 "hostNetwork": {
@@ -68,6 +82,7 @@
                     "type": "string"
                 },
                 "iocConfig": {
+                    "description": "config folder mount point inside generic IOC container",
                     "type": "string"
                 },
                 "iocEnv": {
@@ -77,9 +92,55 @@
                     "description": "root folder for ioc source/binaries inside generic IOC container",
                     "type": "string"
                 },
-                "liveness": {
-                    "description": "IOC Entry liveness probe",
-                    "type": "string"
+                "lifecycle": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/lifecycle",
+                    "type": "object",
+                    "properties": {
+                        "preStop": {
+                            "type": "object",
+                            "properties": {
+                                "exec": {
+                                    "type": "object",
+                                    "properties": {
+                                        "command": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "livenessProbe": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
+                    "type": "object",
+                    "properties": {
+                        "exec": {
+                            "type": "object",
+                            "properties": {
+                                "command": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "integer"
+                        },
+                        "periodSeconds": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
                 },
                 "location": {
                     "description": "The location where the IOCs will run. Should match location label on nodes if present.",
@@ -149,18 +210,6 @@
                 },
                 "serviceAccountName": {
                     "description": "specify the service account",
-                    "type": "string"
-                },
-                "startArgs": {
-                    "description": "IOC Entry point arguments",
-                    "type": "string"
-                },
-                "startCommand": {
-                    "description": "IOC Entry point",
-                    "type": "string"
-                },
-                "stop": {
-                    "description": "IOC Entry stop handler",
                     "type": "string"
                 },
                 "tolerations": {

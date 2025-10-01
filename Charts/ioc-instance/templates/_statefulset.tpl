@@ -86,44 +86,27 @@ spec:
           configMap:
             name: {{ $.Release.Name }}-config
         {{- with .volumes }}
-{{  toYaml . | indent 8}}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
       containers:
       - name: {{ $.Release.Name }}
         image: {{ .image }}
+        {{- with .command }}
         command:
-        {{- if (kindIs "string" .startCommand) }}
-        - {{ .startCommand }}
-        {{- else if (kindIs "slice" .startCommand) }}
-        {{- .startCommand | toYaml | nindent 8 }}
+          {{- . | toYaml | nindent 10 }}
         {{- end }}
+        {{- with .args }}
         args:
-        {{- if (kindIs "string" .startArgs) }}
-        - {{ .startArgs }}
-        {{- else if (kindIs "slice" .startArgs) }}
-        {{- .startArgs | toYaml | nindent 8 }}
+          {{- . | toYaml | nindent 10 }}
         {{- end }}
+        {{ with .livenessProbe }}
         livenessProbe:
-          exec:
-            command:
-            {{- if (kindIs "string" .liveness) }}
-            - /bin/bash
-            - {{ .liveness }}
-            {{- else if (kindIs "slice" .liveness) }}
-            {{- .liveness | toYaml | nindent 12 }}
-            {{- end }}
-          initialDelaySeconds: 120
-          periodSeconds: 10
+          {{- . | toYaml | nindent 10 }}
+      {{- end }}
+      {{ with .lifecycle }}
         lifecycle:
-          preStop:
-            exec:
-              command:
-              {{- if (kindIs "string" .stop) }}
-              - /bin/bash
-              - {{ .stop }}
-              {{- else if (kindIs "slice" .stop) }}
-              {{- .stop | toYaml | nindent 14 }}
-              {{- end }}
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: config-volume
           mountPath: {{ .iocConfig }}
@@ -149,17 +132,17 @@ spec:
           mountPath: /autosave
           subPath: "{{ $.Release.Name }}"
         {{- with .volumeMounts }}
-{{  toYaml . | indent 8}}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         stdin: true
         tty: true
         {{- with .securityContext }}
         securityContext:
-{{  toYaml . | indent 10}}
+          {{-  toYaml . | nindent 10 }}
         {{- end }}
         {{- with .resources }}
         resources:
-{{  toYaml . | indent 10}}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         imagePullPolicy: Always
         env:
@@ -174,48 +157,23 @@ spec:
         - name: IOC_GROUP
           value: {{ $domain | quote }}
         {{- with $.Values.globalEnv }}
-{{  toYaml . | indent 8}}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- with .iocEnv }}
-{{  toYaml . | indent 8}}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
       {{- with .nodeName }}
       nodeName: {{ . }}
       {{- else }}
       {{- with .affinity }}
       affinity:
-{{  toYaml . | indent 8}}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- end }}
       {{- with .tolerations }}
       tolerations:
-{{  toYaml . | indent 8}}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 
-{{ if .dataVolume.pvc }}
----
-# This IOC uses a data volume, so we will create a PVC for it
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: {{ $.Release.Name }}-data
-  labels:
-    app: {{ $.Release.Name }}
-    location: {{ $location }}
-    domain: {{ $domain }}
-    ioc: "true"
-spec:
-{{- if .dataVolume.spec }}
-{{  toYaml .dataVolume.spec | indent 2 }}
-{{ else }}
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1000Mi
-{{- end }}
-{{ else }}
-# This IOC has no data volume, so we will mount the host filesystem
-{{- end }}  {{/* end if .dataVolume.spec */}}
-{{- end -}} {{/* end with .ioc-instance */}}
-{{- end -}} {{/* end define "statefulset" */}}
+{{- end }} {{/* end with .ioc-instance */}}
+{{- end }} {{/* end define "statefulset" */}}
