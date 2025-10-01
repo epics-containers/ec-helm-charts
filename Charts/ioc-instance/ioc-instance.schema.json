@@ -56,7 +56,7 @@
                     "type": "string"
                 },
                 "globalEnv": {
-                    "description": "IOC Entry point",
+                    "description": "Environment variables to add to the pod",
                     "type": "array"
                 },
                 "hostNetwork": {
