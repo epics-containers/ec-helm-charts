@@ -49,7 +49,7 @@ ioc-instance:
   # @schema description: IOC Entry liveness probe
   liveness: /epics/ioc/liveness.sh
 
-  # @schema description: IOC Entry point
+  # @schema description: Environment variables to add to the pod
   globalEnv: []
   # - name:
   #   value:
