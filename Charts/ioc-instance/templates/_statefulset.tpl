@@ -2,8 +2,8 @@
 
 
 {{/*
-  Use 'with' to access ioc-instance key.
-  Required because .ioc-instance is illegal because of the hyphen.
+  Use 'with' to access ioc-instance key via Values dictionary.
+  Required because kebab-case .ioc-instance is illegal as a variable name.
 */}}
 {{ with get .Values "ioc-instance" }}
 
