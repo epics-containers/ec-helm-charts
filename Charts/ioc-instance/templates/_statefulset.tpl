@@ -222,6 +222,15 @@ spec:
           - name: autosave-volume
             mountPath: /autosave
             subPath: "{{ $.Release.Name }}"
+          - name: config-volume
+            mountPath: {{ $root.iocConfig }}
+          {{- if or ($root.dataVolume.pvc) ($root.dataVolume.hostPath) }}
+          - name: {{ $.Release.Name }}-data
+            mountPath: {{ $root.dataVolume.hostPath }}
+            {{- if $root.dataVolume.hostPath }}
+            mountPropagation: HostToContainer
+            {{- end}}
+          {{- end }}
       {{- end }}
       {{/* End of containers */}}
       {{- with .nodeName }}
