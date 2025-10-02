@@ -16,6 +16,9 @@ ioc-instance:
   # @schema description: containerimage URI for the Generic IOC. Mandatory override.
   image: ""
 
+  # @schema $ref: $k8s/container.json#/properties/imagePullPolicy
+  imagePullPolicy: IfNotPresent
+
   # @schema description: The location where the IOCs will run. Should match location label on nodes if present.
   location: ""
 

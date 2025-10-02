@@ -4,6 +4,33 @@
     "description": "Helm chart for deploying EPICS IOCs",
     "type": "object",
     "properties": {
+        "extraContainers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "args": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "command": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
         "global": {
             "description": "Global values shared between all subcharts",
             "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as the `additionalProperties` setting would otherwise collide with Helm's special 'global' values key.",
@@ -82,6 +109,10 @@
                 },
                 "image": {
                     "description": "containerimage URI for the Generic IOC. Mandatory override.",
+                    "type": "string"
+                },
+                "imagePullPolicy": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
                     "type": "string"
                 },
                 "iocConfig": {

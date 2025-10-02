@@ -155,7 +155,7 @@ spec:
         resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        imagePullPolicy: Always
+        imagePullPolicy: .imagePullPolicy
         env:
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
@@ -167,18 +167,22 @@ spec:
           value: {{ $location | quote }}
         - name: IOC_DOMAIN
           value: {{ $domain | quote }}
+        - name: HOME
+          value: /tmp
+        - name: TERM
+          value: xterm-256color
         {{- with .globalEnv }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- with .iocEnv }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{/* Additional ad hoc containers */}}
-      {{ $root := . }}
+      {{- /* Additional ad hoc containers */}}
+      {{- $root := . }}
       {{- range .extraContainers }}
       - name: {{ .name }}
         image: {{ .image }}
-        imagePullPolicy: {{ $root.pullPolicy }}
+        imagePullPolicy: {{ $root.imagePullPolicy }}
         hostNetwork: {{ $root.hostNetwork }}
         # a writable place to have cwd
         workingDir: /tmp
@@ -187,10 +191,10 @@ spec:
             value: /tmp
           - name: TERM
             value: xterm-256color
-          {{- with .globalEnv }}
+          {{- with $root.globalEnv }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
-          {{- with .iocEnv }}
+          {{- with $root.iocEnv }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
         {{- with $root.securityContext }}
@@ -201,21 +205,23 @@ spec:
         command:
           {{- . | toYaml | nindent 12 }}
         {{- end }}
+        {{- with .args }}
+        args:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
         volumeMounts:
-        {{- with $root.volumeMounts }}
-          {{- toYaml . | nindent 12 }}
-        {{- end }}
-        {{- with $root.opisMountPoint }}
+          {{- with $root.volumeMounts }}
+            {{- toYaml . | nindent 14 }}
+          {{- end }}
+          - name: runtime-volume
+            mountPath: /epics/runtime
+            subPath: "{{ $.Release.Name }}"
           - name: opis-volume
-            mountPath: {{ . }}
-            subPath: {{ $.Release.Name }}
-        {{- end }}
-          - name: config-volume
-            mountPath: {{ $root.configFolder }}
-        {{- if $root.editable }}
-          - name: {{ $.Release.Name }}-develop
-            mountPath: /dest
-        {{- end }}
+            mountPath: /epics/opi
+            subPath: "{{ $.Release.Name }}"
+          - name: autosave-volume
+            mountPath: /autosave
+            subPath: "{{ $.Release.Name }}"
       {{- end }}
       {{/* End of containers */}}
       {{- with .nodeName }}
