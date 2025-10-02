@@ -39,11 +39,18 @@ spec:
       app: {{ $.Release.Name }}
   template:
     metadata:
+      {{- with .podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app: {{ $.Release.Name }}
         location: {{ $location }}
         domain: {{ $domain }}
         ioc: "true"
+        {{- with .podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
     spec:
@@ -55,6 +62,10 @@ spec:
       {{- end }}
       hostNetwork: {{ .hostNetwork }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
+      {{- with .podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: runtime-volume
           persistentVolumeClaim:
@@ -99,11 +110,11 @@ spec:
         args:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
-        {{ with .livenessProbe }}
+        {{- with .livenessProbe }}
         livenessProbe:
           {{- . | toYaml | nindent 10 }}
-      {{- end }}
-      {{ with .lifecycle }}
+        {{- end }}
+        {{ with .lifecycle }}
         lifecycle:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
@@ -162,6 +173,49 @@ spec:
         {{- with .iocEnv }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
+      {{/* Additional ad hoc containers */}}
+      {{- range .extraContainers }}
+      - name: {{ .name }}
+        image: {{ .image }}
+        imagePullPolicy: {{ $.Values.pullPolicy }}
+        # a writable place to have cwd
+        workingDir: /tmp
+        env:
+          - name: HOME
+            value: /tmp
+          - name: TERM
+            value: xterm-256color
+          {{- with .globalEnv }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- with .iocEnv }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- with $.Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .command }}
+        command:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
+        volumeMounts:
+        {{- with $.Values.volumeMounts }}
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with $.Values.opisMountPoint }}
+          - name: opis-volume
+            mountPath: {{ . }}
+            subPath: {{ $.Release.Name }}
+        {{- end }}
+          - name: config-volume
+            mountPath: {{ $.Values.configFolder }}
+        {{- if $.Values.editable }}
+          - name: {{ $.Release.Name }}-develop
+            mountPath: /dest
+        {{- end }}
+      {{- end }}
+      {{/* End of containers */}}
       {{- with .nodeName }}
       nodeName: {{ . }}
       {{- else }}
