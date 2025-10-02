@@ -16,6 +16,9 @@ ioc-instance:
   # @schema description: containerimage URI for the Generic IOC. Mandatory override.
   image: ""
 
+  # @schema $ref: $k8s/container.json#/properties/imagePullPolicy
+  imagePullPolicy: IfNotPresent
+
   # @schema description: The location where the IOCs will run. Should match location label on nodes if present.
   location: ""
 
@@ -38,16 +41,35 @@ ioc-instance:
 
   # @schema description: root folder for ioc source/binaries inside generic IOC container
   iocFolder: /epics/ioc
+
+  # @schema description: config folder mount point inside generic IOC container
   iocConfig: /epics/ioc/config
 
-  # @schema description: IOC Entry point
-  startCommand: bash
-  # @schema description: IOC Entry point arguments
-  startArgs: /epics/ioc/start.sh
-  # @schema description: IOC Entry stop handler
-  stop: /epics/ioc/stop.sh
-  # @schema description: IOC Entry liveness probe
-  liveness: /epics/ioc/liveness.sh
+  # @schema $ref: $k8s/container.json#/properties/command
+  command:
+    - bash
+    - -c
+
+  # @schema $ref: $k8s/container.json#/properties/args
+  args:
+    - /epics/ioc/start.sh
+
+  # @schema $ref: $k8s/container.json#/properties/lifecycle
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - /bin/bash
+          - /epics/ioc/stop.sh
+
+  # @schema $ref: $k8s/container.json#/properties/readinessProbe
+  livenessProbe:
+    exec:
+      command:
+        - /bin/bash
+        - /epics/ioc/liveness.sh
+    initialDelaySeconds: 120
+    periodSeconds: 10
 
   # @schema description: Environment variables to add to the pod
   globalEnv: []
@@ -113,3 +135,20 @@ ioc-instance:
 
   # @schema description: server port for pv access. The UDP broadcast port will be one greater.
   pvaServerPort: 5075
+
+  ##############################################################################
+  # additions below this line are to align with the deprecated fastcs helm chart
+  ##############################################################################
+
+  # Add additional containers specified by image and command
+  # see extra.values.yaml for the schema of this list of objects
+  extraContainers: []
+
+  # @schema description: Add annotations to the pod
+  podAnnotations: {}
+
+  # @schema description: Add labels to the pod
+  podLabels: {}
+
+  # @schema $ref: $k8s/podspec.json#/properties/securityContext
+  podSecurityContext: {}

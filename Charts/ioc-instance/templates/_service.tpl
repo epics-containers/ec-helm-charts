@@ -59,5 +59,5 @@ spec:
       protocol: UDP
 {{- end }} {{/* end if not .hostNetwork */}}
 
-{{- end -}} {{/* end with .ioc-instance */}}
-{{- end -}} {{/* end define "statefulset" */}}
+{{- end }} {{/* end with .ioc-instance */}}
+{{- end }} {{/* end define "statefulset" */}}
