@@ -61,6 +61,7 @@ spec:
       serviceAccountName: {{ . | quote }}
       {{- end }}
       hostNetwork: {{ .hostNetwork }}
+      imagePullPolicy: {{ .imagePullPolicy }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       {{- with .podSecurityContext }}
       securityContext:
@@ -155,7 +156,6 @@ spec:
         resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        imagePullPolicy: .imagePullPolicy
         env:
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
