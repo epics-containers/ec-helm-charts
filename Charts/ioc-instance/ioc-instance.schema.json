@@ -69,6 +69,9 @@
                     "description": "the domain IOCs run in, e.g. p47, b01-1, rf, va",
                     "type": "string"
                 },
+                "extraContainers": {
+                    "type": "array"
+                },
                 "globalEnv": {
                     "description": "Environment variables to add to the pod",
                     "type": "array"
@@ -153,6 +156,21 @@
                 "opisClaim": {
                     "description": "PVC for opi files. Defaults to ixx-pvcs",
                     "type": "string"
+                },
+                "podAnnotations": {
+                    "description": "Add annotations to the pod",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "podLabels": {
+                    "description": "Add labels to the pod",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "podSecurityContext": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/securityContext",
+                    "type": "object",
+                    "additionalProperties": false
                 },
                 "pvaServerPort": {
                     "description": "server port for pv access. The UDP broadcast port will be one greater.",

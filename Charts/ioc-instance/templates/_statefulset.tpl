@@ -174,10 +174,12 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
       {{/* Additional ad hoc containers */}}
+      {{ $root := . }}
       {{- range .extraContainers }}
       - name: {{ .name }}
         image: {{ .image }}
-        imagePullPolicy: {{ $.Values.pullPolicy }}
+        imagePullPolicy: {{ $root.pullPolicy }}
+        hostNetwork: {{ $root.hostNetwork }}
         # a writable place to have cwd
         workingDir: /tmp
         env:
@@ -191,7 +193,7 @@ spec:
           {{- with .iocEnv }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
-        {{- with $.Values.securityContext }}
+        {{- with $root.securityContext }}
         securityContext:
           {{- toYaml . | nindent 12 }}
         {{- end }}
@@ -200,17 +202,17 @@ spec:
           {{- . | toYaml | nindent 12 }}
         {{- end }}
         volumeMounts:
-        {{- with $.Values.volumeMounts }}
+        {{- with $root.volumeMounts }}
           {{- toYaml . | nindent 12 }}
         {{- end }}
-        {{- with $.Values.opisMountPoint }}
+        {{- with $root.opisMountPoint }}
           - name: opis-volume
             mountPath: {{ . }}
             subPath: {{ $.Release.Name }}
         {{- end }}
           - name: config-volume
-            mountPath: {{ $.Values.configFolder }}
-        {{- if $.Values.editable }}
+            mountPath: {{ $root.configFolder }}
+        {{- if $root.editable }}
           - name: {{ $.Release.Name }}-develop
             mountPath: /dest
         {{- end }}
