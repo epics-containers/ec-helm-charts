@@ -64,8 +64,12 @@ spec:
       {{- with .serviceAccountName }}
       serviceAccountName: {{ . | quote }}
       {{- end }}
-      hostNetwork: {{ .hostNetwork }}
+      {{- with .hostNetwork }}
+      hostNetwork: {{ . }}
+      {{- end }}
+      {{- if ne .imagePullPolicy "Always"}}
       imagePullPolicy: {{ .imagePullPolicy }}
+      {{- end }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       {{- with .podSecurityContext }}
       securityContext:
