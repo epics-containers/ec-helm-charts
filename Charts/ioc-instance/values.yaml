@@ -48,6 +48,7 @@ ioc-instance:
   # @schema $ref: $k8s/container.json#/properties/command
   command:
     - bash
+    - -c
 
   # @schema $ref: $k8s/container.json#/properties/args
   args:
