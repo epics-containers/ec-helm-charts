@@ -95,8 +95,8 @@ spec:
             value: {{ $location | quote }}
           - name: IOC_DOMAIN
             value: {{ $domain | quote }}
-          {{- with merge .Values.globalEnv .Values.iocEnv }}
-            {{  toYaml . | nindent 12 }}
+          {{- with .globalEnv }}
+            {{- toYaml . | nindent 10 }}
           {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}

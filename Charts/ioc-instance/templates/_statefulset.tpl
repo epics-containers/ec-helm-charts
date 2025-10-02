@@ -38,6 +38,8 @@ spec:
     matchLabels:
       app: {{ $.Release.Name }}
   template:
+
+    {{- /* pod metadata *****************************************************/}}
     metadata:
       {{- with .podAnnotations }}
       annotations:
@@ -53,6 +55,8 @@ spec:
         {{- end }}
         # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
+
+    {{- /* pod specification ************************************************/}}
     spec:
       {{- with .runtimeClassName }}
       runtimeClassName: {{ . }}
@@ -67,6 +71,21 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
+      {{- with .nodeName }}
+      nodeName: {{ . }}
+      {{- else }}
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- /* volumes ********************************************************/}}
       volumes:
         - name: runtime-volume
           persistentVolumeClaim:
@@ -100,6 +119,8 @@ spec:
         {{- with .volumes }}
           {{- toYaml . | nindent 10 }}
         {{- end }}
+
+      {{- /* Main IOC container *********************************************/}}
       containers:
       - name: {{ $.Release.Name }}
         image: {{ .image }}
@@ -177,13 +198,12 @@ spec:
         {{- with .iocEnv }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- /* Additional ad hoc containers */}}
+
+      {{- /* Additional ad hoc containers ***********************************/}}
       {{- $root := . }}
       {{- range .extraContainers }}
       - name: {{ .name }}
         image: {{ .image }}
-        imagePullPolicy: {{ $root.imagePullPolicy }}
-        hostNetwork: {{ $root.hostNetwork }}
         # a writable place to have cwd
         workingDir: /tmp
         env:
@@ -232,19 +252,7 @@ spec:
             {{- end}}
           {{- end }}
       {{- end }}
-      {{/* End of containers */}}
-      {{- with .nodeName }}
-      nodeName: {{ . }}
-      {{- else }}
-      {{- with .affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- end }}
-      {{- with .tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{/* End of containers ************************************************/}}
 
 {{- end }} {{/* end with .ioc-instance */}}
 {{- end }} {{/* end define "statefulset" */}}
