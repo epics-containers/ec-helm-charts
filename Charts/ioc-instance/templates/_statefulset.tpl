@@ -118,7 +118,7 @@ spec:
           configMap:
             name: {{ $.Release.Name }}-config
         {{- with .volumes }}
-          {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
 
       {{- /* Main IOC container *********************************************/}}
@@ -193,7 +193,7 @@ spec:
           mountPath: /autosave
           subPath: "{{ $.Release.Name }}"
         {{- with .volumeMounts }}
-          {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         stdin: true
         tty: true
@@ -269,7 +269,7 @@ spec:
         {{- end }}
         volumeMounts:
           {{- with $root.volumeMounts }}
-            {{- toYaml . | nindent 14 }}
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           - name: runtime-volume
             mountPath: /epics/runtime
