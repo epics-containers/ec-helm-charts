@@ -149,7 +149,7 @@ spec:
             command:
               - /bin/bash
               - -c
-              - .
+              - {{ . }}
           initialDelaySeconds: 120
           periodSeconds: 30
         {{- end }}
@@ -168,7 +168,7 @@ spec:
               command:
                 - /bin/bash
                 - -c
-                - .
+                - {{ . }}
         {{- end }}
         {{- end }}
 
