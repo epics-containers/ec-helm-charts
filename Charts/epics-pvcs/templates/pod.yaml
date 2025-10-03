@@ -95,8 +95,10 @@ spec:
             value: {{ $location | quote }}
           - name: IOC_DOMAIN
             value: {{ $domain | quote }}
-          {{- with .globalEnv }}
-            {{- toYaml . | nindent 10 }}
+          # globals: {{ .Values.global | quote }}
+          {{- range .Values.global.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
           {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}

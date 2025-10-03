@@ -196,11 +196,15 @@ spec:
           value: /tmp
         - name: TERM
           value: xterm-256color
-        {{- with .globalEnv }}
-          {{- toYaml . | nindent 8 }}
+
+        {{- /* Add in the global and instance additional environment vars */}}
+        {{- range $.Values.global.env }}
+        - name: {{ .name }}
+          value: {{ .value }}
         {{- end }}
-        {{- with .iocEnv }}
-          {{- toYaml . | nindent 8 }}
+        {{- range .env }}
+        - name: {{ .name }}
+          value: {{ .value }}
         {{- end }}
 
       {{- /* Additional ad hoc containers ***********************************/}}
@@ -215,12 +219,17 @@ spec:
             value: /tmp
           - name: TERM
             value: xterm-256color
-          {{- with $root.globalEnv }}
-            {{- toYaml . | nindent 10 }}
+
+          {{- /* Add in additional environment vars */}}
+          {{- range $.Values.global.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
           {{- end }}
-          {{- with $root.iocEnv }}
-            {{- toYaml . | nindent 10 }}
+          {{- range $root.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
           {{- end }}
+
         {{- with $root.securityContext }}
         securityContext:
           {{- toYaml . | nindent 12 }}

@@ -8,12 +8,18 @@
 #   https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1
 #   with version from Charts/ioc-instance/.schema.config.yaml (k8sSchemaVersion)
 
+# @schema additionalProperties: true
+global:
+  # @schema  $ref:$k8s/container.json#/properties/env
+  env: []
+
 ioc-instance:
   ################################################################################
   # Values that all IOCs MUST set
   ################################################################################
 
   # @schema description: containerimage URI for the Generic IOC. Mandatory override.
+  # @schema $ref:$k8s/container.json#/properties/image
   image: ""
 
   # @schema $ref: $k8s/container.json#/properties/imagePullPolicy
@@ -31,12 +37,12 @@ ioc-instance:
   domain: ""
 
   # @schema description: at DLS set to 'usb-compat' for mounting in USB devices
+  # @schema  $ref:$k8s/podspec.json#/properties/runtimeClassName
   runtimeClassName: ""
 
-  # @schema description: specify the service account
+  # @schema  $ref:$k8s/podspec.json#/properties/serviceAccountName
   serviceAccountName: ""
-
-  # @schema description: enable host networking for the pod
+  # @schema  $ref:$k8s/podspec.json#/properties/hostNetwork
   hostNetwork: true
 
   # @schema description: root folder for ioc source/binaries inside generic IOC container
@@ -71,13 +77,8 @@ ioc-instance:
     initialDelaySeconds: 120
     periodSeconds: 10
 
-  # @schema description: Environment variables to add to the pod
-  globalEnv: []
-  # - name:
-  #   value:
-  iocEnv: []
-  # - name:
-  #   value:
+  # @schema  $ref:$k8s/container.json#/properties/env
+  env: []
 
   # @schema description: specify the security context. At DLS the IOCs should use iXXdetector user/group IDs
   # @schema  $ref:$k8s/container.json#/properties/securityContext
@@ -104,7 +105,7 @@ ioc-instance:
   # @schema $ref: $k8s/container.json#/properties/volumeMounts
   volumeMounts: []
 
-  # @schema description: nodeName is used to run on a specific node. Overrides affinity
+  # @schema $ref: $k8s/podspec.json#/properties/nodeName
   nodeName: ""
 
   # @schema $ref: $k8s/affinity.json
@@ -141,13 +142,14 @@ ioc-instance:
   ##############################################################################
 
   # Add additional containers specified by image and command
-  # see extra.values.yaml for the schema of this list of objects
+  # see example.values.yaml for the schema of this list of objects
   extraContainers: []
 
-  # @schema description: Add annotations to the pod
-  podAnnotations: {}
+  # @schema description: list of additional annotations to apply o the pod
+  podAnnotations:
+    test: hello
 
-  # @schema description: Add labels to the pod
+  # @schema description: list of additional labels to apply o the pod
   podLabels: {}
 
   # @schema $ref: $k8s/podspec.json#/properties/securityContext
