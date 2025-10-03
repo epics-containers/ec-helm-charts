@@ -198,11 +198,11 @@ spec:
           value: xterm-256color
 
         {{- /* Add in the global and instance additional environment vars */}}
-        {{- range $.Values.global.env }}
+        {{- range .env }}
         - name: {{ .name }}
           value: {{ .value }}
         {{- end }}
-        {{- range .env }}
+        {{- range $.Values.global.env }}
         - name: {{ .name }}
           value: {{ .value }}
         {{- end }}
@@ -221,11 +221,11 @@ spec:
             value: xterm-256color
 
           {{- /* Add in additional environment vars */}}
-          {{- range $.Values.global.env }}
+          {{- range $root.env }}
           - name: {{ .name }}
             value: {{ .value }}
           {{- end }}
-          {{- range $root.env }}
+          {{- range $.Values.global.env }}
           - name: {{ .name }}
             value: {{ .value }}
           {{- end }}
