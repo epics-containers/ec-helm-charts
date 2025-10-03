@@ -54,7 +54,7 @@ spec:
             claimName: {{ . }}
         {{- end }}
         {{- with .Values.volumes }}
-{{  toYaml . | indent 8}}
+          {{  toYaml . | nindent 10}}
         {{- end }}
       containers:
       - name: {{ .Release.Name }}
@@ -75,41 +75,40 @@ spec:
         - name: autosave-volume
           mountPath: /mounts/autosave
         {{- with .Values.volumeMounts }}
-{{  toYaml . | indent 8}}
+          {{  toYaml . | nindent 10 }}
         {{- end }}
         stdin: true
         tty: true
         {{- with .Values.securityContext }}
         securityContext:
-{{  toYaml . | indent 10}}
+          {{  toYaml . | nindent 10 }}
         {{- end }}
         {{- with .Values.resources }}
         resources:
-{{  toYaml . | indent 10}}
+          {{  toYaml . | nindent 10 }}
         {{- end }}
         imagePullPolicy: Always
         env:
-        - name: IOC_NAME
-          value: {{ .Release.Name }}
-        - name: IOC_LOCATION
-          value: {{ $location | quote }}
-        - name: IOC_GROUP
-          value: {{ $domain | quote }}
-        {{- with .Values.globalEnv }}
-{{  toYaml . | indent 8}}
-        {{- end }}
-        {{- with .Values.iocEnv }}
-{{  toYaml . | indent 8}}
-        {{- end }}
+          - name: IOC_NAME
+            value: {{ .Release.Name | quote }}
+          - name: IOC_LOCATION
+            value: {{ $location | quote }}
+          - name: IOC_DOMAIN
+            value: {{ $domain | quote }}
+          # globals: {{ .Values.global | quote }}
+          {{- range .Values.global.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
+          {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}
       {{- else }}
       {{- with .Values.affinity }}
       affinity:
-{{  toYaml . | indent 8}}
+        {{  toYaml . | nindent 8 }}
       {{- end }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-{{  toYaml . | indent 8}}
+        {{  toYaml . | nindent 8}}
       {{- end }}

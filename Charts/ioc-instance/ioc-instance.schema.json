@@ -4,13 +4,42 @@
     "description": "Helm chart for deploying EPICS IOCs",
     "type": "object",
     "properties": {
+        "extraContainers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "args": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "command": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
         "global": {
-            "description": "Global values shared between all subcharts",
-            "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as the `additionalProperties` setting would otherwise collide with Helm's special 'global' values key.",
-            "type": [
-                "object",
-                "null"
-            ]
+            "type": "object",
+            "properties": {
+                "env": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true
         },
         "ioc-instance": {
             "type": "object",
@@ -19,6 +48,13 @@
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/affinity.json",
                     "type": "object",
                     "additionalProperties": false
+                },
+                "args": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/args",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "autosaveClaim": {
                     "description": "PVC for autosave sav files. Defaults to ixx-autosave",
@@ -35,6 +71,13 @@
                 "clusterIP": {
                     "description": "supply a fixed cluster IP for the service",
                     "type": "null"
+                },
+                "command": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/command",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "dataVolume": {
                     "description": "a volume to mount for writing data to. This can be a PVC or a hostPath the PVC",
@@ -55,42 +98,77 @@
                     "description": "the domain IOCs run in, e.g. p47, b01-1, rf, va",
                     "type": "string"
                 },
-                "globalEnv": {
-                    "description": "Environment variables to add to the pod",
+                "env": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "type": "array"
+                },
+                "extraContainers": {
                     "type": "array"
                 },
                 "hostNetwork": {
-                    "description": "enable host networking for the pod",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/hostNetwork",
                     "type": "boolean"
                 },
                 "image": {
                     "description": "containerimage URI for the Generic IOC. Mandatory override.",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/image",
+                    "type": "string"
+                },
+                "imagePullPolicy": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
                     "type": "string"
                 },
                 "iocConfig": {
+                    "description": "config folder mount point inside generic IOC container",
                     "type": "string"
-                },
-                "iocEnv": {
-                    "type": "array"
                 },
                 "iocFolder": {
                     "description": "root folder for ioc source/binaries inside generic IOC container",
                     "type": "string"
                 },
-                "liveness": {
-                    "description": "IOC Entry liveness probe",
+                "lifecycle": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/lifecycle",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "livenessExecutable": {
+                    "description": "simple livenessprobe config",
                     "type": "string"
+                },
+                "livenessProbe": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
+                    "type": "object",
+                    "additionalProperties": false
                 },
                 "location": {
                     "description": "The location where the IOCs will run. Should match location label on nodes if present.",
                     "type": "string"
                 },
                 "nodeName": {
-                    "description": "nodeName is used to run on a specific node. Overrides affinity",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/nodeName",
                     "type": "string"
                 },
                 "opisClaim": {
                     "description": "PVC for opi files. Defaults to ixx-pvcs",
+                    "type": "string"
+                },
+                "podAnnotations": {
+                    "description": "list of additional annotations to apply to the pod",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "podLabels": {
+                    "description": "list of additional labels to apply o the pod",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "podSecurityContext": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/securityContext",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "preStopExecutable": {
+                    "description": "simple lifecycle config",
                     "type": "string"
                 },
                 "pvaServerPort": {
@@ -134,6 +212,7 @@
                 },
                 "runtimeClassName": {
                     "description": "at DLS set to 'usb-compat' for mounting in USB devices",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/runtimeClassName",
                     "type": "string"
                 },
                 "securityContext": {
@@ -148,19 +227,7 @@
                     "additionalProperties": false
                 },
                 "serviceAccountName": {
-                    "description": "specify the service account",
-                    "type": "string"
-                },
-                "startArgs": {
-                    "description": "IOC Entry point arguments",
-                    "type": "string"
-                },
-                "startCommand": {
-                    "description": "IOC Entry point",
-                    "type": "string"
-                },
-                "stop": {
-                    "description": "IOC Entry stop handler",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/serviceAccountName",
                     "type": "string"
                 },
                 "tolerations": {

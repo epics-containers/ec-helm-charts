@@ -5,5 +5,7 @@
 {{ include "ioc-instance.statefulset" . }}
 ---
 {{ include "ioc-instance.service" . }}
+---
+{{ include "ioc-instance.datavolume" . }}
 
 {{- end }}

@@ -3,3 +3,10 @@
 # see .schema.config.yaml
 
 # None required for this Chart.
+extraContainers:
+  - name: my-sidecar
+    image: busybox
+    command:
+      - sleep
+    args:
+      - "3600" # sleep for an hour
