@@ -67,7 +67,6 @@ spec:
       {{- with .hostNetwork }}
       hostNetwork: {{ . }}
       {{- end }}
-      imagePullPolicy: {{ .imagePullPolicy }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       {{- with .podSecurityContext }}
       securityContext:
@@ -126,6 +125,7 @@ spec:
       containers:
       - name: {{ $.Release.Name }}
         image: {{ .image }}
+        imagePullPolicy: {{ .imagePullPolicy }}
         {{- with .command }}
         command:
           {{- . | toYaml | nindent 10 }}
@@ -238,6 +238,7 @@ spec:
       {{- range .extraContainers }}
       - name: {{ .name }}
         image: {{ .image }}
+        imagePullPolicy: {{ .imagePullPolicy }}
         # a writable place to have cwd
         workingDir: /tmp
         env:
