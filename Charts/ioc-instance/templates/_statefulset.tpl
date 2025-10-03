@@ -67,9 +67,6 @@ spec:
       {{- with .hostNetwork }}
       hostNetwork: {{ . }}
       {{- end }}
-      {{- if ne .imagePullPolicy "Always"}}
-      imagePullPolicy: {{ .imagePullPolicy }}
-      {{- end }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       {{- with .podSecurityContext }}
       securityContext:
@@ -121,13 +118,14 @@ spec:
           configMap:
             name: {{ $.Release.Name }}-config
         {{- with .volumes }}
-          {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
 
       {{- /* Main IOC container *********************************************/}}
       containers:
       - name: {{ $.Release.Name }}
         image: {{ .image }}
+        imagePullPolicy: {{ .imagePullPolicy }}
         {{- with .command }}
         command:
           {{- . | toYaml | nindent 10 }}
@@ -148,7 +146,6 @@ spec:
           exec:
             command:
               - /bin/bash
-              - -c
               - {{ . }}
           initialDelaySeconds: 120
           periodSeconds: 30
@@ -167,7 +164,6 @@ spec:
             exec:
               command:
                 - /bin/bash
-                - -c
                 - {{ . }}
         {{- end }}
         {{- end }}
@@ -197,7 +193,7 @@ spec:
           mountPath: /autosave
           subPath: "{{ $.Release.Name }}"
         {{- with .volumeMounts }}
-          {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         stdin: true
         tty: true
@@ -240,6 +236,7 @@ spec:
       {{- range .extraContainers }}
       - name: {{ .name }}
         image: {{ .image }}
+        imagePullPolicy: {{ .imagePullPolicy }}
         # a writable place to have cwd
         workingDir: /tmp
         env:
@@ -272,7 +269,7 @@ spec:
         {{- end }}
         volumeMounts:
           {{- with $root.volumeMounts }}
-            {{- toYaml . | nindent 14 }}
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           - name: runtime-volume
             mountPath: /epics/runtime
