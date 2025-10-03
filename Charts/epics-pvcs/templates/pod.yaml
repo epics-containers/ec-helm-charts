@@ -89,20 +89,17 @@ spec:
         {{- end }}
         imagePullPolicy: Always
         env:
-          {{- range .Values.env }}
-          - name: {{ .name }}
-            value: {{ .value }}
-          {{- end }}
-          {{- range .Values.global.env }}
-          - name: {{ .name }}
-            value: {{ .value }}
-          {{- end }}
           - name: IOC_NAME
             value: {{ .Release.Name | quote }}
           - name: IOC_LOCATION
             value: {{ $location | quote }}
           - name: IOC_DOMAIN
             value: {{ $domain | quote }}
+          # globals: {{ .Values.global | quote }}
+          {{- range .Values.global.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
+          {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}
       {{- else }}

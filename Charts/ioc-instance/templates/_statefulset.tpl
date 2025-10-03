@@ -210,18 +210,6 @@ spec:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         env:
-
-        {{- /* Add in the global and instance additional environment vars */}}
-        {{- range .env }}
-        - name: {{ .name }}
-          value: {{ .value }}
-        {{- end }}
-        {{- range $.Values.global.env }}
-        - name: {{ .name }}
-          value: {{ .value }}
-        {{- end }}
-
-        {{- /* Default env vars. May be overridden by the above as needed */}}
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
         - name: IOC_NAME
@@ -236,6 +224,16 @@ spec:
           value: /tmp
         - name: TERM
           value: xterm-256color
+
+        {{- /* Add in the global and instance additional environment vars */}}
+        {{- range .env }}
+        - name: {{ .name }}
+          value: {{ .value }}
+        {{- end }}
+        {{- range $.Values.global.env }}
+        - name: {{ .name }}
+          value: {{ .value }}
+        {{- end }}
 
       {{- /* Additional ad hoc containers ***********************************/}}
       {{- $root := . }}
