@@ -61,21 +61,16 @@ ioc-instance:
     - /epics/ioc/start.sh
 
   # @schema $ref: $k8s/container.json#/properties/lifecycle
-  lifecycle:
-    preStop:
-      exec:
-        command:
-          - /bin/bash
-          - /epics/ioc/stop.sh
+  lifecycle: {}
+
+  # @schema description: simple lifecycle config
+  preStopExecutable: /epics/ioc/stop.sh
 
   # @schema $ref: $k8s/container.json#/properties/readinessProbe
-  livenessProbe:
-    exec:
-      command:
-        - /bin/bash
-        - /epics/ioc/liveness.sh
-    initialDelaySeconds: 120
-    periodSeconds: 10
+  livenessProbe: {}
+
+  # @schema description: simple livenessprobe config
+  livenessExecutable: /epics/ioc/liveness.sh
 
   # @schema  $ref:$k8s/container.json#/properties/env
   env: []

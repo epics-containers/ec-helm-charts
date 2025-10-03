@@ -129,51 +129,15 @@
                 "lifecycle": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/lifecycle",
                     "type": "object",
-                    "properties": {
-                        "preStop": {
-                            "type": "object",
-                            "properties": {
-                                "exec": {
-                                    "type": "object",
-                                    "properties": {
-                                        "command": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    },
-                                    "additionalProperties": false
-                                }
-                            },
-                            "additionalProperties": false
-                        }
-                    },
                     "additionalProperties": false
+                },
+                "livenessExecutable": {
+                    "description": "simple livenessprobe config",
+                    "type": "string"
                 },
                 "livenessProbe": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
                     "type": "object",
-                    "properties": {
-                        "exec": {
-                            "type": "object",
-                            "properties": {
-                                "command": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "additionalProperties": false
-                        },
-                        "initialDelaySeconds": {
-                            "type": "integer"
-                        },
-                        "periodSeconds": {
-                            "type": "integer"
-                        }
-                    },
                     "additionalProperties": false
                 },
                 "location": {
@@ -207,6 +171,10 @@
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/securityContext",
                     "type": "object",
                     "additionalProperties": false
+                },
+                "preStopExecutable": {
+                    "description": "simple lifecycle config",
+                    "type": "string"
                 },
                 "pvaServerPort": {
                     "description": "server port for pv access. The UDP broadcast port will be one greater.",

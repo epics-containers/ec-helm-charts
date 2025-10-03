@@ -135,15 +135,43 @@ spec:
         {{- with .args }}
         args:
           {{- . | toYaml | nindent 10 }}
-        {{- end }}
+        {{- end -}}
+
+        {{/* supply a complete liveness probe object */}}
         {{- with .livenessProbe }}
         livenessProbe:
           {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the executable for default livenessProbe behaviour */}}
+        {{- with .livenessExecutable -}}
+        livenessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - -c
+              - {{ . }}
+          initialDelaySeconds: 120
+          periodSeconds: 30
         {{- end }}
-        {{ with .lifecycle }}
+        {{- end -}}
+
+        {{/* supply a complete lifecycle object */}}
+        {{- with .lifecycle }}
         lifecycle:
           {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the stop executable for default lifecycle behaviour */}}
+        {{- with .preStopExecutable }}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - {{ . }}
         {{- end }}
+        {{- end }}
+
         volumeMounts:
         - name: config-volume
           mountPath: {{ .iocConfig }}
