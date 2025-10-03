@@ -146,7 +146,6 @@ spec:
           exec:
             command:
               - /bin/bash
-              - -c
               - {{ . }}
           initialDelaySeconds: 120
           periodSeconds: 30
@@ -165,7 +164,6 @@ spec:
             exec:
               command:
                 - /bin/bash
-                - -c
                 - {{ . }}
         {{- end }}
         {{- end }}
