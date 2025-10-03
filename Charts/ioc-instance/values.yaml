@@ -140,9 +140,8 @@ ioc-instance:
   # see example.values.yaml for the schema of this list of objects
   extraContainers: []
 
-  # @schema description: list of additional annotations to apply o the pod
-  podAnnotations:
-    test: hello
+  # @schema description: list of additional annotations to apply to the pod
+  podAnnotations: {}
 
   # @schema description: list of additional labels to apply o the pod
   podLabels: {}

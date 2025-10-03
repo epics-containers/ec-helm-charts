@@ -153,13 +153,8 @@
                     "type": "string"
                 },
                 "podAnnotations": {
-                    "description": "list of additional annotations to apply o the pod",
+                    "description": "list of additional annotations to apply to the pod",
                     "type": "object",
-                    "properties": {
-                        "test": {
-                            "type": "string"
-                        }
-                    },
                     "additionalProperties": false
                 },
                 "podLabels": {
