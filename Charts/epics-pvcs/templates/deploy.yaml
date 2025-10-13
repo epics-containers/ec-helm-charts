@@ -42,6 +42,9 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ $autosaveClaim }}
+  annotations:
+    # don't delete autosave so it can be recovered if the whole beamline is deleted
+    helm.sh/resource-policy: keep
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
