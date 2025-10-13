@@ -45,6 +45,7 @@ metadata:
   annotations:
     # don't delete autosave so it can be recovered if the whole beamline is deleted
     helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Delete=false
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
