@@ -27,14 +27,12 @@ spec:
     targetRevision: {{ default $.Values.source.targetRevision $settings.targetRevision }}
     helm:
       version: v3
-      {{- if eq $index 0 }}
       parameters:
         - name: global.enabled
           value: {{ eq $settings.enabled false | ternary false true | quote }}
         # pass the synced commit hash as a global value
         - name: global.commitHash
           value: $ARGOCD_APP_REVISION_SHORT
-      {{- end }}
       valueFiles:
         - ../values.yaml
         - values.yaml
