@@ -1,5 +1,5 @@
 {{- define "ec-helm-charts.argocd-apps" -}}
-{{- range $service, $settings := list .Values.services }}
+{{- range $service, $settings := .Values.services }}
 {{- /* Make sure settings is an empty dict if it is currently nil */ -}}
 {{ $settings := default dict $settings -}}
 {{ if ne $settings.removed true }}
