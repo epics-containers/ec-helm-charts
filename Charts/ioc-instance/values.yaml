@@ -77,8 +77,16 @@ ioc-instance:
 
   # @schema description: specify the security context. At DLS the IOCs should use iXXdetector user/group IDs
   # @schema  $ref:$k8s/container.json#/properties/securityContext
-  securityContext:
-    allowPrivilegeEscalation: false
+  securityContext: {}
+
+  # @schema description: list of additional annotations to apply to the pod
+  podAnnotations: {}
+
+  # @schema description: list of additional labels to apply o the pod
+  podLabels: {}
+
+  # @schema $ref: $k8s/podspec.json#/properties/securityContext
+  podSecurityContext: {}
 
   # @schema description: a volume to mount for writing data to. This can be a PVC or a hostPath the PVC
   dataVolume:
@@ -132,19 +140,6 @@ ioc-instance:
   # @schema description: server port for pv access. The UDP broadcast port will be one greater.
   pvaServerPort: 5075
 
-  ##############################################################################
-  # additions below this line are to align with the deprecated fastcs helm chart
-  ##############################################################################
-
   # Add additional containers specified by image and command
   # see example.values.yaml for the schema of this list of objects
   extraContainers: []
-
-  # @schema description: list of additional annotations to apply to the pod
-  podAnnotations: {}
-
-  # @schema description: list of additional labels to apply o the pod
-  podLabels: {}
-
-  # @schema $ref: $k8s/podspec.json#/properties/securityContext
-  podSecurityContext: {}

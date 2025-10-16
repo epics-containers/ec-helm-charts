@@ -219,11 +219,6 @@
                     "description": "specify the security context. At DLS the IOCs should use iXXdetector user/group IDs",
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
                     "type": "object",
-                    "properties": {
-                        "allowPrivilegeEscalation": {
-                            "type": "boolean"
-                        }
-                    },
                     "additionalProperties": false
                 },
                 "serviceAccountName": {
