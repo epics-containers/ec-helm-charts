@@ -1,6 +1,5 @@
 {{- define "ec-helm-charts.argocd-apps" -}}
-{{- range $index, $services := list .Values.ec_services .Values.services }}
-{{- range $service, $settings := $services }}
+{{- range $service, $settings := list .Values.services }}
 {{- /* Make sure settings is an empty dict if it is currently nil */ -}}
 {{ $settings := default dict $settings -}}
 {{ if ne $settings.removed true }}
@@ -13,7 +12,6 @@ metadata:
     {{- if eq $settings.enabled false }}
     STOPPED: "1"
     {{- end }}
-    ec_service: {{ eq $index 0 | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -45,7 +43,6 @@ spec:
       - ApplyOutOfSyncOnly=true
       - RespectIgnoreDifferences=true
 ---
-{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
