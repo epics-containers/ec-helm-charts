@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  pull_request:
+
+jobs:
+  lint:
+    uses: ./.github/workflows/_precommit.yml
+
+  helm:
+    uses: ./.github/workflows/_helm.yml
+    needs: lint
+    permissions:
+      contents: read
+      packages: write
+
+  release:
+    if: github.ref_type == 'tag'
+    needs: helm
+    uses: ./.github/workflows/_release.yml
+    permissions:
+      contents: write

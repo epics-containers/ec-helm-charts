@@ -1,9 +1,9 @@
 {{- $location := default .Values.global.location .Values.location | required "ERROR - You must supply location or global.location" -}}
-{{- $ioc_group := default .Values.global.ioc_group .Values.ioc_group | required "ERROR - You must supply ioc_group or global.ioc_group" -}}
-{{- $opisClaim := default (print $ioc_group "-opi-claim") .Values.opisClaim -}}
-{{- $runtimeClaim := default (print $ioc_group "-runtime-claim") .Values.runtimeClaim -}}
-{{- $autosaveClaim := default (print $ioc_group "-autosave-claim") .Values.autosaveClaim -}}
-{{- $binariesClaim := default (print $ioc_group "-binaries-claim") .Values.binariesClaim -}}
+{{- $domain := default .Values.global.domain .Values.domain | required "ERROR - You must supply domain or global.domain" -}}
+{{- $opisClaim := default (print $domain "-opi-claim") .Values.opisClaim -}}
+{{- $runtimeClaim := default (print $domain "-runtime-claim") .Values.runtimeClaim -}}
+{{- $autosaveClaim := default (print $domain "-autosave-claim") .Values.autosaveClaim -}}
+{{- $binariesClaim := default (print $domain "-binaries-claim") .Values.binariesClaim -}}
 
 # PVC for shared OPI files
 kind: PersistentVolumeClaim
@@ -13,13 +13,13 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.opi_size }}
+      storage: {{ .Values.opiSize }}
 ---
 # PVC for shared runtime files
 kind: PersistentVolumeClaim
@@ -29,29 +29,33 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.runtime_size }}
+      storage: {{ .Values.runtimeSize }}
 ---
 # PVC for Autosave volumes
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ $autosaveClaim }}
+  annotations:
+    # don't delete autosave so it can be recovered if the whole beamline is deleted
+    helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Delete=false
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.autosave_size }}
+      storage: {{ .Values.autosaveSize }}
 
 ---
 # PVC for non-native ioc binaries
@@ -62,10 +66,10 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     location: {{ $location }}
-    ioc_group: {{ $ioc_group }}
+    domain: {{ $domain }}
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.binaries_size }}
+      storage: {{ .Values.binariesSize }}

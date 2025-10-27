@@ -1,0 +1,31 @@
+on:
+  workflow_call:
+
+env:
+  HELM_VERSION_TO_INSTALL: 3.17.1
+
+jobs:
+  run:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install helm
+        uses: Azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION_TO_INSTALL }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          # Pin a specific version of uv.
+          version: "0.8.22"
+
+      - name: Install helm plugins
+        run: helm plugin install https://github.com/losisin/helm-values-schema-json.git
+
+      - name: Run pre-commit
+        run: |
+          uvx pre-commit run --all-files --show-diff-on-failure

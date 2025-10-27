@@ -1,9 +1,17 @@
-# Short name for this collection of services
-ioc_group:
-# location where these IOCs and services will run
+# @schema additionalProperties: true
+global:
+  # @schema  $ref:$k8s/container.json#/properties/env
+  env: []
+
+# @schema description: Short name for this collection of services
+domain:
+# @schema description: location where these IOCs and services will run
 location:
-# sizes of the auto provisioned PVs
-opi_size: 1Gi
-runtime_size: 1Gi
-autosave_size: 1Gi
-binaries_size: 1Gi
+# @schema description: sizes of the auto provisioned PVs
+opiSize: 1Gi
+runtimeSize: 1Gi
+autosaveSize: 1Gi
+binariesSize: 1Gi
+
+# @schema  $ref:$k8s/container.json#/properties/env
+env: []

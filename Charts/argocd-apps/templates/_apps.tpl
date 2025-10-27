@@ -1,6 +1,5 @@
 {{- define "ec-helm-charts.argocd-apps" -}}
-{{- range $index, $services := list .Values.ec_services .Values.services }}
-{{- range $service, $settings := $services }}
+{{- range $service, $settings := .Values.services }}
 {{- /* Make sure settings is an empty dict if it is currently nil */ -}}
 {{ $settings := default dict $settings -}}
 {{ if ne $settings.removed true }}
@@ -13,7 +12,6 @@ metadata:
     {{- if eq $settings.enabled false }}
     STOPPED: "1"
     {{- end }}
-    ec_service: {{ eq $index 0 | ternary true false | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -27,14 +25,12 @@ spec:
     targetRevision: {{ default $.Values.source.targetRevision $settings.targetRevision }}
     helm:
       version: v3
-      {{- if eq $index 0 }}
       parameters:
         - name: global.enabled
           value: {{ eq $settings.enabled false | ternary false true | quote }}
         # pass the synced commit hash as a global value
         - name: global.commitHash
           value: $ARGOCD_APP_REVISION_SHORT
-      {{- end }}
       valueFiles:
         - ../values.yaml
         - values.yaml
@@ -47,7 +43,6 @@ spec:
       - ApplyOutOfSyncOnly=true
       - RespectIgnoreDifferences=true
 ---
-{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}

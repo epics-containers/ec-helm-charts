@@ -1,19 +1,16 @@
-## yaml-language-server: $schema=values.schema.json
+# yaml-language-server: $schema=values.schema.json
 
-# NOTE: the $k8s schema references come from
-# https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1
-# with the version set in .fastcs.schema.config.yaml (k8sSchemaVersion)
-
-# Default values for fastcs-instance chart.
+# Default values for ca-repeater chart.
 # With annotations for building the schema using:
 #   https://github.com/losisin/helm-values-schema-json.git
 
-# @schema description: shared values for all services
-# @schema additionalProperties: true
-global: {}
+# NOTE: the $k8s schema references come from
+#   https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1
+#   with the version set in carepeater/.schema.config.yaml (k8sSchemaVersion)
 
-# @schema description: Add environment to all containers
-globalEnv:
+# @schema description: Add environment to containers
+# @schema $ref:$k8s/container.json#/properties/env
+env:
   - name: EPICS_TS_MIN_WEST
     value: "0"
   - name: EPICS_CA_REPEATER_PORT
@@ -43,10 +40,10 @@ hostNetwork: true
 # @schema description: Add labels to the pod
 podLabels: {}
 
-# @schema  $ref:$k8s/container.json#/properties/securityContext
+# @schema $ref:$k8s/container.json#/properties/securityContext
 securityContext: {}
 
-# @schema  $ref: $k8s/container.json#/properties/resources
+# @schema $ref: $k8s/container.json#/properties/resources
 resources:
   # only tiny resources required by carepeater
   requests:

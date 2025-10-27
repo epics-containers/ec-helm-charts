@@ -1,0 +1,12 @@
+# examples of objects in values.yaml that default to empty and have no K8S schema
+# used for generating schema for these objects
+# see .schema.config.yaml
+
+# None required for this Chart.
+extraContainers:
+  - name: my-sidecar
+    image: busybox
+    command:
+      - sleep
+    args:
+      - "3600" # sleep for an hour
