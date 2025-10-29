@@ -114,9 +114,11 @@ spec:
             type: Directory
         {{- end }}
         {{- end }}
+        {{ if ne $.Values.configFolderConfigMap "{}" }}
         - name: config-volume
           configMap:
             name: {{ $.Release.Name }}-config
+        {{- end }}
         {{- with .volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -169,8 +171,10 @@ spec:
         {{- end }}
 
         volumeMounts:
+        {{ if ne $.Values.configFolderConfigMap "{}" }}
         - name: config-volume
           mountPath: {{ .iocConfig }}
+        {{- end }}
         {{- if or (.dataVolume.pvc) (.dataVolume.hostPath) }}
         - name: {{ $.Release.Name }}-data
           mountPath: {{ .dataVolume.hostPath }}
