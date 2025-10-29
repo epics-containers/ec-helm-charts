@@ -10,3 +10,11 @@ extraContainers:
       - sleep
     args:
       - "3600" # sleep for an hour
+
+initContainers:
+  - name: my-sidecar
+    image: busybox
+    command:
+      - sleep
+    args:
+      - "3600" # sleep for an hour

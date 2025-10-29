@@ -6,6 +6,8 @@
   Required because kebab-case .ioc-instance is illegal as a variable name.
 */}}
 {{ with get .Values "ioc-instance" }}
+# Preserve the root of ioc-instance for use in sub contexts
+{{- $root := . }}
 
 {{- /*
 Default the derivable substitution values.
@@ -19,7 +21,7 @@ to a minimum
 {{- $runtimeClaim := default (print $domain "-runtime-claim") .runtimeClaim -}}
 {{- $autosaveClaim := default (print $domain "-autosave-claim") .autosaveClaim -}}
 {{- $image := .image | required "ERROR - You must supply image." -}}
-{{- $enabled := eq $.Values.global.enabled false | ternary false true -}}
+{{- $enabled := eq $.Values.global.enabled false | ternary false true }}
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -37,6 +39,7 @@ spec:
   selector:
     matchLabels:
       app: {{ $.Release.Name }}
+    env:
   template:
 
     {{- /* pod metadata *****************************************************/}}
@@ -114,9 +117,11 @@ spec:
             type: Directory
         {{- end }}
         {{- end }}
+        {{ if ne $.Values.configFolderConfigMap "{}" }}
         - name: config-volume
           configMap:
             name: {{ $.Release.Name }}-config
+        {{- end }}
         {{- with .volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -166,35 +171,37 @@ spec:
                 - /bin/bash
                 - {{ . }}
         {{- end }}
-        {{- end }}
+        {{- end -}}
 
-        volumeMounts:
-        - name: config-volume
-          mountPath: {{ .iocConfig }}
-        {{- if or (.dataVolume.pvc) (.dataVolume.hostPath) }}
-        - name: {{ $.Release.Name }}-data
-          mountPath: {{ .dataVolume.hostPath }}
-          {{- if .dataVolume.hostPath }}
-          mountPropagation: HostToContainer
-          {{- end}}
-        {{- end }}
-        {{- if .nfsv2TftpClaim }}
-        - name: nfsv2-tftp-volume
-          mountPath: /nfsv2-tftp
-          subPath: "{{ $domain }}/{{ $.Release.Name }}"
-        {{- end }}
-        - name: runtime-volume
-          mountPath: /epics/runtime
-          subPath: "{{ $.Release.Name }}"
-        - name: opis-volume
-          mountPath: /epics/opi
-          subPath: "{{ $.Release.Name }}"
-        - name: autosave-volume
-          mountPath: /autosave
-          subPath: "{{ $.Release.Name }}"
-        {{- with .volumeMounts }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        volumeMounts: &volumeMounts
+          {{ if ne $.Values.configFolderConfigMap "{}" }}
+          - name: config-volume
+            mountPath: {{ $root.iocConfig }}
+          {{- end }}
+          {{- if or ($root.dataVolume.pvc) ($root.dataVolume.hostPath) }}
+          - name: {{ $.Release.Name }}-data
+            mountPath: {{ $root.dataVolume.hostPath }}
+            {{- if $root.dataVolume.hostPath }}
+            mountPropagation: HostToContainer
+            {{- end}}
+          {{- end }}
+          {{- if $root.nfsv2TftpClaim }}
+          - name: nfsv2-tftp-volume
+            mountPath: /nfsv2-tftp
+            subPath: "{{ $domain }}/{{ $.Release.Name }}"
+          {{- end }}
+          - name: runtime-volume
+            mountPath: /epics/runtime
+            subPath: "{{ $.Release.Name }}"
+          - name: opis-volume
+            mountPath: /epics/opi
+            subPath: "{{ $.Release.Name }}"
+          - name: autosave-volume
+            mountPath: /autosave
+            subPath: "{{ $.Release.Name }}"
+          {{- with $root.volumeMounts }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
         stdin: true
         tty: true
         {{- with .securityContext }}
@@ -205,7 +212,11 @@ spec:
         resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        env:
+        env: &env
+        - name: ARGOCD_COMMIT_HASH
+          value: {{ $.Values.global.commitHash | quote }}
+        - name: ARGOCD_SOURCE_REPO
+          value: {{ $.Values.global.sourceRepo | quote }}
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
         - name: IOC_NAME
@@ -222,7 +233,7 @@ spec:
           value: xterm-256color
 
         {{- /* Add in the global and instance additional environment vars */}}
-        {{- range .env }}
+        {{- range $root.env }}
         - name: {{ .name }}
           value: {{ .value }}
         {{- end }}
@@ -231,34 +242,14 @@ spec:
           value: {{ .value }}
         {{- end }}
 
+
       {{- /* Additional ad hoc containers ***********************************/}}
-      {{- $root := . }}
       {{- range .extraContainers }}
       - name: {{ .name }}
         image: {{ .image }}
         imagePullPolicy: {{ .imagePullPolicy }}
         # a writable place to have cwd
         workingDir: /tmp
-        env:
-          - name: HOME
-            value: /tmp
-          - name: TERM
-            value: xterm-256color
-
-          {{- /* Add in additional environment vars */}}
-          {{- range $root.env }}
-          - name: {{ .name }}
-            value: {{ .value }}
-          {{- end }}
-          {{- range $.Values.global.env }}
-          - name: {{ .name }}
-            value: {{ .value }}
-          {{- end }}
-
-        {{- with $root.securityContext }}
-        securityContext:
-          {{- toYaml . | nindent 12 }}
-        {{- end }}
         {{- with .command }}
         command:
           {{- . | toYaml | nindent 12 }}
@@ -267,29 +258,40 @@ spec:
         args:
           {{- . | toYaml | nindent 12 }}
         {{- end }}
-        volumeMounts:
-          {{- with $root.volumeMounts }}
-          {{- toYaml . | nindent 10 }}
-          {{- end }}
-          - name: runtime-volume
-            mountPath: /epics/runtime
-            subPath: "{{ $.Release.Name }}"
-          - name: opis-volume
-            mountPath: /epics/opi
-            subPath: "{{ $.Release.Name }}"
-          - name: autosave-volume
-            mountPath: /autosave
-            subPath: "{{ $.Release.Name }}"
-          - name: config-volume
-            mountPath: {{ $root.iocConfig }}
-          {{- if or ($root.dataVolume.pvc) ($root.dataVolume.hostPath) }}
-          - name: {{ $.Release.Name }}-data
-            mountPath: {{ $root.dataVolume.hostPath }}
-            {{- if $root.dataVolume.hostPath }}
-            mountPropagation: HostToContainer
-            {{- end}}
-          {{- end }}
+        volumeMounts: *volumeMounts
+        env: *env
+        {{- with $root.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
       {{- end }}
+
+      {{- /* Init containers ************************************************/}}
+      {{- with .initContainers }}
+      initContainers:
+        {{- range . }}
+        - name: {{ .name }}
+          image: {{ .image }}
+          imagePullPolicy: {{ .imagePullPolicy }}
+          # a writable place to have cwd
+          workingDir: /tmp
+          {{- with .command }}
+          command:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          {{- with .args }}
+          args:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          volumeMounts: *volumeMounts
+          env: *env
+          {{- with $root.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+
       {{/* End of containers ************************************************/}}
 
 {{- end }} {{/* end with .ioc-instance */}}
