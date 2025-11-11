@@ -8,6 +8,8 @@ metadata:
   name:  {{ .Release.Name }}-config
   labels:
     app: {{ .Release.Name }}
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
 # contents of the ioc instance config folder
 data:
 {{ .Values.configFolderConfigMap | indent 2 }}
