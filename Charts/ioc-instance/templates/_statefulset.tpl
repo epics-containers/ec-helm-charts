@@ -33,6 +33,9 @@ metadata:
     domain: {{ $domain }}
     enabled: {{ $enabled | quote }}
     ioc: "true"
+    {{- if .rebootEveryCommit }}
+    commitHash: {{ $.Values.global.commitHash | quote }}
+    {{- end }}
 spec:
   replicas: {{ $enabled | ternary 1 0 }}
   podManagementPolicy: Parallel  # force rollout from a failing state

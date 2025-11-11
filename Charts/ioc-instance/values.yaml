@@ -51,6 +51,9 @@ ioc-instance:
   # @schema description: config folder mount point inside generic IOC container
   iocConfig: /epics/ioc/config
 
+  # @schema description: when true the ioc will reboot on every commit
+  rebootEveryCommit: false
+
   # @schema $ref: $k8s/container.json#/properties/command
   command:
     - bash
