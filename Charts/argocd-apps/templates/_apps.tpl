@@ -33,6 +33,8 @@ spec:
           value: $ARGOCD_APP_REVISION_SHORT
         - name: global.sourceRepo
           value: $ARGOCD_APP_SOURCE_REPO_URL
+        - name: global.sourcePath
+          value: $ARGOCD_APP_SOURCE_PATH
       valueFiles:
         - ../values.yaml
         - values.yaml

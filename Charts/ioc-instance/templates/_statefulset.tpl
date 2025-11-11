@@ -217,6 +217,8 @@ spec:
           value: {{ $.Values.global.commitHash | quote }}
         - name: ARGOCD_SOURCE_REPO
           value: {{ $.Values.global.sourceRepo | quote }}
+        - name: ARGOCD_SOURCE_Path
+          value: {{ $.Values.global.sourcePath | quote }}
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
         - name: IOC_NAME
