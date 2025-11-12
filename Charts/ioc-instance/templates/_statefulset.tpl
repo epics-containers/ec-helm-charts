@@ -141,15 +141,14 @@ spec:
         {{- with .args }}
         args:
           {{- . | toYaml | nindent 10 }}
-        {{- end -}}
-
+        {{- end }}
         {{/* supply a complete liveness probe object */}}
         {{- with .livenessProbe }}
         livenessProbe:
           {{- . | toYaml | nindent 10 }}
         {{- else }}
         {{/* or just the executable for default livenessProbe behaviour */}}
-        {{- with .livenessExecutable -}}
+        {{- with .livenessExecutable }}
         livenessProbe:
           exec:
             command:
@@ -158,8 +157,7 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 30
         {{- end }}
-        {{- end -}}
-
+        {{- end }}
         {{/* supply a complete lifecycle object */}}
         {{- with .lifecycle }}
         lifecycle:
@@ -174,8 +172,7 @@ spec:
                 - /bin/bash
                 - {{ . }}
         {{- end }}
-        {{- end -}}
-
+        {{- end }}
         volumeMounts: &volumeMounts
           {{ if ne $.Values.configFolderConfigMap "{}" }}
           - name: config-volume
