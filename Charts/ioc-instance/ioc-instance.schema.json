@@ -41,6 +41,33 @@
             },
             "additionalProperties": true
         },
+        "initContainers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "args": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "command": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
         "ioc-instance": {
             "type": "object",
             "properties": {
@@ -103,7 +130,8 @@
                     "type": "array"
                 },
                 "extraContainers": {
-                    "type": "array"
+                    "type": "array",
+                    "additionalProperties": false
                 },
                 "hostNetwork": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/hostNetwork",
@@ -117,6 +145,10 @@
                 "imagePullPolicy": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
                     "type": "string"
+                },
+                "initContainers": {
+                    "type": "array",
+                    "additionalProperties": false
                 },
                 "iocConfig": {
                     "description": "config folder mount point inside generic IOC container",
@@ -174,6 +206,10 @@
                 "pvaServerPort": {
                     "description": "server port for pv access. The UDP broadcast port will be one greater.",
                     "type": "integer"
+                },
+                "rebootEveryCommit": {
+                    "description": "when true the ioc will reboot on every commit",
+                    "type": "boolean"
                 },
                 "resources": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/resources",
