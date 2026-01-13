@@ -98,7 +98,7 @@ spec:
           # globals: {{ .Values.global | quote }}
           {{- range .Values.global.env }}
           - name: {{ .name }}
-            value: {{ .value }}
+            value: {{ .value | quote }}
           {{- end }}
       {{- with .Values.nodeName }}
       nodeName: {{ . }}

@@ -42,7 +42,6 @@ spec:
   selector:
     matchLabels:
       app: {{ $.Release.Name }}
-    env:
   template:
 
     {{- /* pod metadata *****************************************************/}}
@@ -222,7 +221,7 @@ spec:
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
         - name: IOC_NAME
-          value: {{ $.Release.Name }}
+          value: {{ $.Release.Name | quote }}
         - name: IOC_PREFIX
           value: {{ or .prefix $.Release.Name | quote }}
         - name: IOC_LOCATION
@@ -237,11 +236,11 @@ spec:
         {{- /* Add in the global and instance additional environment vars */}}
         {{- range $root.env }}
         - name: {{ .name }}
-          value: {{ .value }}
+          value: {{ .value | quote }}
         {{- end }}
         {{- range $.Values.global.env }}
         - name: {{ .name }}
-          value: {{ .value }}
+          value: {{ .value | quote }}
         {{- end }}
 
 
