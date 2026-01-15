@@ -213,8 +213,6 @@ spec:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         env: &env
-        - name: ARGOCD_COMMIT_HASH
-          value: {{ $.Values.global.commitHash | quote }}
         - name: ARGOCD_SOURCE_REPO
           value: {{ $.Values.global.sourceRepo | quote }}
         - name: ARGOCD_SOURCE_Path
