@@ -53,6 +53,11 @@
                         "type": "boolean",
                         "description": "Set to true to remove the service from the cluster",
                         "default": "False"
+                        },
+                    "description": {
+                        "type": "string",
+                        "description": "Custom label describing the purpose of the service",
+                        "default": ""
                         }
                     },
                 "additionalProperties": false,
