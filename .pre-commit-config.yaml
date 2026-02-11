@@ -23,3 +23,11 @@ repos:
         args:
           - --config
           - Charts/carepeater/.schema.config.yaml
+
+  - repo: https://github.com/losisin/helm-values-schema-json
+    rev: v2.2.1
+    hooks:
+      - id: helm-schema
+        args:
+          - --config
+          - Charts/argocd-apps/.schema.config.yaml

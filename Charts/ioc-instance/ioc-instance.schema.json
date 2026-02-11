@@ -4,33 +4,6 @@
     "description": "Helm chart for deploying EPICS IOCs",
     "type": "object",
     "properties": {
-        "extraContainers": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "args": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "command": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false
-            }
-        },
         "global": {
             "type": "object",
             "properties": {
@@ -40,33 +13,6 @@
                 }
             },
             "additionalProperties": true
-        },
-        "initContainers": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "args": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "command": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false
-            }
         },
         "ioc-instance": {
             "type": "object",
@@ -131,6 +77,36 @@
                 },
                 "extraContainers": {
                     "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "name",
+                            "image",
+                            "command",
+                            "args"
+                        ],
+                        "properties": {
+                            "args": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "command": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "image": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
                     "additionalProperties": false
                 },
                 "hostNetwork": {
@@ -148,6 +124,36 @@
                 },
                 "initContainers": {
                     "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "name",
+                            "image",
+                            "command",
+                            "args"
+                        ],
+                        "properties": {
+                            "args": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "command": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "image": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
                     "additionalProperties": false
                 },
                 "iocConfig": {
@@ -157,6 +163,12 @@
                 "iocFolder": {
                     "description": "root folder for ioc source/binaries inside generic IOC container",
                     "type": "string"
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "lifecycle": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/lifecycle",

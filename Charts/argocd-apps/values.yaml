@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=values.schema.json
+
+# This file configures an ArgoCD app of apps that represent a
+# group of beamline or accelerator IOCs and services. The configuration of the
+# services are in the separate repo indicated by repoURL.
+
+# This repository only controls which services and which versions of those
+# services should be running on the cluster. It is recommended that this repo
+# be updated by a CI/CD pipeline or configuration tools only.
+
+# @schema $ref:https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/project
+project: ""
+# @schema $ref:https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/destination
+destination:
+  name: ""
+  namespace: ""
+# @schema $ref:https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/source
+source:
+  repoURL: ""
+  targetRevision: ""
+
+services: {}
+  # Each item is of the form:
+  #   service: service name as it appears in K8S (statefulset/deployment name)
+  #     targetRevision: optional override for targetRevision above
+  #     repoURL: optional override for git repo to source the helm chart from
+  #            the path is always services/<service> within that repo
+  #     removed: set to true to remove the service from the cluster
+  #     enabled: set to false to stop a service

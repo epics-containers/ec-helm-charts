@@ -36,6 +36,9 @@ metadata:
     {{- if .rebootEveryCommit }}
     commitHash: {{ $.Values.global.commitHash | quote }}
     {{- end }}
+    {{- with .labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ $enabled | ternary 1 0 }}
   podManagementPolicy: Parallel  # force rollout from a failing state
@@ -60,7 +63,9 @@ spec:
         {{- end }}
         # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
-
+        {{- with .labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     {{- /* pod specification ************************************************/}}
     spec:
       {{- with .runtimeClassName }}

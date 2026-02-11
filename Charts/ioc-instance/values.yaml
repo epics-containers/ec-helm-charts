@@ -154,3 +154,11 @@ ioc-instance:
   # these share the mounts and environment with the main container
   # @schema additionalProperties: false
   extraContainers: []
+
+  # labels to add to the statefulset and pod metadata:labels
+  # IMPORTANT: do not change here if using ArgoCD, instead set the labels you want
+  # in the deployment repo values.yaml file
+
+  # @schema type: object
+  # @schema additionalProperties: {"type": "string"}
+  labels: {}
