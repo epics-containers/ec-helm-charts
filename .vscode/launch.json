@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run pre-commit (all files)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "uv run pre-commit run --all-files"
+        }
+    ]
+}

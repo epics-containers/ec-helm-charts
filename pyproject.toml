@@ -1,0 +1,31 @@
+[project]
+name = "ec-helm-charts"
+version = "0.0.0"
+description = "Tooling environment only"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["copier", "pre-commit", "tox-uv"]
+
+[tool.tox]
+skipsdist = true
+# envs to runs automatically with tox -p
+env_list = ["pre-commit"]
+
+[tool.tox.env_run_base]
+# Pass all environment variables to the test environments
+passenv = ["*"]
+
+[tool.tox.env.pre-commit]
+description = "Run pre-commit on all files"
+commands = [
+    [
+        "pre-commit",
+        "run",
+        "--all-files",
+        "--show-diff-on-failure",
+        { replace = "posargs", default = [
+        ], extend = true },
+    ],
+]
