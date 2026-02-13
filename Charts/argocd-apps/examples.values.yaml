@@ -6,7 +6,7 @@ services:
   # @schema type: [object, null]
   example:
     # @schema type: object
-    # @schema additionalProperties: {"type": "string"}
+    # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource.\nValues must be 63 characters or fewer to match the Kubernetes specification."}
     labels: {}
     targetRevision: ""
     repoURL: ""

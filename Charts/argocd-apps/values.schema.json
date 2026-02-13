@@ -44,7 +44,9 @@
                         "labels": {
                             "type": "object",
                             "additionalProperties": {
-                                "type": "string"
+                                "description": "Custom labels applied to the resource.\nValues must be 63 characters or fewer to match the Kubernetes specification.",
+                                "type": "string",
+                                "maxLength": 63
                             }
                         },
                         "removed": {
