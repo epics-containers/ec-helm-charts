@@ -120,12 +120,13 @@ ioc-instance:
   # @schema $ref: $k8s/podspec.json#/properties/tolerations
   tolerations: []
 
-  # @schema  $ref: $k8s/container.json#/properties/resources
+  # Note, cannot use official $ref: $k8s/container.json#/properties/resources
+  # because it does not include device resources
   resources:
-    limits:
+    limits: # @schema additionalProperties: true
       cpu: 500m
       memory: 256Mi
-    requests:
+    requests: # @schema additionalProperties: true
       cpu: 100m
       memory: 64Mi
 
