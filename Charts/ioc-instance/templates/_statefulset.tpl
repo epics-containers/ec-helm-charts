@@ -63,7 +63,7 @@ spec:
         {{- end }}
         # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
-        {{- with .labels }}
+        {{- with .Values.global.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     {{- /* pod specification ************************************************/}}
