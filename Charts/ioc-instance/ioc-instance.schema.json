@@ -225,7 +225,7 @@
                                     "type": "string"
                                 }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": true
                         },
                         "requests": {
                             "type": "object",
@@ -237,7 +237,7 @@
                                     "type": "string"
                                 }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": true
                         }
                     },
                     "additionalProperties": false
