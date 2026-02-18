@@ -3,9 +3,13 @@
 # Define input, output and source for $refs relative to repository root for pre-commit
 values:
   - Charts/argocd-apps/values.yaml
-  - Charts/argocd-apps/examples.values.yaml
+  # - Charts/argocd-apps/examples.values.yaml
 
 output: Charts/argocd-apps/values.schema.json
+
+defaults:
+  emptyObjects:
+    - services
 
 # bundle up references (don't do this as K8S refs are 500kb+)
 bundleRoot: Charts

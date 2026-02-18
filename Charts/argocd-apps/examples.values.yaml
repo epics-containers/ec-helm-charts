@@ -2,13 +2,17 @@
 # used for generating schema for these objects
 # see .schema.config.yaml
 
-services:
-  # @schema type: [object, null]
-  example:
-    # @schema type: object
-    # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource.\nValues must be 63 characters or fewer to match the Kubernetes specification."}
-    labels: {}
-    targetRevision: ""
-    repoURL: ""
-    removed: false
-    enabled: true
+# services:
+#   example1:
+#     labels: {}
+#     targetRevision: ""
+#     repoURL: ""
+#     removed: false
+#     enabled: true
+
+#   example2:
+#     labels: {}
+#     targetRevision: ""
+#     repoURL: ""
+#     removed: false
+#     enabled: true

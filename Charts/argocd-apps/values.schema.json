@@ -30,39 +30,44 @@
             "type": "string"
         },
         "services": {
-            "type": "object",
-            "properties": {
-                "example": {
-                    "type": [
-                        "object",
-                        "null"
-                    ],
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "labels": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "description": "Custom labels applied to the resource.\nValues must be 63 characters or fewer to match the Kubernetes specification.",
-                                "type": "string",
-                                "maxLength": 63
-                            }
-                        },
-                        "removed": {
-                            "type": "boolean"
-                        },
-                        "repoURL": {
-                            "type": "string"
-                        },
-                        "targetRevision": {
-                            "type": "string"
+            "type": [
+                "object",
+                "null"
+            ],
+            "additionalProperties": {
+                "type": [
+                    "object",
+                    "null"
+                ],
+                "properties": {
+                    "enabled": {
+                        "default": true,
+                        "type": "boolean"
+                    },
+                    "labels": {
+                        "default": {},
+                        "type": "object",
+                        "additionalProperties": {
+                            "description": "Custom labels applied to the resource.",
+                            "type": "string",
+                            "maxLength": 63
                         }
                     },
-                    "additionalProperties": false
-                }
-            },
-            "additionalProperties": false
+                    "removed": {
+                        "default": false,
+                        "type": "boolean"
+                    },
+                    "repoURL": {
+                        "default": "",
+                        "type": "string"
+                    },
+                    "targetRevision": {
+                        "default": "",
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
         },
         "source": {
             "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/source",

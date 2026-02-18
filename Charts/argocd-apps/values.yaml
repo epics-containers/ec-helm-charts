@@ -19,7 +19,9 @@ source:
   repoURL: ""
   targetRevision: ""
 
-services: {}
+# @schema type: [object, null]
+# @schema mergeProperties: true
+services:
   # Each item is of the form:
   #   service: service name as it appears in K8S (statefulset/deployment name)
   #     targetRevision: optional override for targetRevision above
@@ -27,3 +29,26 @@ services: {}
   #            the path is always services/<service> within that repo
   #     removed: set to true to remove the service from the cluster
   #     enabled: set to false to stop a service
+
+  # @schema type: [object, null]
+  example1:
+    # @schema type: object
+    # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource."}
+    # @schema default: {}
+    labels: {}
+
+    # @schema type: string
+    # @schema default: ""
+    targetRevision: ""
+
+    # @schema type: string
+    # @schema default: ""
+    repoURL: ""
+
+    # @schema type: boolean
+    # @schema default: false
+    removed: false
+
+    # @schema type: boolean
+    # @schema default: true
+    enabled: true
