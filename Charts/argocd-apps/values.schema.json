@@ -64,6 +64,10 @@
                     "targetRevision": {
                         "default": "",
                         "type": "string"
+                    },
+                    "values": {
+                        "type": "object",
+                        "additionalProperties": false
                     }
                 },
                 "additionalProperties": false

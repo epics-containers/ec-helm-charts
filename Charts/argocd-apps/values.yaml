@@ -52,3 +52,6 @@ services:
     # @schema type: boolean
     # @schema default: true
     enabled: true
+
+    # @schema type: object
+    values: {}
