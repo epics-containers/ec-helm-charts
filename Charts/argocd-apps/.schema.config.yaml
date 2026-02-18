@@ -3,7 +3,6 @@
 # Define input, output and source for $refs relative to repository root for pre-commit
 values:
   - Charts/argocd-apps/values.yaml
-  # - Charts/argocd-apps/examples.values.yaml
 
 output: Charts/argocd-apps/values.schema.json
 
