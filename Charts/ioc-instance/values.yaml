@@ -85,7 +85,9 @@ ioc-instance:
   # @schema description: list of additional annotations to apply to the pod
   podAnnotations: {}
 
-  # @schema description: list of additional labels to apply o the pod
+  # @schema type: object
+  # @schema additionalProperties: {"type":"string","maxLength":63,"description":"list of additional labels to apply to the pod."}
+  # @schema default: {}
   podLabels: {}
 
   # @schema $ref: $k8s/podspec.json#/properties/securityContext
@@ -160,5 +162,6 @@ ioc-instance:
   # in the deployment repo values.yaml file
 
   # @schema type: object
-  # @schema additionalProperties: {"type": "string"}
+  # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource."}
+  # @schema default: {}
   labels: {}

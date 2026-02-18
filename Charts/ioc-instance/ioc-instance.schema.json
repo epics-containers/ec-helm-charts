@@ -165,9 +165,12 @@
                     "type": "string"
                 },
                 "labels": {
+                    "default": {},
                     "type": "object",
                     "additionalProperties": {
-                        "type": "string"
+                        "description": "Custom labels applied to the resource.",
+                        "type": "string",
+                        "maxLength": 63
                     }
                 },
                 "lifecycle": {
@@ -202,9 +205,13 @@
                     "additionalProperties": false
                 },
                 "podLabels": {
-                    "description": "list of additional labels to apply o the pod",
+                    "default": {},
                     "type": "object",
-                    "additionalProperties": false
+                    "additionalProperties": {
+                        "description": "list of additional labels to apply to the pod.",
+                        "type": "string",
+                        "maxLength": 63
+                    }
                 },
                 "podSecurityContext": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/securityContext",
