@@ -10,7 +10,7 @@
 
 # @schema additionalProperties: true
 global:
-  # @schema  $ref:$k8s/container.json#/properties/env
+  # @schema $ref: $k8s/container.json#/properties/env
   env: []
 
 ioc-instance:
@@ -19,7 +19,7 @@ ioc-instance:
   ################################################################################
 
   # @schema description: containerimage URI for the Generic IOC. Mandatory override.
-  # @schema $ref:$k8s/container.json#/properties/image
+  # @schema $ref: $k8s/container.json#/properties/image
   image: ""
 
   # @schema $ref: $k8s/container.json#/properties/imagePullPolicy
@@ -37,12 +37,12 @@ ioc-instance:
   domain: ""
 
   # @schema description: at DLS set to 'usb-compat' for mounting in USB devices
-  # @schema  $ref:$k8s/podspec.json#/properties/runtimeClassName
+  # @schema $ref: $k8s/podspec.json#/properties/runtimeClassName
   runtimeClassName: ""
 
-  # @schema  $ref:$k8s/podspec.json#/properties/serviceAccountName
+  # @schema $ref: $k8s/podspec.json#/properties/serviceAccountName
   serviceAccountName: ""
-  # @schema  $ref:$k8s/podspec.json#/properties/hostNetwork
+  # @schema $ref: $k8s/podspec.json#/properties/hostNetwork
   hostNetwork: true
 
   # @schema description: root folder for ioc source/binaries inside generic IOC container
@@ -75,17 +75,19 @@ ioc-instance:
   # @schema description: simple livenessprobe config
   livenessExecutable: /epics/ioc/liveness.sh
 
-  # @schema  $ref:$k8s/container.json#/properties/env
+  # @schema $ref: $k8s/container.json#/properties/env
   env: []
 
   # @schema description: specify the security context. At DLS the IOCs should use iXXdetector user/group IDs
-  # @schema  $ref:$k8s/container.json#/properties/securityContext
+  # @schema $ref: $k8s/container.json#/properties/securityContext
   securityContext: {}
 
   # @schema description: list of additional annotations to apply to the pod
   podAnnotations: {}
 
-  # @schema description: list of additional labels to apply o the pod
+  # @schema type: object
+  # @schema additionalProperties: {"type":"string","maxLength":63,"description":"list of additional labels to apply to the pod."}
+  # @schema default: {}
   podLabels: {}
 
   # @schema $ref: $k8s/podspec.json#/properties/securityContext
@@ -157,3 +159,12 @@ ioc-instance:
   # these share the mounts and environment with the main container
   # @schema additionalProperties: false
   extraContainers: []
+
+  # labels to add to the statefulset and pod metadata:labels
+  # IMPORTANT: do not change here if using ArgoCD, instead set the labels you want
+  # in the deployment repo values.yaml file
+
+  # @schema type: object
+  # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource."}
+  # @schema default: {}
+  labels: {}

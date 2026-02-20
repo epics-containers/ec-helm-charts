@@ -1,0 +1,91 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "argocd-apps Helm chart",
+    "description": "Helm chart for creating app of apps to deploy services",
+    "type": "object",
+    "properties": {
+        "destination": {
+            "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/destination",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "namespace": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "global": {
+            "description": "Global values shared between all subcharts",
+            "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as the `additionalProperties` setting would otherwise collide with Helm's special 'global' values key.",
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "project": {
+            "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/project",
+            "type": "string"
+        },
+        "services": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "additionalProperties": {
+                "type": [
+                    "object",
+                    "null"
+                ],
+                "properties": {
+                    "enabled": {
+                        "default": true,
+                        "type": "boolean"
+                    },
+                    "labels": {
+                        "default": {},
+                        "type": "object",
+                        "additionalProperties": {
+                            "description": "Custom labels applied to the resource.",
+                            "type": "string",
+                            "maxLength": 63
+                        }
+                    },
+                    "removed": {
+                        "default": false,
+                        "type": "boolean"
+                    },
+                    "repoURL": {
+                        "default": "",
+                        "type": "string"
+                    },
+                    "targetRevision": {
+                        "default": "",
+                        "type": "string"
+                    },
+                    "values": {
+                        "type": "object",
+                        "additionalProperties": false
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "source": {
+            "$ref": "https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/source",
+            "type": "object",
+            "properties": {
+                "repoURL": {
+                    "type": "string"
+                },
+                "targetRevision": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}
