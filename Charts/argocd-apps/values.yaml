@@ -8,15 +8,17 @@
 # services should be running on the cluster. It is recommended that this repo
 # be updated by a CI/CD pipeline or configuration tools only.
 
-# @schema $ref:https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/project
+# @schema description: "The ArgoCD project. At DLS this is the same as the beamline namespace. or 'accelerator'"
 project: ""
-# @schema $ref:https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/destination
 destination:
+  # @schema description: "The name of the destination cluster. e.g. 'i21' 'pollux' 'acastus'"
   name: ""
+  # @schema description: "The namespace in the destination cluster. At DLS this is always the same as the project name"
   namespace: ""
-# @schema $ref:https://raw.githubusercontent.com/argoproj/argo-schema-generator/2024-10-01-1727745921/schema/argo_cd_kustomize_schema.json#/definitions/io.argoproj.argocd.v1alpha1.ApplicationSpec/properties/source
 source:
+  # @schema description: "The URL of the Git repository containing the application manifests."
   repoURL: ""
+  # @schema description: "The target revision (branch, tag, commit) of the Git repository."
   targetRevision: ""
 
 # @schema type: [object, null]
