@@ -221,6 +221,10 @@ spec:
           value: {{ $.Values.global.sourceRepo | quote }}
         - name: ARGOCD_SOURCE_Path
           value: {{ $.Values.global.sourcePath | quote }}
+        {{- if .rebootEveryCommit }}
+        - name: ARGOCD_COMMIT_HASH
+          value: {{ $.Values.global.commitHash | quote }}
+        {{- end }}
         - name: IOCSH_PS1
           value: "{{ $.Release.Name }} > "
         - name: IOC_NAME
