@@ -22,6 +22,7 @@ to a minimum
 {{- $autosaveClaim := default (print $domain "-autosave-claim") .autosaveClaim -}}
 {{- $image := .image | required "ERROR - You must supply image." -}}
 {{- $enabled := eq $.Values.global.enabled false | ternary false true }}
+{{- $labels := default $.Values.global.labels .labels -}}
 
 apiVersion: apps/v1
 kind: StatefulSet
