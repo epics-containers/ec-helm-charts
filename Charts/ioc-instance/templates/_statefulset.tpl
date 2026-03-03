@@ -22,6 +22,7 @@ to a minimum
 {{- $autosaveClaim := default (print $domain "-autosave-claim") .autosaveClaim -}}
 {{- $image := .image | required "ERROR - You must supply image." -}}
 {{- $enabled := eq $.Values.global.enabled false | ternary false true }}
+{{- $labels := $.Values.global.labels }}
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -36,7 +37,7 @@ metadata:
     {{- if .rebootEveryCommit }}
     commitHash: {{ $.Values.global.commitHash | quote }}
     {{- end }}
-    {{- with .labels }}
+    {{- with $labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
@@ -63,7 +64,7 @@ spec:
         {{- end }}
         # re-deploy if the configMap has changed
         configHash: {{ $.Values.configFolderHash | default "noConfigMap" | quote }}
-        {{- with $.Values.global.labels }}
+        {{- with $labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     {{- /* pod specification ************************************************/}}
@@ -145,6 +146,22 @@ spec:
         {{- with .args }}
         args:
           {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        {{/* supply a complete readiness probe object */}}
+        {{- with .readinessProbe }}
+        readinessProbe:
+          {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the executable for default readinessProbe behaviour */}}
+        {{- with .readinessExecutable }}
+        readinessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - {{ . }}
+          initialDelaySeconds: 20
+          periodSeconds: 60
+        {{- end }}
         {{- end }}
         {{/* supply a complete liveness probe object */}}
         {{- with .livenessProbe }}

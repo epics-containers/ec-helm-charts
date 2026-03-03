@@ -70,6 +70,13 @@ ioc-instance:
   preStopExecutable: /epics/ioc/stop.sh
 
   # @schema $ref: $k8s/container.json#/properties/readinessProbe
+  readinessProbe: {}
+
+  # @schema description: simple readinessprobe config
+  # for now, check readiness using the same script as the liveness probe
+  readinessExecutable: /epics/ioc/liveness.sh
+
+  # @schema $ref: $k8s/container.json#/properties/readinessProbe
   livenessProbe: {}
 
   # @schema description: simple livenessprobe config
