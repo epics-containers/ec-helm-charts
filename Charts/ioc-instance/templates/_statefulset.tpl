@@ -147,6 +147,39 @@ spec:
         args:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
+        {{/* supply a complete startup probe object */}}
+        {{- with .startupProbe }}
+        startupProbe:
+          {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the executable for default startupProbe behaviour */}}
+        {{- with .startupExecutable }}
+        startupProbe:
+          exec:
+            command:
+              - /bin/bash
+              - {{ . }}
+          initialDelaySeconds: 5
+          periodSeconds: 60
+          failureThreshold: 10
+        {{- end }}
+        {{- end }}
+        {{/* supply a complete readiness probe object */}}
+        {{- with .readinessProbe }}
+        readinessProbe:
+          {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the executable for default readinessProbe behaviour */}}
+        {{- with .readinessExecutable }}
+        readinessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - {{ . }}
+          initialDelaySeconds: 20
+          periodSeconds: 60
+        {{- end }}
+        {{- end }}
         {{/* supply a complete liveness probe object */}}
         {{- with .livenessProbe }}
         livenessProbe:
