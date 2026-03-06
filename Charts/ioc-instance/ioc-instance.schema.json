@@ -67,6 +67,18 @@
                     },
                     "additionalProperties": false
                 },
+                "disableLivenessProbe": {
+                    "description": "disable the liveness probe.",
+                    "type": "boolean"
+                },
+                "disableReadinessProbe": {
+                    "description": "disable the readiness probe.",
+                    "type": "boolean"
+                },
+                "disableStartupProbe": {
+                    "description": "disable the startup probe.",
+                    "type": "boolean"
+                },
                 "domain": {
                     "description": "the domain IOCs run in, e.g. p47, b01-1, rf, va",
                     "type": "string"

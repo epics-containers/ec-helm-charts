@@ -159,9 +159,9 @@ spec:
             command:
               - /bin/bash
               - {{ . }}
-          initialDelaySeconds: 5
+          initialDelaySeconds: 0
           periodSeconds: 60
-          failureThreshold: 10
+          failureThreshold: 43200 # ~ a month
         {{- end }}
         {{- end }}
         {{/* supply a complete readiness probe object */}}
@@ -177,7 +177,7 @@ spec:
               - /bin/bash
               - {{ . }}
           initialDelaySeconds: 20
-          periodSeconds: 60
+          periodSeconds: 30
         {{- end }}
         {{- end }}
         {{/* supply a complete liveness probe object */}}
@@ -273,6 +273,12 @@ spec:
           value: /tmp
         - name: TERM
           value: xterm-256color
+        - name: K8S_IOC_STARTUP_ENABLED
+          value: {{ .disableStartupProbe | ternary "false" "true" }}
+        - name: K8S_IOC_READINESS_ENABLED
+          value: {{ .disableReadinessProbe | ternary "false" "true" }}
+        - name: K8S_IOC_LIVENESS_ENABLED
+          value: {{ .disableLivenessProbe | ternary "false" "true" }}
 
         {{- /* Add in the global and instance additional environment vars */}}
         {{- range $root.env }}
