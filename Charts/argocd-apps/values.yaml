@@ -35,7 +35,7 @@ services:
   # @schema type: [object, null]
   example1:
     # @schema type: object
-    # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource."}
+    # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource.","pattern":"^[a-zA-Z0-9](?:(?!--)[a-zA-Z0-9-]){0,62}$"}
     # @schema default: {}
     labels: {}
 
