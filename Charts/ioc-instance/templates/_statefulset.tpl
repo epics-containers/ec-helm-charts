@@ -273,12 +273,6 @@ spec:
           value: /tmp
         - name: TERM
           value: xterm-256color
-        - name: K8S_IOC_STARTUP_ENABLED
-          value: {{ .disableStartupProbe | ternary false true | quote }}
-        - name: K8S_IOC_READINESS_ENABLED
-          value: {{ .disableReadinessProbe | ternary false true | quote }}
-        - name: K8S_IOC_LIVENESS_ENABLED
-          value: {{ .disableLivenessProbe | ternary false true | quote }}
         {{- /* Add in the global and instance additional environment vars */}}
         {{- range $root.env }}
         - name: {{ .name }}
