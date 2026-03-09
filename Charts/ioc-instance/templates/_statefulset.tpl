@@ -160,8 +160,8 @@ spec:
               - /bin/bash
               - {{ . }}
           initialDelaySeconds: 0
-          periodSeconds: 5
-          failureThreshold: 520000 # ~ a month
+          periodSeconds: 1
+          failureThreshold: 2600000 # ~ a month
         {{- end }}
         {{- end }}
         {{/* supply a complete readiness probe object */}}
