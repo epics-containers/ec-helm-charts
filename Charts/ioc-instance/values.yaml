@@ -82,8 +82,8 @@ ioc-instance:
   readinessProbe: {}
 
   # @schema description: simple readinessprobe config
-  # For now, use the same script as the liveness probe
-  readinessExecutable: /epics/ioc/readiness.sh
+  # Until readiness script is available, use the same script as the liveness probe
+  readinessExecutable: /epics/ioc/liveness.sh
 
   # @schema description: disable the readiness probe.
   # Not required yet, so disabled by default to avoid confusion.
