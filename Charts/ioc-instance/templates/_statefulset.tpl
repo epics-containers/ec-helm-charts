@@ -161,7 +161,8 @@ spec:
               - {{ . }}
           initialDelaySeconds: 0
           periodSeconds: 1
-          failureThreshold: 1300000 # ~ half a month
+          failureThreshold: 2600000 # ~ a month if period kept at 1s
+          timeoutSeconds: 1300000 # ~ half a month
         {{- end }}
         {{- end }}
         {{/* supply a complete readiness probe object */}}
