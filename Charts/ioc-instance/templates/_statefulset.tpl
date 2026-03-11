@@ -147,6 +147,40 @@ spec:
         args:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
+        {{/* supply a complete startup probe object */}}
+        {{- with .startupProbe }}
+        startupProbe:
+          {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the executable for default startupProbe behaviour */}}
+        {{- with .startupExecutable }}
+        startupProbe:
+          exec:
+            command:
+              - /bin/bash
+              - {{ . }}
+          initialDelaySeconds: 0
+          periodSeconds: 1
+          failureThreshold: 2600000 # ~ a month if period kept at 1s
+          timeoutSeconds: 1300000 # ~ half a month
+        {{- end }}
+        {{- end }}
+        {{/* supply a complete readiness probe object */}}
+        {{- with .readinessProbe }}
+        readinessProbe:
+          {{- . | toYaml | nindent 10 }}
+        {{- else }}
+        {{/* or just the executable for default readinessProbe behaviour */}}
+        {{- with .readinessExecutable }}
+        readinessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - {{ . }}
+          initialDelaySeconds: 20
+          periodSeconds: 30
+        {{- end }}
+        {{- end }}
         {{/* supply a complete liveness probe object */}}
         {{- with .livenessProbe }}
         livenessProbe:
@@ -240,7 +274,6 @@ spec:
           value: /tmp
         - name: TERM
           value: xterm-256color
-
         {{- /* Add in the global and instance additional environment vars */}}
         {{- range $root.env }}
         - name: {{ .name }}

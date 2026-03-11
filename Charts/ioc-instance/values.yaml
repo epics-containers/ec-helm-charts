@@ -69,7 +69,20 @@ ioc-instance:
   # @schema description: simple lifecycle config
   preStopExecutable: /epics/ioc/stop.sh
 
+  # @schema $ref: $k8s/container.json#/properties/startupProbe
+  startupProbe: {}
+
+  # @schema description: simple startupprobe config
+  startupExecutable: /epics/ioc/startup.sh
+
   # @schema $ref: $k8s/container.json#/properties/readinessProbe
+  readinessProbe: {}
+
+  # @schema description: simple readinessprobe config
+  # Until a generic readiness script is available, disable the readiness probe by default to avoid confusion.
+  readinessExecutable: ""
+
+  # @schema $ref: $k8s/container.json#/properties/livenessProbe
   livenessProbe: {}
 
   # @schema description: simple livenessprobe config

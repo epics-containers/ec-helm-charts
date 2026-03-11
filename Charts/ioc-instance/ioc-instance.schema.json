@@ -183,7 +183,7 @@
                     "type": "string"
                 },
                 "livenessProbe": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/livenessProbe",
                     "type": "object",
                     "additionalProperties": false
                 },
@@ -225,6 +225,15 @@
                 "pvaServerPort": {
                     "description": "server port for pv access. The UDP broadcast port will be one greater.",
                     "type": "integer"
+                },
+                "readinessExecutable": {
+                    "description": "simple readinessprobe config",
+                    "type": "string"
+                },
+                "readinessProbe": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
+                    "type": "object",
+                    "additionalProperties": false
                 },
                 "rebootEveryCommit": {
                     "description": "when true the ioc will reboot on every commit",
@@ -279,6 +288,15 @@
                 "serviceAccountName": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/serviceAccountName",
                     "type": "string"
+                },
+                "startupExecutable": {
+                    "description": "simple startupprobe config",
+                    "type": "string"
+                },
+                "startupProbe": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/startupProbe",
+                    "type": "object",
+                    "additionalProperties": false
                 },
                 "tolerations": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
