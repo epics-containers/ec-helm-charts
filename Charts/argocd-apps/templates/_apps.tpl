@@ -35,11 +35,12 @@ spec:
           value: $ARGOCD_APP_SOURCE_REPO_URL
         - name: global.sourcePath
           value: $ARGOCD_APP_SOURCE_PATH
-        {{- with $settings.labels }}
-        - name: global.labels
-          value:
-        {{- toYaml . | nindent 12 }}
-        {{- end }}
+      {{- with $settings.labels }}
+      valuesObject:
+        global:
+          labels:
+      {{- toYaml . | nindent 12 }}
+      {{- end }}
       valueFiles:
         - ../values.yaml
         - values.yaml

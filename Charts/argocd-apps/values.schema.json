@@ -51,6 +51,7 @@
                         "additionalProperties": {
                             "description": "Custom labels applied to the resource.",
                             "type": "string",
+                            "pattern": "^[a-zA-Z0-9](?:(?!--)[a-zA-Z0-9-]){0,62}$",
                             "maxLength": 63
                         }
                     },
