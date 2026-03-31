@@ -31,3 +31,11 @@ repos:
         args:
           - --config
           - Charts/argocd-apps/.schema.config.yaml
+
+  - repo: https://github.com/losisin/helm-values-schema-json
+    rev: v2.3.1
+    hooks:
+      - id: helm-schema
+        args:
+          - --config
+          - Charts/epics-pvcs/.schema.config.yaml
