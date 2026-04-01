@@ -79,7 +79,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .name }}
+  name: {{ .name }}-claim
   labels:
     app: {{ $.Release.Name }}
     location: {{ $location }}

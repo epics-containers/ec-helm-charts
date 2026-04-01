@@ -49,9 +49,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $autosaveClaim }}
         {{- range .Values.additionalPvcs }}
-        - name: {{ .name }}
+        - name: {{ .name }}-volume
           persistentVolumeClaim:
-            claimName: {{ .name }}
+            claimName: {{ .name }}-claim
         {{- end }}
         {{- with .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
@@ -80,7 +80,7 @@ spec:
         - name: autosave-volume
           mountPath: /mounts/autosave
         {{- range .Values.additionalPvcs }}
-        - name: {{ .name }}
+        - name: {{ .name }}-volume
           mountPath: /mounts/{{ .name }}
         {{- end }}
         {{- with .Values.volumeMounts }}
