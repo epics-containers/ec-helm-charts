@@ -50,8 +50,8 @@ spec:
             claimName: {{ $autosaveClaim }}
         {{- range .Values.additionalPvcs }}
         - name: {{ .name }}-volume
-          persistentVolumeClaim:
-            claimName: {{ .name }}-claim
+            persistentVolumeClaim:
+            claimName: {{ printf "%s-%s-claim" $domain .name }}
         {{- end }}
         {{- with .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
