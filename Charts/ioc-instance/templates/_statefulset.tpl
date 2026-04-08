@@ -96,6 +96,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .resourceClaims }}
+      resourceClaims:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
       {{- /* volumes ********************************************************/}}
       volumes:
