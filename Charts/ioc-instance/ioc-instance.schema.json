@@ -8,7 +8,7 @@
             "type": "object",
             "properties": {
                 "env": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/env",
                     "type": "array"
                 }
             },
@@ -18,12 +18,12 @@
             "type": "object",
             "properties": {
                 "affinity": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/affinity.json",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/affinity.json",
                     "type": "object",
                     "additionalProperties": false
                 },
                 "args": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/args",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/args",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -46,7 +46,7 @@
                     "type": "null"
                 },
                 "command": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/command",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/command",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -72,7 +72,7 @@
                     "type": "string"
                 },
                 "env": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/env",
                     "type": "array"
                 },
                 "extraContainers": {
@@ -110,16 +110,16 @@
                     "additionalProperties": false
                 },
                 "hostNetwork": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/hostNetwork",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/hostNetwork",
                     "type": "boolean"
                 },
                 "image": {
                     "description": "containerimage URI for the Generic IOC. Mandatory override.",
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/image",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/image",
                     "type": "string"
                 },
                 "imagePullPolicy": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/imagePullPolicy",
                     "type": "string"
                 },
                 "initContainers": {
@@ -174,7 +174,7 @@
                     }
                 },
                 "lifecycle": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/lifecycle",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/lifecycle",
                     "type": "object",
                     "additionalProperties": false
                 },
@@ -183,7 +183,7 @@
                     "type": "string"
                 },
                 "livenessProbe": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/livenessProbe",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/livenessProbe",
                     "type": "object",
                     "additionalProperties": false
                 },
@@ -192,7 +192,7 @@
                     "type": "string"
                 },
                 "nodeName": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/nodeName",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/nodeName",
                     "type": "string"
                 },
                 "opisClaim": {
@@ -214,7 +214,7 @@
                     }
                 },
                 "podSecurityContext": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/securityContext",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/securityContext",
                     "type": "object",
                     "additionalProperties": false
                 },
@@ -231,7 +231,7 @@
                     "type": "string"
                 },
                 "readinessProbe": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/readinessProbe",
                     "type": "object",
                     "additionalProperties": false
                 },
@@ -240,9 +240,12 @@
                     "type": "boolean"
                 },
                 "resources": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/resources",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/resources",
                     "type": "object",
                     "properties": {
+                        "claims": {
+                            "type": "array"
+                        },
                         "limits": {
                             "type": "object",
                             "properties": {
@@ -276,17 +279,17 @@
                 },
                 "runtimeClassName": {
                     "description": "at DLS set to 'usb-compat' for mounting in USB devices",
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/runtimeClassName",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/runtimeClassName",
                     "type": "string"
                 },
                 "securityContext": {
                     "description": "specify the security context. At DLS the IOCs should use iXXdetector user/group IDs",
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/securityContext",
                     "type": "object",
                     "additionalProperties": false
                 },
                 "serviceAccountName": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/serviceAccountName",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/serviceAccountName",
                     "type": "string"
                 },
                 "startupExecutable": {
@@ -294,24 +297,28 @@
                     "type": "string"
                 },
                 "startupProbe": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/startupProbe",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/startupProbe",
                     "type": "object",
                     "additionalProperties": false
                 },
                 "tolerations": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/tolerations",
                     "type": "array"
                 },
                 "volumeMounts": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/volumeMounts",
                     "type": "array"
                 },
                 "volumes": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/volumes",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/volumes",
                     "type": "array"
                 }
             },
             "additionalProperties": false
+        },
+        "resourceClaims": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/resourceClaims",
+            "type": "array"
         }
     },
     "additionalProperties": false

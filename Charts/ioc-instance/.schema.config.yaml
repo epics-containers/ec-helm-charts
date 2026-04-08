@@ -27,4 +27,4 @@ schemaRoot:
   # No additional properties in schema root for tighter protection:
   additionalProperties: false
 
-k8sSchemaVersion: v1.33.3
+k8sSchemaVersion: v1.34.0
