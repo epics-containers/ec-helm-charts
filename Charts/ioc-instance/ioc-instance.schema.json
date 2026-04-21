@@ -239,6 +239,10 @@
                     "description": "when true the ioc will reboot on every commit",
                     "type": "boolean"
                 },
+                "resourceClaims": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/resourceClaims",
+                    "type": "array"
+                },
                 "resources": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/container.json#/properties/resources",
                     "type": "object",
@@ -315,10 +319,6 @@
                 }
             },
             "additionalProperties": false
-        },
-        "resourceClaims": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/podspec.json#/properties/resourceClaims",
-            "type": "array"
         }
     },
     "additionalProperties": false

@@ -98,7 +98,7 @@ spec:
       {{- end }}
 
       {{- /* resource claims ************************************************/}}
-      {{- with $.Values.resourceClaims }}
+      {{- with .resourceClaims }}
       resourceClaims:
         {{- toYaml . | nindent 8 }}
       {{- end }}

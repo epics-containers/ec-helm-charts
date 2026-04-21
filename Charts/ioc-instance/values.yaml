@@ -183,5 +183,5 @@ ioc-instance:
   # @schema default: {}
   labels: {}
 
-# @schema $ref: $k8s/podspec.json#/properties/resourceClaims
-resourceClaims: []
+  # @schema $ref: $k8s/podspec.json#/properties/resourceClaims
+  resourceClaims: []
