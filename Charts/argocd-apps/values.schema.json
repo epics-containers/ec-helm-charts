@@ -45,6 +45,20 @@
                         "default": true,
                         "type": "boolean"
                     },
+                    "destination": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "name": {
+                            "default": "",
+                            "type": "string"
+                        },
+                        "namespace": {
+                            "default": "",
+                            "type": "string"
+                        }
+                    },
                     "labels": {
                         "default": {},
                         "type": "object",
