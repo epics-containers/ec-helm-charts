@@ -41,9 +41,14 @@ spec:
           labels:
       {{- toYaml . | nindent 12 }}
       {{- end }}
+      {{- with $settings.values }}
+      valueFiles:
+      {{- toYaml . | nindent 8 }}
+      {{- else }}
       valueFiles:
         - ../values.yaml
         - values.yaml
+      {{- end }}
   syncPolicy:
     automated:
 
