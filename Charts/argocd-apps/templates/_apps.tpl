@@ -17,8 +17,8 @@ metadata:
 spec:
   project: {{ default $.Release.Namespace $.Values.project }}
   destination:
-    namespace: {{ $.Values.destination.namespace }}
-    name: {{ $.Values.destination.name }}
+    namespace: {{ default $.Values.destination.namespace $settings.destination.namespace }}
+    name: {{ default $.Values.destination.name $settings.destination.name }}
   source:
     repoURL: {{ default $.Values.source.repoURL $settings.repoURL }}
     path: services/{{ $service }}
