@@ -195,6 +195,11 @@
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/nodeName",
                     "type": "string"
                 },
+                "nodeSelector": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/nodeSelector",
+                    "type": "object",
+                    "additionalProperties": false
+                },
                 "opisClaim": {
                     "description": "PVC for opi files. Defaults to ixx-pvcs",
                     "type": "string"
