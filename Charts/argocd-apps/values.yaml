@@ -26,6 +26,9 @@ source:
 services:
   # Each item is of the form:
   #   service: service name as it appears in K8S (statefulset/deployment name)
+  #     destination: optional override for destination parameters above
+  #       name: optional override for the deployment cluster above
+  #       namespace: optional override for namespace above
   #     targetRevision: optional override for targetRevision above
   #     repoURL: optional override for git repo to source the helm chart from
   #            the path is always services/<service> within that repo
@@ -34,6 +37,18 @@ services:
 
   # @schema type: [object, null]
   example1:
+
+    # @schema type: [object, null]
+    destination:
+
+      # @schema type: string
+      # @schema default: ""
+      name: ""
+
+      # @schema type: string
+      # @schema default: ""
+      namespace: ""
+
     # @schema type: object
     # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource.","pattern":"^[a-zA-Z0-9](?:(?!--)[a-zA-Z0-9-]){0,62}$"}
     # @schema default: {}

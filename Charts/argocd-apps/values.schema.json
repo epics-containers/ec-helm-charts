@@ -41,6 +41,23 @@
                     "null"
                 ],
                 "properties": {
+                    "destination": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "name": {
+                                "default": "",
+                                "type": "string"
+                            },
+                            "namespace": {
+                                "default": "",
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
                     "enabled": {
                         "default": true,
                         "type": "boolean"
