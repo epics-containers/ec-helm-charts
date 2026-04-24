@@ -41,23 +41,26 @@
                     "null"
                 ],
                 "properties": {
-                    "enabled": {
-                        "default": true,
-                        "type": "boolean"
-                    },
                     "destination": {
                         "type": [
                             "object",
                             "null"
                         ],
-                        "name": {
-                            "default": "",
-                            "type": "string"
+                        "properties": {
+                            "name": {
+                                "default": "",
+                                "type": "string"
+                            },
+                            "namespace": {
+                                "default": "",
+                                "type": "string"
+                            }
                         },
-                        "namespace": {
-                            "default": "",
-                            "type": "string"
-                        }
+                        "additionalProperties": false
+                    },
+                    "enabled": {
+                        "default": true,
+                        "type": "boolean"
                     },
                     "labels": {
                         "default": {},
