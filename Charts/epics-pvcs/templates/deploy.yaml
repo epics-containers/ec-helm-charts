@@ -73,3 +73,21 @@ spec:
   resources:
     requests:
       storage: {{ .Values.binariesSize }}
+---
+# Any additional PVCs defined by the user
+{{- range .Values.additionalPvcs }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ printf "%s-%s-claim" $domain .name }}
+  labels:
+    app: {{ $.Release.Name }}
+    location: {{ $location }}
+    domain: {{ $domain }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .size }}
+{{- end }}

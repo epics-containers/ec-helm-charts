@@ -48,6 +48,11 @@ spec:
         - name: autosave-volume
           persistentVolumeClaim:
             claimName: {{ $autosaveClaim }}
+        {{- range .Values.additionalPvcs }}
+        - name: {{ .name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ printf "%s-%s-claim" $domain .name }}
+        {{- end }}
         {{- with .Values.nfsv2TftpClaim }}
         - name: nfsv2-tftp-volume
           persistentVolumeClaim:
@@ -74,6 +79,10 @@ spec:
           mountPath: /mounts/opis
         - name: autosave-volume
           mountPath: /mounts/autosave
+        {{- range .Values.additionalPvcs }}
+        - name: {{ .name }}-volume
+          mountPath: /mounts/{{ .name }}
+        {{- end }}
         {{- with .Values.volumeMounts }}
           {{  toYaml . | nindent 10 }}
         {{- end }}
