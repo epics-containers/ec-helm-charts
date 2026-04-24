@@ -67,7 +67,12 @@
                         "default": "",
                         "type": "string"
                     },
-                    "values": {
+                    "valuesFiles": {
+                        "default": [],
+                        "type": "array"
+                    },
+                    "valuesObject": {
+                        "default": {},
                         "type": "object",
                         "additionalProperties": false
                     }
