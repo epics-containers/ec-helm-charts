@@ -45,6 +45,7 @@ spec:
       {{- with $settings.valuesObject }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
       {{- with $settings.valuesFiles }}
       valueFiles:
       {{- toYaml . | nindent 8 }}
