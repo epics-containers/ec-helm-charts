@@ -73,7 +73,7 @@ ioc-instance:
   startupProbe: {}
 
   # @schema description: simple startupprobe config
-  startupExecutable: /epics/ioc/startup.sh
+  startupExecutable: ""
 
   # @schema $ref: $k8s/container.json#/properties/readinessProbe
   readinessProbe: {}
