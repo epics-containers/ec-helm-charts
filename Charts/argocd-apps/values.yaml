@@ -29,6 +29,12 @@ services:
   #     targetRevision: optional override for targetRevision above
   #     repoURL: optional override for git repo to source the helm chart from
   #            the path is always services/<service> within that repo
+  #     valuesObject: An object that is passed as values to the helm chart.
+  #                 This is merged with the default values.yaml in the repo,
+  #                 with valuesObject taking precedence.
+  #     valuesFiles: A list of paths to values.yaml files that are passed to
+  #                 the helm chart. Subsequent files in the list override
+  #                 the previous ones.
   #     removed: set to true to remove the service from the cluster
   #     enabled: set to false to stop a service
 
@@ -56,4 +62,9 @@ services:
     enabled: true
 
     # @schema type: object
-    values: {}
+    # @schema default: {}
+    valuesObject: {}
+
+    # @schema type: array
+    # @schema default: []
+    valuesFiles: []
