@@ -16,7 +16,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: {{ default $.Release.Namespace $.Values.project }}
-  {{- $settingsDestination := default dict $settings.destination -}}
+  {{- $settingsDestination := default dict $settings.destination }}
   destination:
     namespace: {{ default $.Values.destination.namespace $settingsDestination.namespace }}
     name: {{ default $.Values.destination.name $settingsDestination.name }}
