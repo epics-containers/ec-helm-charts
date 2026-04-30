@@ -80,6 +80,10 @@
                         "default": "",
                         "type": "string"
                     },
+                    "serviceChart": {
+                        "default": "",
+                        "type": "string"
+                    },
                     "targetRevision": {
                         "default": "",
                         "type": "string"
