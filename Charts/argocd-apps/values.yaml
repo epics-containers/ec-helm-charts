@@ -25,21 +25,23 @@ source:
 # @schema mergeProperties: true
 services:
   # Each item is of the form:
-  #   service: service name as it appears in K8S (statefulset/deployment name)
-  #     destination: optional override for destination parameters above
-  #       name: optional override for the deployment cluster above
-  #       namespace: optional override for namespace above
-  #     targetRevision: optional override for targetRevision above
+  #   service: service name as it appears in K8S (statefulset/deployment name).
+  #     destination: optional override for destination parameters above.
+  #       name: optional override for the deployment cluster above.
+  #       namespace: optional override for namespace above.
+  #     serviceChart: optional override for the helm chart to use. 
+  #                 The path is always services/<serviceChart> within the repo.
+  #     targetRevision: optional override for targetRevision above.
   #     repoURL: optional override for git repo to source the helm chart from
-  #            the path is always services/<service> within that repo
+  #            the path is always services/<service> within that repo.
   #     valuesObject: An object that is passed as values to the helm chart.
   #                 This is merged with the default values.yaml in the repo,
   #                 with valuesObject taking precedence.
   #     valuesFiles: A list of paths to values.yaml files that are passed to
   #                 the helm chart. Subsequent files in the list override
   #                 the previous ones.
-  #     removed: set to true to remove the service from the cluster
-  #     enabled: set to false to stop a service
+  #     removed: set to true to remove the service from the cluster.
+  #     enabled: set to false to stop a service.
 
   # @schema type: [object, null]
   example1:
@@ -59,6 +61,10 @@ services:
     # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource.","pattern":"^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$|^[a-zA-Z0-9]$"}
     # @schema default: {}
     labels: {}
+
+    # @schema type: string
+    # @schema default: ""
+    serviceChart: ""
 
     # @schema type: string
     # @schema default: ""
