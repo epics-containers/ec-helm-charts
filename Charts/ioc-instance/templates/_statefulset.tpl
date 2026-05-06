@@ -24,6 +24,14 @@ to a minimum
 {{- $enabled := eq $.Values.global.enabled false | ternary false true }}
 {{- $customLabels := $.Values.global.labels }}
 
+{{- /* --- USB device key: required when usbDevices are declared --- */ -}}
+{{- $usbKey := "" -}}
+{{- if .Values.usbDevices -}}
+  {{- $usbKey = .Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
+{{- else -}}
+  {{- $usbKey = default "" .Values.global.usbKey -}}
+{{- end -}}
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -98,6 +106,15 @@ spec:
       {{- with .tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- /* resource claims ************************************************/}}
+      {{- with .usbDevices }}
+      resourceClaims:
+        {{- range $dev := . }}
+        - name: {{ $dev.name }}
+          resourceClaimTemplateName: rct-{{ $dev.name }}
+        {{- end }}
       {{- end }}
 
       {{- /* volumes ********************************************************/}}
@@ -253,6 +270,12 @@ spec:
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
+          {{- with $.usbDevices }}
+          claims:
+            {{- range $dev := . }}
+            - name: {{ $dev.name }}
+            {{- end }}
+          {{- end }}
         {{- end }}
         env: &env
         - name: ARGOCD_SOURCE_REPO

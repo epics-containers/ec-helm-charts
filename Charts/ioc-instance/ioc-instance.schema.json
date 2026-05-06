@@ -307,6 +307,10 @@
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
                     "type": "array"
                 },
+                "usbDevices": {
+                    "description": "declare usb devices to attach to pod using dynamic resource allocation.",
+                    "type": "array"
+                },
                 "volumeMounts": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
                     "type": "array"

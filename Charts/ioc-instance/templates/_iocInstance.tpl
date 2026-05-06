@@ -7,5 +7,7 @@
 {{ include "ioc-instance.service" . }}
 ---
 {{ include "ioc-instance.datavolume" . }}
+---
+{{ include "ioc-instance.resourceclaimtemplate" . }}
 
 {{- end }}
