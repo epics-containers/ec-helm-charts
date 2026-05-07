@@ -1,14 +1,15 @@
 {{- define "ioc-instance.service" -}}
-
 {{/*
   Use with to access ioc-instance key.
   Required because .ioc-instance is illegal because of the hyphen.
 */}}
-{{ with get .Values "ioc-instance" }}
-
 # when not using hostNetwork, create a service to give the IOC a fixed cluster IP
 # TODO - we could introduce this service to hostNetwork IOCs too: for review.
+
 {{- if not .hostNetwork }}
+
+{{ with get .Values "ioc-instance" }}
+
 apiVersion: v1
 kind: Service
 metadata:
