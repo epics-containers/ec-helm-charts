@@ -5,7 +5,7 @@ ResourceClaimTemplate generation for USB devices. Generates one ResourceClaimTem
 
 {{- $usbKey := "" -}}
 {{- if .usbDevices -}}
-  {{- $usbKey = .Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
+  {{- $usbKey = $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
 {{- end -}}
 
 {{- range $device := .usbDevices }}
@@ -25,8 +25,6 @@ apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
   name: {{ $device.name }}
-  labels:
-    {{- include "ioc-instance.labels" $ | nindent 4 }}
 spec:
   spec:
     devices:
