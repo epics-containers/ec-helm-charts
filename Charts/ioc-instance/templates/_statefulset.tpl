@@ -111,9 +111,9 @@ spec:
       {{- /* resource claims ************************************************/}}
       {{- with .usbDevices }}
       resourceClaims:
-        {{- range $dev := . }}
-        - name: {{ $dev.name }}
-          resourceClaimTemplateName: rct-{{ $dev.name }}
+        {{- range $device := . }}
+        - name: {{ $device.name }}
+          resourceClaimTemplateName: {{ $device.name }}
         {{- end }}
       {{- end }}
 
@@ -272,8 +272,8 @@ spec:
           {{- toYaml . | nindent 10 }}
           {{- with $.usbDevices }}
           claims:
-            {{- range $dev := . }}
-            - name: {{ $dev.name }}
+            {{- range $device := . }}
+            - name: {{ $device.name }}
             {{- end }}
           {{- end }}
         {{- end }}

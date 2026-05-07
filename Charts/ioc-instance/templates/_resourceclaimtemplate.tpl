@@ -18,13 +18,13 @@ ResourceClaimTemplate generation for USB devices. Generates one ResourceClaimTem
   {{- end -}}
 {{- end -}}
 {{- if eq (len $attrKeys) 0 -}}
-  {{- fail (printf "ERROR - usbDevices entry '%s' must have at least one selector attribute (vendor, product, serial, etc.)" $device.name) -}}
+  {{- fail (printf "ERROR - usbDevices entry '%s' must have at least one selector attribute [vendor, product, serial, host, bus]" $device.name) -}}
 {{- end }}
 ---
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
-  name: rct-{{ $dev.name }}
+  name: {{ $device.name }}
   labels:
     {{- include "ioc-instance.labels" $ | nindent 4 }}
 spec:
@@ -33,7 +33,7 @@ spec:
       requests:
       - name: req-0
         firstAvailable:
-        - name: {{ $dev.name }}
+        - name: device-0
           deviceClassName: usbip
           allocationMode: ExactCount
           count: 1
