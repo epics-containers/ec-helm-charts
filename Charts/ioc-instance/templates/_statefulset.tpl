@@ -267,10 +267,11 @@ spec:
         securityContext:
           {{-  toYaml . | nindent 10 }}
         {{- end }}
+        {{- $usbDevices := .usbDevices }}
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
-          {{- with $.usbDevices }}
+          {{- with $usbDevices }}
           claims:
             {{- range $device := . }}
             - name: {{ $device.name }}
