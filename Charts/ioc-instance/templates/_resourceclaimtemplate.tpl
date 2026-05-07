@@ -40,7 +40,7 @@ spec:
           selectors:
             {{- range $key := ($attrKeys | sortAlpha) }}
             - cel:
-                expression: "device.attributes[\"{{ $usbKey }}\"].{{ $key }} == \"{{ index $dev $key }}\""
+                expression: "device.attributes[\"{{ $usbKey }}\"].{{ $key }} == \"{{ index $device $key }}\""
             {{- end }}
 {{- end }}
 
