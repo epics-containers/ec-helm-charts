@@ -26,7 +26,7 @@ to a minimum
 
 {{- /* --- USB device key: required when usbDevices are declared --- */ -}}
 {{- $usbKey := "" -}}
-{{- if .Values.usbDevices -}}
+{{- if .usbDevices -}}
   {{- $usbKey = .Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
 {{- else -}}
   {{- $usbKey = default "" .Values.global.usbKey -}}
