@@ -22,7 +22,7 @@ spec:
     name: {{ default $.Values.destination.name $settingsDestination.name }}
   source:
     repoURL: {{ default $.Values.source.repoURL $settings.repoURL }}
-    path: services/{{ $service }}
+    path: services/{{ default $service $settings.serviceChart }}
     targetRevision: {{ default $.Values.source.targetRevision $settings.targetRevision }}
     helm:
       version: v3
