@@ -30,7 +30,7 @@ to a minimum
   {{- $usbKey = $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
 {{- else -}}
   {{- $usbKey = default "" $.Values.global.usbKey -}}
-{{- end -}}
+{{- end }}
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -109,13 +109,13 @@ spec:
       {{- end }}
 
       {{- /* resource claims ************************************************/}}
-      {{/* {{- with .usbDevices }}
+      {{- with .usbDevices }}
       resourceClaims:
         {{- range $device := . }}
         - name: {{ $device.name }}
           resourceClaimTemplateName: {{ $device.name }}
         {{- end }}
-      {{- end }} */}}
+      {{- end }}
 
       {{- /* volumes ********************************************************/}}
       volumes:
@@ -271,12 +271,12 @@ spec:
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
-          {{/* {{- with $usbDevices }}
+          {{- with $usbDevices }}
           claims:
             {{- range $device := . }}
             - name: {{ $device.name }}
             {{- end }}
-          {{- end }} */}}
+          {{- end }}
         {{- end }}
         env: &env
         - name: ARGOCD_SOURCE_REPO
