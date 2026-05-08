@@ -1,4 +1,5 @@
 {{ define "ioc-instance" }}
+
 {{- include "ioc-instance.configmap" . }}
 ---
 {{ include "ioc-instance.statefulset" . }}
@@ -6,5 +7,11 @@
 {{ include "ioc-instance.service" . }}
 ---
 {{ include "ioc-instance.datavolume" . }}
-{{ include "ioc-instance.resourceclaimtemplate" . }}
+
+{{- with get .Values "ioc-instance" }}
+{{- if .usbDevices }}
+{{ include "ioc-instance.resourceclaimtemplate" $ }}
+{{- end }}
+{{- end }}
+
 {{- end }}

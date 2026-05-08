@@ -5,10 +5,8 @@ ResourceClaimTemplate generation for USB devices. Generates one ResourceClaimTem
 
 {{ with get .Values "ioc-instance" }}
 
-{{- $usbKey := "" -}}
-{{- if .usbDevices -}}
-  {{- $usbKey = $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
-{{- end -}}
+{{- $usbKey := $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
+
 
 {{- range $device := .usbDevices }}
 
