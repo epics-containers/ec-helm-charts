@@ -8,10 +8,10 @@
 ---
 {{ include "ioc-instance.datavolume" . }}
 
-{{/* {{- with get .Values "ioc-instance" }}
+{{- with get .Values "ioc-instance" }}
 {{- if .usbDevices }}
 {{ include "ioc-instance.resourceclaimtemplate" $ }}
 {{- end }}
-{{- end }} */}}
+{{- end }}
 
 {{- end }}

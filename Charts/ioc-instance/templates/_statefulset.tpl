@@ -109,13 +109,13 @@ spec:
       {{- end }}
 
       {{- /* resource claims ************************************************/}}
-      {{- with .usbDevices }}
+      {{/* {{- with .usbDevices }}
       resourceClaims:
         {{- range $device := . }}
         - name: {{ $device.name }}
           resourceClaimTemplateName: {{ $device.name }}
         {{- end }}
-      {{- end }}
+      {{- end }} */}}
 
       {{- /* volumes ********************************************************/}}
       volumes:
@@ -271,12 +271,12 @@ spec:
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
-          {{- with $usbDevices }}
+          {{/* {{- with $usbDevices }}
           claims:
             {{- range $device := . }}
             - name: {{ $device.name }}
             {{- end }}
-          {{- end }}
+          {{- end }} */}}
         {{- end }}
         env: &env
         - name: ARGOCD_SOURCE_REPO
