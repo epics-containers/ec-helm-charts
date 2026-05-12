@@ -7,24 +7,14 @@ ResourceClaimTemplate generation for USB devices. Generates one ResourceClaimTem
 
 {{- $usbKey := $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
 
+{{- range $i, $device := .usbDevices }}
 
-{{- range $device := .usbDevices }}
-
-{{- /* --- validate - must have name and at least one selector attribute --- */ -}}
-{{- $attrKeys := list -}}
-{{- range $key, $_ := $device -}}
-  {{- if ne $key "name" -}}
-    {{- $attrKeys = append $attrKeys $key -}}
-  {{- end -}}
-{{- end -}}
-{{- if eq (len $attrKeys) 0 -}}
-  {{- fail (printf "ERROR - usbDevices entry '%s' must have at least one selector attribute [vendor, product, serial, host, bus]" $device.name) -}}
-{{- end }}
+{{- $attrKeys := keys $device | sortAlpha }}
 ---
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
-  name: {{ $device.name }}
+  name: {{ $.Release.Name }}-usb-{{ printf "%02d" (add1 $i) }}
 spec:
   spec:
     devices:
