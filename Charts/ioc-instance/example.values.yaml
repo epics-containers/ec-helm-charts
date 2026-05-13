@@ -20,3 +20,10 @@ ioc-instance:
         - sleep
       args: # @schema required
         - "3600" # sleep for an hour
+
+  usbDevices:
+    - vendor: "04d8" # @schema description: USB vendor ID
+      product: "00a3" # @schema description: USB product ID
+      serial: "ABC123" # @schema description: Serial number
+      host: "10.12.34.5" # @schema description: Host IP
+      bus: "1-2.3" # @schema description: USB bus path
