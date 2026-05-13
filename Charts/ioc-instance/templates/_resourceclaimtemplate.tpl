@@ -31,7 +31,7 @@ spec:
             - cel:
                 expression: "device.attributes[\"{{ $usbKey }}\"].{{ $key }} == \"{{ index $device $key }}\""
             {{- end }}
-{{- end }}
+{{- end }} {{/* end range $i, $device := .usbDevices */}}
 {{- end }} {{/* end if .usbDevices */}}
 {{- end }} {{/* end with .ioc-instance */}}
-{{- end -}}
+{{- end }} {{/* end define ioc-instance.resourceclaimtemplate */}}
