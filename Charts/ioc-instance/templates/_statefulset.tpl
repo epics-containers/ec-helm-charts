@@ -24,13 +24,6 @@ to a minimum
 {{- $enabled := eq $.Values.global.enabled false | ternary false true }}
 {{- $customLabels := $.Values.global.labels }}
 
-{{- /* --- USB device key: required when usbDevices are declared --- */ -}}
-{{- $usbKey := "" -}}
-{{- if .usbDevices -}}
-  {{- $usbKey = $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
-{{- else -}}
-  {{- $usbKey = default "" $.Values.global.usbKey -}}
-{{- end }}
 
 apiVersion: apps/v1
 kind: StatefulSet
