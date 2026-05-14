@@ -1,0 +1,36 @@
+{{- /*
+ResourceClaimTemplate generation for USB devices. Generates one ResourceClaimTemplate per entry in .usbDevices.
+*/ -}}
+{{- define "ioc-instance.resourceclaimtemplate" -}}
+
+{{ with get .Values "ioc-instance" }}
+{{- if .usbDevices }}
+
+{{- $usbKey := $.Values.global.usbKey | required "ERROR - You must supply global.usbKey when usbDevices are declared" -}}
+
+{{- range $i, $device := .usbDevices }}
+
+{{- $attrKeys := keys $device | sortAlpha }}
+---
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: {{ $.Release.Name }}-usb-{{ printf "%02d" (add1 $i) }}
+spec:
+  spec:
+    devices:
+      requests:
+      - name: req-0
+        exactly:
+          deviceClassName: usbip
+          allocationMode: ExactCount
+          count: 1
+          selectors:
+            {{- range $key := $attrKeys }}
+            - cel:
+                expression: "device.attributes[\"{{ $usbKey }}\"].{{ $key }} == \"{{ index $device $key }}\""
+            {{- end }}
+{{- end }} {{/* end range $i, $device := .usbDevices */}}
+{{- end }} {{/* end if .usbDevices */}}
+{{- end }} {{/* end with .ioc-instance */}}
+{{- end }} {{/* end define ioc-instance.resourceclaimtemplate */}}

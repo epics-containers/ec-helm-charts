@@ -24,6 +24,7 @@ to a minimum
 {{- $enabled := eq $.Values.global.enabled false | ternary false true }}
 {{- $customLabels := $.Values.global.labels }}
 
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -98,6 +99,15 @@ spec:
       {{- with .tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- /* resource claims ************************************************/}}
+      {{- with .usbDevices }}
+      resourceClaims:
+        {{- range $i, $device := . }}
+        - name: {{ $.Release.Name }}-usb-{{ printf "%02d" (add1 $i) }}
+          resourceClaimTemplateName: {{ $.Release.Name }}-usb-{{ printf "%02d" (add1 $i) }}
+        {{- end }}
       {{- end }}
 
       {{- /* volumes ********************************************************/}}
@@ -250,9 +260,16 @@ spec:
         securityContext:
           {{-  toYaml . | nindent 10 }}
         {{- end }}
+        {{- $usbDevices := .usbDevices }}
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
+          {{- with $usbDevices }}
+          claims:
+            {{- range $i, $device := . }}
+            - name: {{ $.Release.Name }}-usb-{{ printf "%02d" (add1 $i) }}
+            {{- end }}
+          {{- end }}
         {{- end }}
         env: &env
         - name: ARGOCD_SOURCE_REPO

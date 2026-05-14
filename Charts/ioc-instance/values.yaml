@@ -150,6 +150,10 @@ ioc-instance:
       cpu: 100m
       memory: 64Mi
 
+  # @schema description: declare usb devices to attach to pod using dynamic resource allocation. Requires Kubernetes >=1.34 (DRA GA). Values must not contain '"' or '\'.
+  # @schema additionalProperties: false
+  usbDevices: []
+
   # @schema description: supply a fixed cluster IP for the service
   clusterIP:
 

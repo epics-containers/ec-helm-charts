@@ -307,6 +307,37 @@
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
                     "type": "array"
                 },
+                "usbDevices": {
+                    "description": "declare usb devices to attach to pod using dynamic resource allocation. Requires Kubernetes \u003e=1.34 (DRA GA). Values must not contain '\"' or '\\'.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "bus": {
+                                "description": "USB bus path",
+                                "type": "string"
+                            },
+                            "host": {
+                                "description": "Host IP",
+                                "type": "string"
+                            },
+                            "product": {
+                                "description": "USB product ID",
+                                "type": "string"
+                            },
+                            "serial": {
+                                "description": "Serial number",
+                                "type": "string"
+                            },
+                            "vendor": {
+                                "description": "USB vendor ID",
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false
+                },
                 "volumeMounts": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
                     "type": "array"
