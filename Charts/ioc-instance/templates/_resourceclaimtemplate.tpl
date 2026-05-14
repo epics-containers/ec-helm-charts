@@ -22,7 +22,7 @@ spec:
       requests:
       - name: req-0
         exactly:
-        - name: device-0
+          name: device-0
           deviceClassName: usbip
           allocationMode: ExactCount
           count: 1
