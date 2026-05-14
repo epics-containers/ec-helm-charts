@@ -21,7 +21,7 @@ spec:
     devices:
       requests:
       - name: req-0
-        firstAvailable:
+        exactly:
         - name: device-0
           deviceClassName: usbip
           allocationMode: ExactCount
