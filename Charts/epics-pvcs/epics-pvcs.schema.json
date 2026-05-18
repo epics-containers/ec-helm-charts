@@ -1,0 +1,64 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "epics-pvcs Helm chart",
+    "description": "Helm chart for deploying EPICS PVCs",
+    "type": "object",
+    "properties": {
+        "additionalPvcs": {
+            "description": "additional PVCs to create for this domain and location",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "size"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "autosaveSize": {
+            "type": "string"
+        },
+        "binariesSize": {
+            "type": "string"
+        },
+        "domain": {
+            "description": "Short name for this collection of services",
+            "type": "null"
+        },
+        "env": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+            "type": "array"
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "env": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true
+        },
+        "location": {
+            "description": "location where these IOCs and services will run",
+            "type": "null"
+        },
+        "opiSize": {
+            "description": "sizes of the auto provisioned PVs",
+            "type": "string"
+        },
+        "runtimeSize": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}
