@@ -1,0 +1,7 @@
+# examples of objects in values.yaml that default to empty and have no K8S schema
+# used for generating schema for these objects
+# see .schema.config.yaml
+
+additionalPvcs:
+  - name: my-pvc # @schema required
+    size: 1Gi # @schema required

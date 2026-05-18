@@ -1,0 +1,30 @@
+# .schema.yaml
+
+# Define input, output and source for $refs relative to repository root for pre-commit
+values:
+  - Charts/epics-pvcs/values.yaml
+  - Charts/epics-pvcs/example.values.yaml
+
+# Do not call this values.schema.json because this is a library chart.
+# When importing default values into the parent the schema check that would fail
+# if it sees values.schema.json and tries to use it (I think because the check assumes
+# that the contents of ioc-instance is going into the root?)
+output: Charts/epics-pvcs/epics-pvcs.schema.json
+
+# bundle up references (don't do this as K8S refs are 500kb+)
+bundleRoot: Charts
+bundle: false
+
+# Include comments for the helm-docs plugin into the schema, to allow e.g. documentation in VSCode
+useHelmDocs: false
+
+# Allow additional properties for eg. initResources, different types of volumes/volumeMounts
+noAdditionalProperties: true
+
+schemaRoot:
+  title: epics-pvcs Helm chart
+  description: Helm chart for deploying EPICS PVCs
+  # No additional properties in schema root for tighter protection:
+  additionalProperties: false
+
+k8sSchemaVersion: v1.33.3

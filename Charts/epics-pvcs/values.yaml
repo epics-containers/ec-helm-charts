@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=epics-pvcs.schema.json
+
 # @schema additionalProperties: true
 global:
   # @schema  $ref:$k8s/container.json#/properties/env
@@ -15,3 +17,6 @@ binariesSize: 1Gi
 
 # @schema  $ref:$k8s/container.json#/properties/env
 env: []
+
+# @schema description: additional PVCs to create for this domain and location
+additionalPvcs: []
