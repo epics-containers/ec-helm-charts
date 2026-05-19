@@ -21,9 +21,12 @@ ioc-instance:
       args: # @schema required
         - "3600" # sleep for an hour
 
+  # @schema description: declare usb devices to attach to pod using dynamic resource allocation.
+  # @schema type: array
   usbDevices:
-    - vendor: "04d8" # @schema description: USB vendor ID
-      product: "00a3" # @schema description: USB product ID
-      serial: "ABC123" # @schema description: Serial number
-      host: "10.12.34.5" # @schema description: Host IP
-      bus: "1-2.3" # @schema description: USB bus path
+    - name: my-usb # @schema required
+      vendor: 04d8
+      product: 00a3
+      serial: ABC123
+      host: 10.12.34.5
+      bus: 1-2.3

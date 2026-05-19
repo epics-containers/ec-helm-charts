@@ -102,9 +102,11 @@ spec:
       {{- end }}
 
       {{- /* resource claims ************************************************/}}
+      {{- if .usbDevices }}
       resourceClaims:
         - name: {{ $.Release.Name }}
           resourceClaimTemplateName: {{ $.Release.Name }}
+      {{- end }}
 
       {{- /* volumes ********************************************************/}}
       volumes:
@@ -260,8 +262,10 @@ spec:
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
+          {{- if .usbDevices }}
           claims:
             - name: {{ $.Release.Name }}
+          {{- end }}
         {{- end }}
         env: &env
         - name: ARGOCD_SOURCE_REPO
