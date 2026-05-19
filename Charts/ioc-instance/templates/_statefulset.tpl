@@ -262,7 +262,7 @@ spec:
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}
-          {{- if .usbDevices }}
+          {{- if $usbDevices }}
           claims:
             - name: {{ $.Release.Name }}
           {{- end }}
