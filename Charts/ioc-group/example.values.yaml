@@ -1,0 +1,9 @@
+# examples of objects in values.yaml that default to empty and have no K8S schema
+# used for generating schema for these objects
+# see .schema.config.yaml
+
+# Every entry must supply NAME. The remaining keys are free-form environment
+# variable names, so unlike the other charts this one cannot close the object
+# with additionalProperties - see noAdditionalProperties in .schema.config.yaml.
+iocs:
+  - NAME: "01" # @schema required

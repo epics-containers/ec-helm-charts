@@ -1,0 +1,31 @@
+# .schema.yaml
+
+# Define input, output and source for $refs relative to repository root for pre-commit
+values:
+  - Charts/ioc-group/values.yaml
+  - Charts/ioc-group/example.values.yaml
+
+# Do not call this values.schema.json because this is a library chart.
+# See the note in Charts/ioc-instance/.schema.config.yaml for the reason.
+# The ioc-instance key is not described here: consumers should $ref
+# ioc-instance.schema.json for that half of the values.
+output: Charts/ioc-group/ioc-group.schema.json
+
+# bundle up references (don't do this as K8S refs are 500kb+)
+bundleRoot: Charts
+bundle: false
+
+# Include comments for the helm-docs plugin into the schema, to allow e.g. documentation in VSCode
+useHelmDocs: false
+
+# The keys of an iocs entry are environment variable names chosen by the user,
+# so the item objects must stay open. schemaRoot below still closes the root.
+noAdditionalProperties: false
+
+schemaRoot:
+  title: ioc-group Helm chart
+  description: Helm chart for deploying a group of EPICS IOCs that differ only by environment variables
+  # No additional properties in schema root for tighter protection:
+  additionalProperties: false
+
+k8sSchemaVersion: v1.33.3

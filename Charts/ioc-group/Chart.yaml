@@ -1,0 +1,25 @@
+# A Helm Chart for a group of IOC instances that differ only by environment
+apiVersion: v2
+name: ioc-group
+
+# updated by CI when tagging a release
+version: 1.0.0
+
+type: library
+home: https://github.com/epics-containers/ec-helm-charts
+sources:
+  - https://github.com/epics-containers/ec-helm-charts/tree/main/Charts/ioc-group
+maintainers:
+  - name: epics-containers
+    url: https://epics-containers.github.io
+
+# ioc-group renders the ioc-instance library once per entry in .Values.iocs.
+# The local file:// reference keeps the two charts in step: the packaged
+# ioc-group always vendors the ioc-instance it was built against.
+dependencies:
+  - name: ioc-instance
+    version: 1.0.0
+    repository: "file://../ioc-instance"
+    import-values:
+      - child: ioc-instance
+        parent: ioc-instance
