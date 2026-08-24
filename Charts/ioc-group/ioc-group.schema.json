@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "ioc-group Helm chart",
+    "description": "Helm chart for deploying a group of EPICS IOCs that differ only by environment variables",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "env": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true
+        },
+        "iocs": {
+            "description": "One entry per IOC instance in this group. Each entry is a map of environment variables appended to ioc-instance.env for that instance alone. Every entry MUST include NAME - its value is appended to the release name to make that IOC's Kubernetes resources unique, and NAME must be unique within the group.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "NAME"
+                ],
+                "properties": {
+                    "NAME": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

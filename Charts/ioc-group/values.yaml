@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=ioc-group.schema.json
+
+# Default values for ioc-group chart.
+# With annotations for building the schema using:
+#   https://github.com/losisin/helm-values-schema-json.git
+
+# NOTE: the $k8s schema references come from
+#   https://github.com/yannh/kubernetes-json-schema/tree/master/v1.33.1
+#   with version from Charts/ioc-group/.schema.config.yaml (k8sSchemaVersion)
+
+# NOTE: ioc-group deploys a group of IOCs that share one image, one config
+# folder and one ioc-instance block. Set those in the ioc-instance key exactly
+# as you would for a single IOC - see Charts/ioc-instance/values.yaml.
+
+# @schema additionalProperties: true
+global:
+  # @schema $ref: $k8s/container.json#/properties/env
+  env: []
+
+# One entry per IOC instance in the group, e.g.
+#
+#   iocs:
+#     - NAME: "01"
+#       CAMERA_IP: 172.23.0.1
+#     - NAME: "02"
+#       CAMERA_IP: 172.23.0.2
+#
+# For a release called bl99p-ea-cams this deploys bl99p-ea-cams-01 and
+# bl99p-ea-cams-02. Refer to the variables from the shared config folder with
+# ibek's {{ _global.get_env('CAMERA_IP') }}.
+#
+# NOTE: the variables become container environment in alphabetical order, so
+# do not rely on k8s $(VAR) references between them.
+#
+# @schema description: One entry per IOC instance in this group. Each entry is a map of environment variables appended to ioc-instance.env for that instance alone. Every entry MUST include NAME - its value is appended to the release name to make that IOC's Kubernetes resources unique, and NAME must be unique within the group.
+# @schema type: array
+iocs: []
