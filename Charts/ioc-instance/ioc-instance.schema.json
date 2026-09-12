@@ -20,7 +20,7 @@
                 "affinity": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/affinity.json",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "args": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/args",
@@ -33,17 +33,9 @@
                     "description": "PVC for autosave sav files. Defaults to ixx-autosave",
                     "type": "string"
                 },
-                "baseIp": {
-                    "description": "cluster CIDR (default is all clusters at DLS)",
-                    "type": "string"
-                },
                 "caServerPort": {
                     "description": "server port for channel access. The caRepeater port will be one greater.",
                     "type": "integer"
-                },
-                "clusterIP": {
-                    "description": "supply a fixed cluster IP for the service",
-                    "type": "null"
                 },
                 "command": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/command",
@@ -176,7 +168,7 @@
                 "lifecycle": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/lifecycle",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "livenessExecutable": {
                     "description": "simple livenessprobe config",
@@ -185,7 +177,7 @@
                 "livenessProbe": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/livenessProbe",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "location": {
                     "description": "The location where the IOCs will run. Should match location label on nodes if present.",
@@ -198,7 +190,7 @@
                 "nodeSelector": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/nodeSelector",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "opisClaim": {
                     "description": "PVC for opi files. Defaults to ixx-pvcs",
@@ -221,7 +213,7 @@
                 "podSecurityContext": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/securityContext",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "preStopExecutable": {
                     "description": "simple lifecycle config",
@@ -238,7 +230,7 @@
                 "readinessProbe": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/readinessProbe",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "rebootEveryCommit": {
                     "description": "when true the ioc will reboot on every commit",
@@ -273,7 +265,7 @@
                             "additionalProperties": true
                         }
                     },
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "runtimeClaim": {
                     "description": "PVC for runtime assets. Defaults to ixx-runtime",
@@ -288,7 +280,7 @@
                     "description": "specify the security context. At DLS the IOCs should use iXXdetector user/group IDs",
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "serviceAccountName": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/serviceAccountName",
@@ -301,7 +293,7 @@
                 "startupProbe": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/startupProbe",
                     "type": "object",
-                    "additionalProperties": false
+                    "unevaluatedProperties": false
                 },
                 "tolerations": {
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",

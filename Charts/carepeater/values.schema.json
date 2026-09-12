@@ -45,7 +45,7 @@
                     "additionalProperties": false
                 }
             },
-            "additionalProperties": false
+            "unevaluatedProperties": false
         },
         "command": {
             "description": "command to as entrypoint to the container",
@@ -73,7 +73,7 @@
         },
         "global": {
             "description": "Global values shared between all subcharts",
-            "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as the `additionalProperties` setting would otherwise collide with Helm's special 'global' values key.",
+            "$comment": "Added automatically by 'helm schema' to allow this chart to be used as a Helm dependency, as this schema would otherwise not allow Helm's special 'global' values key.",
             "type": [
                 "object",
                 "null"
@@ -133,12 +133,12 @@
                     "additionalProperties": false
                 }
             },
-            "additionalProperties": false
+            "unevaluatedProperties": false
         },
         "securityContext": {
             "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
             "type": "object",
-            "additionalProperties": false
+            "unevaluatedProperties": false
         },
         "tolerations": {
             "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
