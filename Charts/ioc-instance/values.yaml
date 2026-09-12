@@ -154,14 +154,6 @@ ioc-instance:
   # Values must not contain '"' or '\'.
   usbDevices: []
 
-  # @schema description: supply a fixed cluster IP for the service
-  clusterIP:
-
-  # If a fixed cluster IP is not supplied, we allocate one based on the IOC name
-  # using baseIP to determine the range of IPs to allocate from.
-  # @schema description: cluster CIDR (default is all clusters at DLS)
-  baseIp: "10.96.0.0/12"
-
   # @schema description: server port for channel access. The caRepeater port will be one greater.
   caServerPort: 5064
 

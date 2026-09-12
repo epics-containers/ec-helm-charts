@@ -6,7 +6,7 @@
 */}}
 {{ with get .Values "ioc-instance" }}
 
-# when not using hostNetwork, create a service to give the IOC a fixed cluster IP
+# when not using hostNetwork, create a service with a cluster-assigned IP
 # TODO - we could introduce this service to hostNetwork IOCs too: for review.
 {{- if not .hostNetwork }}
 apiVersion: v1
@@ -22,8 +22,6 @@ spec:
   selector:
     app: {{ $.Release.Name }}
   type: ClusterIP
-  {{- $alloc_args := dict "name" $.Release.Name "namespace" $.Release.Namespace "baseIp" .baseIp "startIp" .startIp }}
-  clusterIP: {{ .clusterIP | default (include "allocateIpFromName" $alloc_args) }}
   ports:
     - name: ca-server-tcp
       port: {{ .caServerPort | default 5064 }}
