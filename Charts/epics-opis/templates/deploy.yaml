@@ -38,13 +38,10 @@ spec:
       containers:
         - name: server
           image: {{ .Values.image }}
+          {{- with .Values.resources }}
           resources:
-            requests:
-              memory: 100Mi
-              cpu: 200m
-            limits:
-              memory: 500Mi
-              cpu: 600m
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 90
               protocol: TCP
