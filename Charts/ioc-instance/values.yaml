@@ -166,13 +166,17 @@ ioc-instance:
 
   # Add simple containers specified by image and command
   # see example.values.yaml for the schema of this list of objects
-  # these share the mounts and environment with the main container
+  # by default these share the resources, mounts, environment and
+  # securityContext of the main container. Each entry may override
+  # resources, volumeMounts, securityContext, workingDir and imagePullPolicy,
+  # and may append to env.
   # @schema additionalProperties: false
   initContainers: []
 
   # Add additional containers specified by image and command
   # see example.values.yaml for the schema of this list of objects
-  # these share the mounts and environment with the main container
+  # these take the same fields and defaults as initContainers.
+  # NOTE: their resources add to the pod total that counts against a quota
   # @schema additionalProperties: false
   extraContainers: []
 

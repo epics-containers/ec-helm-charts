@@ -82,8 +82,7 @@
                         "required": [
                             "name",
                             "image",
-                            "command",
-                            "args"
+                            "command"
                         ],
                         "properties": {
                             "args": {
@@ -98,10 +97,36 @@
                                     "type": "string"
                                 }
                             },
+                            "env": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                                "type": "array"
+                            },
                             "image": {
                                 "type": "string"
                             },
+                            "imagePullPolicy": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
+                                "type": "string"
+                            },
                             "name": {
+                                "type": "string"
+                            },
+                            "resources": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/resources",
+                                "type": "object",
+                                "unevaluatedProperties": false
+                            },
+                            "securityContext": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
+                                "type": "object",
+                                "unevaluatedProperties": false
+                            },
+                            "volumeMounts": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
+                                "type": "array"
+                            },
+                            "workingDir": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/workingDir",
                                 "type": "string"
                             }
                         },
@@ -129,8 +154,7 @@
                         "required": [
                             "name",
                             "image",
-                            "command",
-                            "args"
+                            "command"
                         ],
                         "properties": {
                             "args": {
@@ -145,10 +169,36 @@
                                     "type": "string"
                                 }
                             },
+                            "env": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                                "type": "array"
+                            },
                             "image": {
                                 "type": "string"
                             },
+                            "imagePullPolicy": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
+                                "type": "string"
+                            },
                             "name": {
+                                "type": "string"
+                            },
+                            "resources": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/resources",
+                                "type": "object",
+                                "unevaluatedProperties": false
+                            },
+                            "securityContext": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
+                                "type": "object",
+                                "unevaluatedProperties": false
+                            },
+                            "volumeMounts": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
+                                "type": "array"
+                            },
+                            "workingDir": {
+                                "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/workingDir",
                                 "type": "string"
                             }
                         },

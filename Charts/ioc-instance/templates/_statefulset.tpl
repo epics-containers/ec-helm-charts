@@ -23,6 +23,8 @@ to a minimum
 {{- $image := .image | required "ERROR - You must supply image." -}}
 {{- $enabled := eq $.Values.global.enabled false | ternary false true }}
 {{- $customLabels := $.Values.global.labels }}
+{{- /* context for the container helpers in _containers.tpl */}}
+{{- $containerCtx := dict "top" $ "ioc" $root "domain" $domain "location" $location }}
 
 
 apiVersion: apps/v1
@@ -223,35 +225,8 @@ spec:
                 - {{ . }}
         {{- end }}
         {{- end }}
-        volumeMounts: &volumeMounts
-          {{ if ne $.Values.configFolderConfigMap "{}" }}
-          - name: config-volume
-            mountPath: {{ $root.iocConfig }}
-          {{- end }}
-          {{- if $root.dataVolume.enabled }}
-          - name: {{ $.Release.Name }}-data
-            mountPath: {{ default $root.dataVolume.hostPath $root.dataVolume.mountPath | required "ERROR - dataVolume.mountPath or dataVolume.hostPath is required when dataVolume.enabled is true" }}
-            {{- if $root.dataVolume.hostPath }}
-            mountPropagation: HostToContainer
-            {{- end}}
-          {{- end }}
-          {{- if $root.nfsv2TftpClaim }}
-          - name: nfsv2-tftp-volume
-            mountPath: /nfsv2-tftp
-            subPath: "{{ $domain }}/{{ $.Release.Name }}"
-          {{- end }}
-          - name: runtime-volume
-            mountPath: /epics/runtime
-            subPath: "{{ $.Release.Name }}"
-          - name: opis-volume
-            mountPath: /epics/opi
-            subPath: "{{ $.Release.Name }}"
-          - name: autosave-volume
-            mountPath: /autosave
-            subPath: "{{ $.Release.Name }}"
-          {{- with $root.volumeMounts }}
-          {{- toYaml . | nindent 10 }}
-          {{- end }}
+        volumeMounts:
+          {{- include "ioc-instance.volumeMounts" $containerCtx | trim | nindent 10 }}
         stdin: true
         tty: true
         {{- with .securityContext }}
@@ -267,86 +242,21 @@ spec:
             - name: {{ $.Release.Name }}
           {{- end }}
         {{- end }}
-        env: &env
-        - name: ARGOCD_SOURCE_REPO
-          value: {{ $.Values.global.sourceRepo | quote }}
-        - name: ARGOCD_SOURCE_Path
-          value: {{ $.Values.global.sourcePath | quote }}
-        {{- if .rebootEveryCommit }}
-        - name: ARGOCD_COMMIT_HASH
-          value: {{ $.Values.global.commitHash | quote }}
-        {{- end }}
-        - name: IOCSH_PS1
-          value: "{{ $.Release.Name }} > "
-        - name: IOC_NAME
-          value: {{ $.Release.Name | quote }}
-        - name: IOC_PREFIX
-          value: {{ or .prefix $.Release.Name | quote }}
-        - name: IOC_LOCATION
-          value: {{ $location | quote }}
-        - name: IOC_DOMAIN
-          value: {{ $domain | quote }}
-        - name: HOME
-          value: /tmp
-        - name: TERM
-          value: xterm-256color
-        {{- /* Add in the global and instance additional environment vars */}}
-        {{- range $root.env }}
-        - name: {{ .name }}
-          value: {{ .value | quote }}
-        {{- end }}
-        {{- range $.Values.global.env }}
-        - name: {{ .name }}
-          value: {{ .value | quote }}
-        {{- end }}
+        env:
+          {{- include "ioc-instance.env" $containerCtx | nindent 10 }}
 
 
       {{- /* Additional ad hoc containers ***********************************/}}
+      {{- /* see "ioc-instance.container" in _containers.tpl for the defaults */}}
       {{- range .extraContainers }}
-      - name: {{ .name }}
-        image: {{ .image }}
-        imagePullPolicy: {{ .imagePullPolicy }}
-        # a writable place to have cwd
-        workingDir: /tmp
-        {{- with .command }}
-        command:
-          {{- . | toYaml | nindent 12 }}
-        {{- end }}
-        {{- with .args }}
-        args:
-          {{- . | toYaml | nindent 12 }}
-        {{- end }}
-        volumeMounts: *volumeMounts
-        env: *env
-        {{- with $root.securityContext }}
-        securityContext:
-          {{- toYaml . | nindent 12 }}
-        {{- end }}
+      {{- include "ioc-instance.container" (merge (dict "c" .) $containerCtx) | nindent 6 }}
       {{- end }}
 
       {{- /* Init containers ************************************************/}}
       {{- with .initContainers }}
       initContainers:
         {{- range . }}
-        - name: {{ .name }}
-          image: {{ .image }}
-          imagePullPolicy: {{ .imagePullPolicy }}
-          # a writable place to have cwd
-          workingDir: /tmp
-          {{- with .command }}
-          command:
-            {{- . | toYaml | nindent 12 }}
-          {{- end }}
-          {{- with .args }}
-          args:
-            {{- . | toYaml | nindent 12 }}
-          {{- end }}
-          volumeMounts: *volumeMounts
-          env: *env
-          {{- with $root.securityContext }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+        {{- include "ioc-instance.container" (merge (dict "c" .) $containerCtx) | nindent 8 }}
         {{- end }}
       {{- end }}
 

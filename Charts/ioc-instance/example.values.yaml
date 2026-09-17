@@ -4,22 +4,69 @@
 
 ioc-instance:
   # None required for this Chart.
+  # initContainers and extraContainers entries take the same fields. Only name,
+  # image and command are required. Every other field defaults to the setting
+  # of the main IOC container:
+  #   resources:       the IOC resources, without the usbDevices claims
+  #   volumeMounts:    the IOC volumeMounts. Setting it replaces them all.
+  #   env:             the IOC env. Setting it appends to them.
+  #   securityContext: the IOC securityContext
+  #   workingDir:      /tmp
+  #   imagePullPolicy: left to the Kubernetes default
+  # Set resources, volumeMounts or securityContext to {} or [] to clear them.
   # @schema: add
   extraContainers:
     - name: my-sidecar # @schema required
       image: busybox # @schema required
       command: # @schema required
         - sleep
-      args: # @schema required
+      args:
         - "3600" # sleep for an hour
+      # @schema $ref: $k8s/container.json#/properties/imagePullPolicy
+      imagePullPolicy: IfNotPresent
+      # @schema $ref: $k8s/container.json#/properties/workingDir
+      workingDir: /tmp
+      # @schema $ref: $k8s/container.json#/properties/resources; skipProperties: true
+      resources:
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      # @schema $ref: $k8s/container.json#/properties/volumeMounts
+      volumeMounts:
+        - { name: autosave-volume, mountPath: /autosave, subPath: my-ioc } # @schema hidden
+      # @schema $ref: $k8s/container.json#/properties/env
+      env:
+        - { name: SIDECAR_MODE, value: "watch" } # @schema hidden
+      # @schema $ref: $k8s/container.json#/properties/securityContext; skipProperties: true
+      securityContext:
+        runAsNonRoot: true
 
   initContainers:
-    - name: my-sidecar # @schema required
+    - name: my-init # @schema required
       image: busybox # @schema required
       command: # @schema required
-        - sleep
-      args: # @schema required
-        - "3600" # sleep for an hour
+        - sh
+        - -c
+      args:
+        - echo "preparing the IOC runtime"
+      # @schema $ref: $k8s/container.json#/properties/imagePullPolicy
+      imagePullPolicy: IfNotPresent
+      # @schema $ref: $k8s/container.json#/properties/workingDir
+      workingDir: /tmp
+      # @schema $ref: $k8s/container.json#/properties/resources; skipProperties: true
+      resources:
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      # @schema $ref: $k8s/container.json#/properties/volumeMounts
+      volumeMounts:
+        - { name: runtime-volume, mountPath: /epics/runtime, subPath: my-ioc } # @schema hidden
+      # @schema $ref: $k8s/container.json#/properties/env
+      env:
+        - { name: INIT_MODE, value: "prepare" } # @schema hidden
+      # @schema $ref: $k8s/container.json#/properties/securityContext; skipProperties: true
+      securityContext:
+        runAsNonRoot: true
 
   # @schema description: declare usb devices to attach to pod using dynamic resource allocation.
   # @schema type: array
