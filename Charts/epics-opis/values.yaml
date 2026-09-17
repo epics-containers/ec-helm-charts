@@ -1,5 +1,14 @@
 # use nginx for publishing opi files over http
 image: nginx:1.25.4
+# resources for the nginx container. nginx serving static OPI files is nearly
+# idle, so these can be lowered where a namespace has a tight CPU/memory quota
+resources:
+  requests:
+    memory: 100Mi
+    cpu: 200m
+  limits:
+    memory: 500Mi
+    cpu: 600m
 # Short name for this collection of services
 domain:
 # location where these IOCs and services will run
