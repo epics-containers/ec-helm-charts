@@ -124,15 +124,15 @@ spec:
           persistentVolumeClaim:
             claimName: {{ . }}
         {{- end }}
+        {{- if .dataVolume.enabled }}
         {{- if .dataVolume.pvc }}
         - name: {{ $.Release.Name }}-data
           persistentVolumeClaim:
             claimName: {{ $.Release.Name }}-data
         {{- else }}
-        {{- with .dataVolume.hostPath }}
         - name: {{ $.Release.Name }}-data
           hostPath:
-            path: {{ . }}
+            path: {{ .dataVolume.hostPath | required "ERROR - dataVolume.hostPath is required when dataVolume.enabled is true and dataVolume.pvc is false" }}
             type: Directory
         {{- end }}
         {{- end }}
@@ -228,9 +228,9 @@ spec:
           - name: config-volume
             mountPath: {{ $root.iocConfig }}
           {{- end }}
-          {{- if or ($root.dataVolume.pvc) ($root.dataVolume.hostPath) }}
+          {{- if $root.dataVolume.enabled }}
           - name: {{ $.Release.Name }}-data
-            mountPath: {{ $root.dataVolume.hostPath }}
+            mountPath: {{ default $root.dataVolume.hostPath $root.dataVolume.mountPath | required "ERROR - dataVolume.mountPath or dataVolume.hostPath is required when dataVolume.enabled is true" }}
             {{- if $root.dataVolume.hostPath }}
             mountPropagation: HostToContainer
             {{- end}}
