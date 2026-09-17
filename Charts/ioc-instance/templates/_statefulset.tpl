@@ -130,12 +130,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $.Release.Name }}-data
         {{- else }}
-        {{- with .dataVolume.hostPath }}
         - name: {{ $.Release.Name }}-data
           hostPath:
-            path: {{ . }}
+            path: {{ .dataVolume.hostPath | required "ERROR - dataVolume.hostPath is required when dataVolume.enabled is true and dataVolume.pvc is false" }}
             type: Directory
-        {{- end }}
         {{- end }}
         {{- end }}
         {{ if ne $.Values.configFolderConfigMap "{}" }}
@@ -230,7 +228,7 @@ spec:
           - name: config-volume
             mountPath: {{ $root.iocConfig }}
           {{- end }}
-          {{- if and $root.dataVolume.enabled (or $root.dataVolume.pvc $root.dataVolume.hostPath) }}
+          {{- if $root.dataVolume.enabled }}
           - name: {{ $.Release.Name }}-data
             mountPath: {{ default $root.dataVolume.hostPath $root.dataVolume.mountPath | required "ERROR - dataVolume.mountPath or dataVolume.hostPath is required when dataVolume.enabled is true" }}
             {{- if $root.dataVolume.hostPath }}
