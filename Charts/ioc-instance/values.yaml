@@ -106,12 +106,16 @@ ioc-instance:
   # @schema $ref: $k8s/podspec.json#/properties/securityContext
   podSecurityContext: {}
 
-  # @schema description: a volume to mount for writing data to. This can be a PVC or a hostPath the PVC
+  # @schema description: an optional volume to mount for writing data to. When enabled this is either a PVC or a hostPath.
   dataVolume:
-    # @schema description:  Create a PVC called {{ .Release.Name }}-data when true
+    # @schema description: Add a data volume to the IOC pod when true. Off by default because most IOCs do not write data files.
+    enabled: false
+    # @schema description: When enabled, create a PVC called {{ .Release.Name }}-data if true, otherwise mount hostPath from the node.
     pvc: true
-    # @schema description: A path on the host machine to write data into. Also used as the path that the pvc or hostPath will be mounted at so that users need not be confused about inside/outside container paths.
+    # @schema description: A path on the host machine to write data into when pvc is false. Also the default mountPath, so that users need not be confused about inside/outside container paths.
     hostPath: /data
+    # @schema description: Path inside the containers where the data volume is mounted. Defaults to hostPath when empty.
+    mountPath: ""
 
   # @schema description: PVC for opi files. Defaults to ixx-pvcs
   opisClaim: ""
