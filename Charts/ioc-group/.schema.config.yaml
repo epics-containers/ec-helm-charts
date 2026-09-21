@@ -18,9 +18,11 @@ bundle: false
 # Include comments for the helm-docs plugin into the schema, to allow e.g. documentation in VSCode
 useHelmDocs: false
 
-# The keys of an iocs entry are environment variable names chosen by the user,
-# so the item objects must stay open. schemaRoot below still closes the root.
-noAdditionalProperties: false
+# Close object schemas that have no explicit @schema additionalProperties
+# annotation. The iocs array items are annotated @schema additionalProperties:
+# true in example.values.yaml, since each entry's non-NAME keys are
+# user-chosen environment variable names and must stay open.
+noAdditionalProperties: true
 
 schemaRoot:
   title: ioc-group Helm chart

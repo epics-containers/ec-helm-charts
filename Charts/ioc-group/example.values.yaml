@@ -3,7 +3,11 @@
 # see .schema.config.yaml
 
 # Every entry must supply NAME. The remaining keys are free-form environment
-# variable names, so unlike the other charts this one cannot close the object
-# with additionalProperties - see noAdditionalProperties in .schema.config.yaml.
+# variable names, so unlike the other charts' fixed-shape objects this item
+# must stay open. There is no way to annotate additionalProperties on an
+# array item that also declares real keys (losisin/helm-values-schema-json#103),
+# so a second, empty example item carries that annotation on its own; the
+# generator merges the two example items into one items schema.
 iocs:
+  - {} # @schema additionalProperties: true
   - NAME: "01" # @schema required

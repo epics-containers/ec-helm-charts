@@ -3,6 +3,10 @@ on:
 
 env:
   HELM_VERSION_TO_INSTALL: 3.17.1
+  # The helm-schema hook's rev in .pre-commit-config.yaml does not select a
+  # generator version - the hook shells out to this plugin - so this is the
+  # real pin. Keep the two equal.
+  SCHEMA_PLUGIN_VERSION: v2.6.0
 
 jobs:
   run:
@@ -24,7 +28,7 @@ jobs:
           version: "0.8.22"
 
       - name: Install helm plugins
-        run: helm plugin install https://github.com/losisin/helm-values-schema-json.git
+        run: helm plugin install https://github.com/losisin/helm-values-schema-json.git --version ${{ env.SCHEMA_PLUGIN_VERSION }}
 
       - name: Run pre-commit
         run: |
