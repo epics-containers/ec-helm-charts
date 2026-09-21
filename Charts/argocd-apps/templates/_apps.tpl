@@ -8,6 +8,10 @@ kind: Application
 metadata:
   name: {{ $service }}
   namespace: {{ $.Release.Namespace }}
+  {{- with $settings.description }}
+  annotations:
+    epics-containers.github.io/description: {{ . | quote }}
+  {{- end }}
   labels:
     {{- if eq $settings.enabled false }}
     STOPPED: "1"
