@@ -8,7 +8,7 @@
             "type": "object",
             "properties": {
                 "env": {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/container.json#/properties/env",
                     "type": "array"
                 }
             },
