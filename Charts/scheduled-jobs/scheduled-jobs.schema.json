@@ -1,0 +1,109 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "scheduled-jobs Helm chart",
+    "description": "Helm chart for running a container image on a schedule",
+    "type": "object",
+    "properties": {
+        "activeDeadlineSeconds": {
+            "description": "default maximum run time for each job in seconds, after which the job is killed and marked failed. A job may override it. 0 means no limit.",
+            "type": "integer",
+            "minimum": 0
+        },
+        "affinity": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/affinity.json",
+            "type": "object",
+            "unevaluatedProperties": false
+        },
+        "env": {
+            "description": "environment variables for every job. Appended after global.env, and each job's own env is appended after these.",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+            "type": "array"
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "env": {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+                    "type": "array"
+                }
+            },
+            "additionalProperties": true
+        },
+        "hostNetwork": {
+            "description": "run on the host network, needed for Channel Access broadcasts to reach IOCs that also use hostNetwork",
+            "type": "boolean"
+        },
+        "image": {
+            "description": "container image URI that runs every job in this service. Mandatory override.",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/image",
+            "type": "string"
+        },
+        "imagePullPolicy": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/imagePullPolicy",
+            "type": "string"
+        },
+        "jobs": {
+            "default": {},
+            "type": "object",
+            "additionalProperties": {
+                "type": [
+                    "object",
+                    "null"
+                ],
+                "properties": {
+                    "activeDeadlineSeconds": {
+                        "description": "maximum run time in seconds for this job. 0 means no limit",
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "args": {
+                        "description": "arguments passed to the image's entrypoint",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "env": {
+                        "description": "extra environment variables for this job, appended after the service env",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "name"
+                            ],
+                            "additionalProperties": true
+                        }
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "schedule": {
+            "description": "cron schedule shared by every job in this service, e.g. \"0 2 * * *\". Mandatory override. Need a different schedule? Make a different service.",
+            "type": "string"
+        },
+        "securityContext": {
+            "description": "container security context. At DLS use the iXXdetector user/group IDs for access to data folders",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
+            "type": "object",
+            "unevaluatedProperties": false
+        },
+        "timeZone": {
+            "description": "IANA time zone for the schedule, e.g. Europe/London. Empty uses the cluster's zone (usually UTC).",
+            "type": "string"
+        },
+        "tolerations": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
+            "type": "array"
+        },
+        "volumeMounts": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/volumeMounts",
+            "type": "array"
+        },
+        "volumes": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/volumes",
+            "type": "array"
+        }
+    },
+    "additionalProperties": false
+}

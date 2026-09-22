@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=scheduled-jobs.schema.json
+
+# example values for a service that depends on this chart.
+# NOT an input for generating the schema: see .schema.config.yaml
+
+image: busybox # required
+schedule: "0 2 * * *" # required
+timeZone: Europe/London
+
+env:
+  - { name: SHARED_SETTING, value: "for-all-jobs" }
+
+# each job becomes its own CronJob, all starting together.
+jobs:
+  # steps that must not overlap go in ONE job, so they run in sequence
+  my-sequence:
+    args:
+      - sh
+      - -c
+      - echo "step one" && echo "step two"
+    activeDeadlineSeconds: 600
+    env:
+      - { name: JOB_SETTING, value: "for-this-job" }
+
+  # a separate job runs in parallel with my-sequence
+  my-parallel-job:
+    args:
+      - sh
+      - -c
+      - echo "running alongside my-sequence"
