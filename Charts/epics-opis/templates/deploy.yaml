@@ -43,7 +43,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           ports:
-            - containerPort: 90
+            - containerPort: 80
               protocol: TCP
           volumeMounts:
             # - mountPath: /opis
@@ -71,17 +71,24 @@ metadata:
     app: {{ .Release.Name }}
     location: {{ $location }}
     domain: {{ $domain }}
+  {{- with .Values.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
 spec:
-  type: LoadBalancer
+  type: {{ .Values.service.type }}
+  {{- with .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- with .Values.service.externalIPs }}
+  externalIPs:
+{{ toYaml . | indent 4 }}
+  {{- end }}
   ports:
     - name: http
       port: 80
       protocol: TCP
       targetPort: 80
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: 443
   sessionAffinity: None
   selector:
     app: {{ .Release.Name }}
