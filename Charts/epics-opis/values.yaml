@@ -18,6 +18,7 @@ location:
 # networking for the Service that exposes the OPI files over http
 service:
   # LoadBalancer, ClusterIP or NodePort
+  # @schema enum: ["LoadBalancer", "ClusterIP", "NodePort"]
   type: LoadBalancer
   # pin a specific address when the LoadBalancer provider supports it
   # @schema type: ["string", "null"]

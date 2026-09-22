@@ -73,7 +73,12 @@
                     ]
                 },
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "LoadBalancer",
+                        "ClusterIP",
+                        "NodePort"
+                    ]
                 }
             },
             "additionalProperties": false
