@@ -1,0 +1,96 @@
+# yaml-language-server: $schema=scheduled-jobs.schema.json
+
+# Default values for the scheduled-jobs chart.
+# With annotations for building the schema using:
+#   https://github.com/losisin/helm-values-schema-json.git
+#
+# In a services repo these values sit under the `scheduled-jobs:` key, because
+# the service depends on this chart. Add the following to the repo-wide
+# services/values.yaml to pick up hostNetwork, securityContext, affinity and
+# tolerations like every other service:
+#
+#   scheduled-jobs:
+#     <<: *shared
+
+# @schema additionalProperties: true
+global:
+  # @schema $ref: $k8s/container.json#/properties/env
+  env: []
+
+################################################################################
+# Values that every service MUST set
+################################################################################
+
+# @schema description: container image URI that runs every job in this service. Mandatory override.
+# @schema $ref: $k8s/container.json#/properties/image
+image: ""
+
+# @schema description: cron schedule shared by every job in this service, e.g. "0 2 * * *". Mandatory override. Need a different schedule? Make a different service.
+# @schema type: string
+schedule: ""
+
+################################################################################
+# Optional override values
+################################################################################
+
+# @schema description: IANA time zone for the schedule, e.g. Europe/London. Empty uses the cluster's zone (usually UTC).
+# @schema type: string
+timeZone: ""
+
+# @schema $ref: $k8s/container.json#/properties/imagePullPolicy
+imagePullPolicy: IfNotPresent
+
+# @schema description: default maximum run time for each job in seconds, after which the job is killed and marked failed. A job may override it. 0 means no limit.
+# @schema type: integer
+# @schema minimum: 0
+activeDeadlineSeconds: 3600
+
+# @schema description: environment variables for every job. Appended after global.env, and each job's own env is appended after these.
+# @schema $ref: $k8s/container.json#/properties/env
+env: []
+
+# @schema $ref: $k8s/podspec.json#/properties/volumes
+volumes: []
+
+# @schema $ref: $k8s/container.json#/properties/volumeMounts
+volumeMounts: []
+
+################################################################################
+# Usually supplied by the shared block in services/values.yaml
+################################################################################
+
+# @schema description: run on the host network, needed for Channel Access broadcasts to reach IOCs that also use hostNetwork
+hostNetwork: false
+
+# @schema description: container security context. At DLS use the iXXdetector user/group IDs for access to data folders
+# @schema $ref: $k8s/container.json#/properties/securityContext
+securityContext: {}
+
+# @schema $ref: $k8s/affinity.json
+affinity: {}
+
+# @schema $ref: $k8s/podspec.json#/properties/tolerations
+tolerations: []
+
+################################################################################
+# The jobs
+################################################################################
+
+# Each key is a job name (lowercase letters, digits and '-') and becomes a
+# CronJob called <service>-<job name>.
+#
+# All jobs start at the same time and run in parallel. If two things touch the
+# same hardware, put them in the SAME job so they run in sequence.
+#
+# Each job may set:
+#   args:                  arguments passed to the image's entrypoint
+#   env:                   extra environment variables, appended last
+#   activeDeadlineSeconds: overrides the service default above
+#
+# Every job also receives JOB_NAME set to its key.
+#
+# @schema type: object
+# @schema patternProperties: {"^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {"type":["object","null"],"additionalProperties":false,"properties":{"args":{"type":"array","items":{"type":"string"},"description":"arguments passed to the image's entrypoint"},"env":{"type":"array","items":{"type":"object","required":["name"],"additionalProperties":true},"description":"extra environment variables for this job, appended after the service env"},"activeDeadlineSeconds":{"type":"integer","minimum":0,"description":"maximum run time in seconds for this job. 0 means no limit"}}}}
+# @schema additionalProperties: false
+# @schema default: {}
+jobs: {}

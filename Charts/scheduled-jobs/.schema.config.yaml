@@ -1,0 +1,29 @@
+# .schema.yaml
+
+# Define input, output and source for $refs relative to repository root for pre-commit
+# example.values.yaml is not an input: the job shape comes from the
+# annotation in values.yaml, and the example's job names would otherwise
+# get their own narrower schemas.
+values:
+  - Charts/scheduled-jobs/values.yaml
+
+# Not values.schema.json, so Helm does not enforce this schema: a beamline's
+# shared block in services/values.yaml could add keys this chart does not
+# define, which would fail the sync. Editors still validate values files.
+output: Charts/scheduled-jobs/scheduled-jobs.schema.json
+
+# bundle up references (don't do this as K8S refs are 500kb+)
+bundleRoot: Charts
+bundle: false
+
+# Include comments for the helm-docs plugin into the schema, to allow e.g. documentation in VSCode
+useHelmDocs: false
+
+noAdditionalProperties: true
+
+schemaRoot:
+  title: scheduled-jobs Helm chart
+  description: Helm chart for running a container image on a schedule
+  additionalProperties: false
+
+k8sSchemaVersion: v1.33.3
