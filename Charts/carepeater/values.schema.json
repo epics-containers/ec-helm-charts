@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
         "affinity": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/affinity.json",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/affinity.json",
             "type": "object",
             "properties": {
                 "nodeAffinity": {
@@ -56,7 +56,7 @@
         },
         "env": {
             "description": "Add environment to containers",
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/env",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/container.json#/properties/env",
             "type": "array",
             "items": {
                 "type": "object",
@@ -105,7 +105,7 @@
             "additionalProperties": false
         },
         "resources": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/resources",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/container.json#/properties/resources",
             "type": "object",
             "properties": {
                 "limits": {
@@ -136,12 +136,12 @@
             "unevaluatedProperties": false
         },
         "securityContext": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/container.json#/properties/securityContext",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/container.json#/properties/securityContext",
             "type": "object",
             "unevaluatedProperties": false
         },
         "tolerations": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.33.3/podspec.json#/properties/tolerations",
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/podspec.json#/properties/tolerations",
             "type": "array"
         }
     },
