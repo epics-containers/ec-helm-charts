@@ -29,7 +29,9 @@ services:
   #     destination: optional override for destination parameters above.
   #       name: optional override for the deployment cluster above.
   #       namespace: optional override for namespace above.
-  #     serviceChart: optional override for the helm chart to use. 
+  #     description: optional free-text description, rendered as an
+  #                 annotation on the generated Application's own metadata.
+  #     serviceChart: optional override for the helm chart to use.
   #                 The path is always services/<serviceChart> within the repo.
   #     targetRevision: optional override for targetRevision above.
   #     repoURL: optional override for git repo to source the helm chart from
@@ -61,6 +63,10 @@ services:
     # @schema additionalProperties: {"type":"string","maxLength":63,"description":"Custom labels applied to the resource.","pattern":"^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$|^[a-zA-Z0-9]$"}
     # @schema default: {}
     labels: {}
+
+    # @schema type: string
+    # @schema default: ""
+    description: ""
 
     # @schema type: string
     # @schema default: ""
