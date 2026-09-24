@@ -42,10 +42,12 @@ spec:
           value: $ARGOCD_APP_SOURCE_PATH
       {{- /* Merge labels into valuesObject.global.labels. Rendering the two
              separately would emit two sibling global: keys and YAML would
-             silently keep only the last. valuesObject wins on a clash. */ -}}
+             silently keep only the last. The dedicated labels key wins on a
+             clash: it is the narrower, schema-validated setting, like a
+             parameter overriding valuesObject. */ -}}
       {{- $valuesObject := deepCopy (default dict $settings.valuesObject) }}
       {{- with $settings.labels }}
-      {{- $valuesObject = merge $valuesObject (dict "global" (dict "labels" .)) }}
+      {{- $valuesObject = mergeOverwrite $valuesObject (dict "global" (dict "labels" .)) }}
       {{- end }}
       {{- with $valuesObject }}
       valuesObject:
