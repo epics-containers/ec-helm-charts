@@ -67,6 +67,11 @@
                     },
                     "additionalProperties": false
                 },
+                "dnsPolicy": {
+                    "description": "leave empty for the Kubernetes default. hostNetwork IOCs that need cluster DNS should set ClusterFirstWithHostNet.",
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.7-standalone-strict/podspec.json#/properties/dnsPolicy",
+                    "type": "string"
+                },
                 "domain": {
                     "description": "the domain IOCs run in, e.g. p47, b01-1, rf, va",
                     "type": "string"
