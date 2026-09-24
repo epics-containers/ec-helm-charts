@@ -99,7 +99,7 @@
                     "valuesObject": {
                         "default": {},
                         "type": "object",
-                        "additionalProperties": false
+                        "additionalProperties": true
                     }
                 },
                 "additionalProperties": false
