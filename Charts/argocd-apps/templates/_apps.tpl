@@ -40,16 +40,16 @@ spec:
           value: $ARGOCD_APP_SOURCE_REPO_URL
         - name: global.sourcePath
           value: $ARGOCD_APP_SOURCE_PATH
-      {{- if or $settings.labels $settings.valuesObject }}
-      valuesObject:
-        {{- with $settings.labels }}
-        global:
-          labels:
-        {{- toYaml . | nindent 12 }}
-        {{- end}}
-      {{- with $settings.valuesObject }}
-      {{- toYaml . | nindent 8 }}
+      {{- /* Merge labels into valuesObject.global.labels. Rendering the two
+             separately would emit two sibling global: keys and YAML would
+             silently keep only the last. valuesObject wins on a clash. */ -}}
+      {{- $valuesObject := deepCopy (default dict $settings.valuesObject) }}
+      {{- with $settings.labels }}
+      {{- $valuesObject = merge $valuesObject (dict "global" (dict "labels" .)) }}
       {{- end }}
+      {{- with $valuesObject }}
+      valuesObject:
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with $settings.valuesFiles }}
       valueFiles:
