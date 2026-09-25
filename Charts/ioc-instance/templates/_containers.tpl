@@ -23,7 +23,9 @@ The volumeMounts of the main IOC container, as a YAML list at column 0.
 {{- if or $ioc.dataVolume.pvc $ioc.dataVolume.hostPath }}
 - name: {{ $top.Release.Name }}-data
   mountPath: {{ $ioc.dataVolume.mountPath | default $ioc.dataVolume.hostPath | default "/data" }}
+  {{- if not $ioc.dataVolume.pvc }}
   mountPropagation: HostToContainer
+  {{- end }}
 {{- end }}
 {{- if $ioc.nfsv2TftpClaim }}
 - name: nfsv2-tftp-volume
