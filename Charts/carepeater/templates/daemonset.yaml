@@ -26,7 +26,7 @@ spec:
           image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{- with  $.Values.globalEnv }}
+            {{- with .Values.env }}
             {{-  toYaml . | nindent 12}}
             {{- end }}
           {{- with .Values.securityContext }}
