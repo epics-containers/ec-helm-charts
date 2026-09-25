@@ -20,12 +20,10 @@ The volumeMounts of the main IOC container, as a YAML list at column 0.
 - name: config-volume
   mountPath: {{ $ioc.iocConfig }}
 {{- end }}
-{{- if $ioc.dataVolume.enabled }}
+{{- if or $ioc.dataVolume.pvc $ioc.dataVolume.hostPath }}
 - name: {{ $top.Release.Name }}-data
-  mountPath: {{ default $ioc.dataVolume.hostPath $ioc.dataVolume.mountPath | required "ERROR - dataVolume.mountPath or dataVolume.hostPath is required when dataVolume.enabled is true" }}
-  {{- if $ioc.dataVolume.hostPath }}
+  mountPath: {{ $ioc.dataVolume.mountPath | default $ioc.dataVolume.hostPath | default "/data" }}
   mountPropagation: HostToContainer
-  {{- end }}
 {{- end }}
 {{- if $ioc.nfsv2TftpClaim }}
 - name: nfsv2-tftp-volume

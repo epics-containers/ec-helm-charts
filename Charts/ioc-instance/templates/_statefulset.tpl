@@ -126,17 +126,15 @@ spec:
           persistentVolumeClaim:
             claimName: {{ . }}
         {{- end }}
-        {{- if .dataVolume.enabled }}
         {{- if .dataVolume.pvc }}
         - name: {{ $.Release.Name }}-data
           persistentVolumeClaim:
             claimName: {{ $.Release.Name }}-data
-        {{- else }}
+        {{- else if .dataVolume.hostPath }}
         - name: {{ $.Release.Name }}-data
           hostPath:
-            path: {{ .dataVolume.hostPath | required "ERROR - dataVolume.hostPath is required when dataVolume.enabled is true and dataVolume.pvc is false" }}
+            path: {{ .dataVolume.hostPath }}
             type: Directory
-        {{- end }}
         {{- end }}
         {{ if ne $.Values.configFolderConfigMap "{}" }}
         - name: config-volume
