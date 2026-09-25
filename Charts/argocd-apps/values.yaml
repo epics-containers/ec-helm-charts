@@ -89,6 +89,7 @@ services:
     enabled: true
 
     # @schema type: object
+    # @schema additionalProperties: true
     # @schema default: {}
     valuesObject: {}
 
