@@ -5,7 +5,7 @@
 {{- $location := default $.Values.global.location .location | required "ERROR - You must supply location or global.location" -}}
 {{- $domain := default $.Values.global.domain .domain | required "ERROR - You must supply domain or global.domain" -}}
 
-{{- if and .dataVolume.enabled .dataVolume.pvc }}
+{{- if .dataVolume.pvc }}
 # This IOC uses a data volume, so we will create a PVC for it
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -26,10 +26,10 @@ spec:
     requests:
       storage: 1000Mi
 {{- end }}
-{{ else if .dataVolume.enabled }}
-# This IOC has no data volume, so we will mount the host filesystem
+{{ else if .dataVolume.hostPath }}
+# This IOC mounts the host path {{ .dataVolume.hostPath }} as its data volume
 {{ else }}
 # This IOC has no data volume
-{{- end }}  {{/* end if .dataVolume.enabled and .dataVolume.pvc */}}
+{{- end }}  {{/* end if .dataVolume.pvc */}}
 {{- end }}  {{/* end with get .Values "ioc-instance" */}}
 {{- end }}  {{/* end define ioc-instance.datavolume */}}
