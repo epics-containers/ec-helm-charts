@@ -45,6 +45,10 @@ ioc-instance:
   # @schema $ref: $k8s/podspec.json#/properties/hostNetwork
   hostNetwork: true
 
+  # @schema description: leave empty for the Kubernetes default. hostNetwork IOCs that need cluster DNS should set ClusterFirstWithHostNet.
+  # @schema $ref: $k8s/podspec.json#/properties/dnsPolicy
+  dnsPolicy: ""
+
   # @schema description: root folder for ioc source/binaries inside generic IOC container
   iocFolder: /epics/ioc
 

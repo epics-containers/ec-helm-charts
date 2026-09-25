@@ -81,6 +81,9 @@ spec:
       {{- with .hostNetwork }}
       hostNetwork: {{ . }}
       {{- end }}
+      {{- with .dnsPolicy }}
+      dnsPolicy: {{ . }}
+      {{- end }}
       terminationGracePeriodSeconds: 3 # nice to have quick restarts on IOCs
       {{- with .podSecurityContext }}
       securityContext:
