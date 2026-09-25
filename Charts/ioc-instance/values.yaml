@@ -108,9 +108,9 @@ ioc-instance:
 
   # @schema description: an optional volume to mount for writing data to. A PVC when pvc is true, else the node's hostPath when that is set, else no data volume.
   dataVolume:
-    # @schema description: Create a PVC called {{ .Release.Name }}-data and mount it when true.
+    # @schema description: Create a PVC called {{ .Release.Name }}-data and mount it at mountPath (default /data) when true.
     pvc: false
-    # @schema description: A path on the host machine to mount when pvc is false. Also the default mountPath, so that users need not be confused about inside/outside container paths. Empty means no host path volume.
+    # @schema description: A path on the host machine to mount as the data volume. Also the default mountPath, so that users need not be confused about inside/outside container paths. Empty means no host path volume. Cannot be combined with pvc true.
     hostPath: ""
     # @schema description: Path inside the containers where the data volume is mounted. Defaults to hostPath, or /data when hostPath is empty.
     mountPath: ""

@@ -49,7 +49,7 @@
                     "type": "object",
                     "properties": {
                         "hostPath": {
-                            "description": "A path on the host machine to mount when pvc is false. Also the default mountPath, so that users need not be confused about inside/outside container paths. Empty means no host path volume.",
+                            "description": "A path on the host machine to mount as the data volume. Also the default mountPath, so that users need not be confused about inside/outside container paths. Empty means no host path volume. Cannot be combined with pvc true.",
                             "type": "string"
                         },
                         "mountPath": {
@@ -57,7 +57,7 @@
                             "type": "string"
                         },
                         "pvc": {
-                            "description": "Create a PVC called {{ .Release.Name }}-data and mount it when true.",
+                            "description": "Create a PVC called {{ .Release.Name }}-data and mount it at mountPath (default /data) when true.",
                             "type": "boolean"
                         }
                     },

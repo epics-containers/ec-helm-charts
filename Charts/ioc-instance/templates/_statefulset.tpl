@@ -126,6 +126,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ . }}
         {{- end }}
+        {{- if and .dataVolume.pvc .dataVolume.hostPath }}
+        {{- fail "ERROR - dataVolume.pvc and dataVolume.hostPath cannot both be set: use dataVolume.mountPath to choose where the PVC is mounted" }}
+        {{- end }}
         {{- if .dataVolume.pvc }}
         - name: {{ $.Release.Name }}-data
           persistentVolumeClaim:
