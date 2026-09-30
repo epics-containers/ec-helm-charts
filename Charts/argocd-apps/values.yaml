@@ -21,6 +21,12 @@ source:
   # @schema description: "The target revision (branch, tag, commit) of the Git repository."
   targetRevision: ""
 
+# @schema type: object
+# @schema additionalProperties: {"type": "string"}
+# @schema description: "Map of group name to target revision (branch, tag, commit), referenced by services.<svc>.group. A service with no group follows source.targetRevision."
+# @schema default: {}
+versions: {}
+
 # @schema type: [object, null]
 # @schema mergeProperties: true
 services:
@@ -33,7 +39,12 @@ services:
   #                 annotation on the generated Application's own metadata.
   #     serviceChart: optional override for the helm chart to use.
   #                 The path is always services/<serviceChart> within the repo.
-  #     targetRevision: optional override for targetRevision above.
+  #     group: optional key into the root-level versions map. Resolution order
+  #                 for targetRevision is: this service's own targetRevision,
+  #                 then versions[group], then source.targetRevision. A group
+  #                 naming a missing versions entry fails the render.
+  #     targetRevision: optional override for targetRevision above, and for
+  #                 the group's version above that.
   #     repoURL: optional override for git repo to source the helm chart from
   #            the path is always services/<service> within that repo.
   #     valuesObject: An object that is passed as values to the helm chart.
@@ -45,7 +56,7 @@ services:
   #     removed: set to true to remove the service from the cluster.
   #     enabled: set to false to stop a service.
 
-  # @schema type: [object, null]
+  # @schema type: object
   example1:
 
     # @schema type: [object, null]
@@ -71,6 +82,11 @@ services:
     # @schema type: string
     # @schema default: ""
     serviceChart: ""
+
+    # @schema type: string
+    # @schema default: ""
+    # @schema description: "Key into the root-level versions map. Superseded by this service's own targetRevision when that is also set."
+    group: ""
 
     # @schema type: string
     # @schema default: ""

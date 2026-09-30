@@ -27,7 +27,19 @@ spec:
   source:
     repoURL: {{ default $.Values.source.repoURL $settings.repoURL }}
     path: services/{{ default $service $settings.serviceChart }}
-    targetRevision: {{ default $.Values.source.targetRevision $settings.targetRevision }}
+    {{- /* Resolution order: this service's own targetRevision, then its
+           group's entry in .Values.versions, then source.targetRevision.
+           A group that has no matching versions entry fails the render, so
+           a typo cannot silently leave a service out of a cutover. */ -}}
+    {{- $groupRevision := $.Values.source.targetRevision }}
+    {{- with $settings.group }}
+    {{- $versions := default dict $.Values.versions }}
+    {{- if not (hasKey $versions .) }}
+    {{- fail (printf "services.%s.group %q has no matching entry in .Values.versions" $service .) }}
+    {{- end }}
+    {{- $groupRevision = index $versions . }}
+    {{- end }}
+    targetRevision: {{ default $groupRevision $settings.targetRevision }}
     helm:
       version: v3
       parameters:
