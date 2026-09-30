@@ -8,22 +8,22 @@
 # services should be running on the cluster. It is recommended that this repo
 # be updated by a CI/CD pipeline or configuration tools only.
 
-# @schema description: "The ArgoCD project. At DLS this is the same as the beamline namespace. or 'accelerator'"
+# @schema description: The ArgoCD project. At DLS this is the same as the beamline namespace. or 'accelerator'
 project: ""
 destination:
-  # @schema description: "The name of the destination cluster. e.g. 'i21' 'pollux' 'acastus'"
+  # @schema description: The name of the destination cluster. e.g. 'i21' 'pollux' 'acastus'
   name: ""
-  # @schema description: "The namespace in the destination cluster. At DLS this is always the same as the project name"
+  # @schema description: The namespace in the destination cluster. At DLS this is always the same as the project name
   namespace: ""
 source:
-  # @schema description: "The URL of the Git repository containing the application manifests."
+  # @schema description: The URL of the Git repository containing the application manifests.
   repoURL: ""
-  # @schema description: "The target revision (branch, tag, commit) of the Git repository."
+  # @schema description: The target revision (branch, tag, commit) of the Git repository.
   targetRevision: ""
 
 # @schema type: object
 # @schema additionalProperties: {"type": "string"}
-# @schema description: "Map of group name to target revision (branch, tag, commit), referenced by services.<svc>.group. A service with no group follows source.targetRevision."
+# @schema description: Map of group name to target revision (branch, tag, commit), referenced by services.<svc>.group. A service with no group follows source.targetRevision.
 # @schema default: {}
 versions: {}
 
@@ -85,7 +85,7 @@ services:
 
     # @schema type: string
     # @schema default: ""
-    # @schema description: "Key into the root-level versions map. Superseded by this service's own targetRevision when that is also set."
+    # @schema description: Key into the root-level versions map. Superseded by this service's own targetRevision when that is also set.
     group: ""
 
     # @schema type: string
