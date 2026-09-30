@@ -32,12 +32,14 @@ spec:
            A group that has no matching versions entry fails the render, so
            a typo cannot silently leave a service out of a cutover. */ -}}
     {{- $groupRevision := $.Values.source.targetRevision }}
+    {{- if not $settings.targetRevision }}
     {{- with $settings.group }}
     {{- $versions := default dict $.Values.versions }}
     {{- if not (hasKey $versions .) }}
     {{- fail (printf "services.%s.group %q has no matching entry in .Values.versions" $service .) }}
     {{- end }}
     {{- $groupRevision = index $versions . }}
+    {{- end }}
     {{- end }}
     targetRevision: {{ default $groupRevision $settings.targetRevision }}
     helm:
