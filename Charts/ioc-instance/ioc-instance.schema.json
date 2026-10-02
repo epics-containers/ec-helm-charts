@@ -278,6 +278,10 @@
                     "description": "simple lifecycle config",
                     "type": "string"
                 },
+                "probeTimeoutSeconds": {
+                    "description": "timeoutSeconds for the exec command on the generated readiness and liveness probes (not the startup probe, which uses a very large timeout). Raised above the Kubernetes default of 1s to allow for a slow EPICS Channel Access search.",
+                    "type": "integer"
+                },
                 "pvaServerPort": {
                     "description": "server port for pv access. The UDP broadcast port will be one greater.",
                     "type": "integer"

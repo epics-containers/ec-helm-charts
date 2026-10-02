@@ -196,6 +196,7 @@ spec:
               - {{ . }}
           initialDelaySeconds: 20
           periodSeconds: 30
+          timeoutSeconds: {{ $root.probeTimeoutSeconds | default 5 }}
         {{- end }}
         {{- end }}
         {{/* supply a complete liveness probe object */}}
@@ -212,6 +213,7 @@ spec:
               - {{ . }}
           initialDelaySeconds: 120
           periodSeconds: 30
+          timeoutSeconds: {{ $root.probeTimeoutSeconds | default 5 }}
         {{- end }}
         {{- end }}
         {{/* supply a complete lifecycle object */}}
