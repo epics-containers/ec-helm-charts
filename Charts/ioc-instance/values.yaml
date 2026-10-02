@@ -73,6 +73,9 @@ ioc-instance:
   # @schema description: simple lifecycle config
   preStopExecutable: /epics/ioc/stop.sh
 
+  # @schema description: timeoutSeconds for the exec command on the generated readiness and liveness probes (not the startup probe, which uses a very large timeout). Raised above the Kubernetes default of 1s to allow for a slow EPICS Channel Access search.
+  probeTimeoutSeconds: 5
+
   # @schema $ref: $k8s/container.json#/properties/startupProbe
   startupProbe: {}
 
@@ -83,8 +86,10 @@ ioc-instance:
   readinessProbe: {}
 
   # @schema description: simple readinessprobe config
-  # Until a generic readiness script is available, disable the readiness probe by default to avoid confusion.
-  readinessExecutable: ""
+  # Runs the same check as livenessExecutable by default, so a crash-looping IOC
+  # is also reported as not Ready. Override to run a different check, or set to
+  # "" to disable the readiness probe.
+  readinessExecutable: /epics/ioc/readiness.sh
 
   # @schema $ref: $k8s/container.json#/properties/livenessProbe
   livenessProbe: {}
