@@ -86,10 +86,9 @@ ioc-instance:
   readinessProbe: {}
 
   # @schema description: simple readinessprobe config
-  # Runs the same check as livenessExecutable by default, so a crash-looping IOC
-  # is also reported as not Ready. Override to run a different check, or set to
-  # "" to disable the readiness probe.
-  readinessExecutable: /epics/ioc/readiness.sh
+  # Empty by default (no readiness probe), since not every IOC image ships a
+  # readiness script. Set to e.g. /epics/ioc/readiness.sh per service to enable it.
+  readinessExecutable: ""
 
   # @schema $ref: $k8s/container.json#/properties/livenessProbe
   livenessProbe: {}
