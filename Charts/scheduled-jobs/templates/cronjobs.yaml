@@ -10,6 +10,8 @@ One CronJob per entry in .Values.jobs. All share the service image and schedule.
 {{- $job = $job | default dict }}
 
 {{- $deadline := hasKey $job "activeDeadlineSeconds" | ternary $job.activeDeadlineSeconds $.Values.activeDeadlineSeconds }}
+{{- $sa := hasKey $job "serviceAccountName" | ternary $job.serviceAccountName $.Values.serviceAccountName }}
+{{- $automount := hasKey $job "automountServiceAccountToken" | ternary $job.automountServiceAccountToken $.Values.automountServiceAccountToken }}
 {{- $labels := dict "app" $.Release.Name "job" $jobName "scheduled-job" "true" }}
 {{- $labels = merge $labels ($.Values.global.labels | default dict) }}
 
@@ -46,6 +48,12 @@ spec:
             {{- toYaml $labels | nindent 12 }}
         spec:
           restartPolicy: Never
+          {{- with $sa }}
+          serviceAccountName: {{ . | quote }}
+          {{- end }}
+          {{- if kindIs "bool" $automount }}
+          automountServiceAccountToken: {{ $automount }}
+          {{- end }}
           {{- if $.Values.hostNetwork }}
           hostNetwork: true
           dnsPolicy: ClusterFirstWithHostNet

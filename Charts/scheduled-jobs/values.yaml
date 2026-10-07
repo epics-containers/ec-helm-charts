@@ -72,6 +72,14 @@ affinity: {}
 # @schema $ref: $k8s/podspec.json#/properties/tolerations
 tolerations: []
 
+# @schema description: name of the ServiceAccount the job pods run as. Empty uses the namespace default. A job may override it.
+# @schema type: string
+serviceAccountName: ""
+
+# @schema description: whether to mount the ServiceAccount token into the pods. Set false for jobs that do not talk to the Kubernetes API. Null leaves the Kubernetes default. A job may override it.
+# @schema type: [boolean, "null"]
+automountServiceAccountToken: null
+
 ################################################################################
 # The jobs
 ################################################################################
@@ -86,11 +94,13 @@ tolerations: []
 #   args:                  arguments passed to the image's entrypoint
 #   env:                   extra environment variables, appended last
 #   activeDeadlineSeconds: overrides the service default above
+#   serviceAccountName:    overrides the service default above
+#   automountServiceAccountToken: overrides the service default above
 #
 # Every job also receives JOB_NAME set to its key.
 #
 # @schema type: object
-# @schema patternProperties: {"^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {"type":["object","null"],"additionalProperties":false,"properties":{"args":{"type":"array","items":{"type":"string"},"description":"arguments passed to the image's entrypoint"},"env":{"type":"array","items":{"type":"object","required":["name"],"additionalProperties":true},"description":"extra environment variables for this job, appended after the service env"},"activeDeadlineSeconds":{"type":"integer","minimum":0,"description":"maximum run time in seconds for this job. 0 means no limit"}}}}
+# @schema patternProperties: {"^[a-z0-9]([-a-z0-9]*[a-z0-9])?$": {"type":["object","null"],"additionalProperties":false,"properties":{"args":{"type":"array","items":{"type":"string"},"description":"arguments passed to the image's entrypoint"},"env":{"type":"array","items":{"type":"object","required":["name"],"additionalProperties":true},"description":"extra environment variables for this job, appended after the service env"},"activeDeadlineSeconds":{"type":"integer","minimum":0,"description":"maximum run time in seconds for this job. 0 means no limit"},"serviceAccountName":{"type":"string","description":"ServiceAccount for this job's pods, overriding the service default"},"automountServiceAccountToken":{"type":"boolean","description":"mount the ServiceAccount token into this job's pods, overriding the service default"}}}}
 # @schema additionalProperties: false
 # @schema default: {}
 jobs: {}
