@@ -32,9 +32,17 @@ versions: {}
 services:
   # Each item is of the form:
   #   service: service name as it appears in K8S (statefulset/deployment name).
+  #     project: optional override for project above. Resolution order is: this
+  #                 service's own project, then its destination.namespace, then
+  #                 the root-level project, then the release namespace.
+  #     appNamespace: optional override for the namespace the ArgoCD Application
+  #                 itself is created in. Resolution order is: this service's
+  #                 own appNamespace, then its destination.namespace, then the
+  #                 release namespace.
   #     destination: optional override for destination parameters above.
   #       name: optional override for the deployment cluster above.
-  #       namespace: optional override for namespace above.
+  #       namespace: optional override for namespace above. Also moves this
+  #                 service's project and Application, see above.
   #     description: optional free-text description, rendered as an
   #                 annotation on the generated Application's own metadata.
   #     serviceChart: optional override for the helm chart to use.
@@ -58,6 +66,14 @@ services:
 
   # @schema type: object
   example1:
+
+    # @schema type: string
+    # @schema default: ""
+    project: ""
+
+    # @schema type: string
+    # @schema default: ""
+    appNamespace: ""
 
     # @schema type: [object, null]
     destination:
