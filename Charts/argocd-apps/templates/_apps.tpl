@@ -2,12 +2,15 @@
 {{- range $service, $settings := .Values.services }}
 {{- /* Make sure settings is an empty dict if it is currently nil */ -}}
 {{ $settings := default dict $settings -}}
+{{ $settingsDestination := default dict $settings.destination -}}
 {{ if ne $settings.removed true }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ $service }}
-  namespace: {{ $.Release.Namespace }}
+  {{- /* A service that overrides destination.namespace moves its Application
+         and project there too, as namespaces and projects map 1:1. */}}
+  namespace: {{ coalesce $settings.appNamespace $settingsDestination.namespace $.Release.Namespace }}
   {{- with $settings.description }}
   annotations:
     epics-containers.github.io/description: {{ . | quote }}
@@ -19,8 +22,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: {{ default $.Release.Namespace $.Values.project }}
-  {{- $settingsDestination := default dict $settings.destination }}
+  project: {{ coalesce $settings.project $settingsDestination.namespace $.Values.project $.Release.Namespace }}
   destination:
     namespace: {{ default $.Values.destination.namespace $settingsDestination.namespace }}
     name: {{ default $.Values.destination.name $settingsDestination.name }}
